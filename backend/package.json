@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/app.js",
   "type": "module",
-  "license": "AGPL-version-3.0",
+  "license": "MIT",
   "private": false,
   "engines": {
     "node": ">= 14.0.0",
