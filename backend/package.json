@@ -28,7 +28,7 @@
     "watch-node": "nodemon dist/app.js",
     "build-ts": "yarn tsc",
     "watch-ts": "tsc -w",
-    "lint": "eslint src/*.ts",
+    "lint": "npx eslint src/*.ts",
     "lint-fix": "npx lint --fix",
     "debug": "npm run build && npm run watch-debug",
     "serve-debug": "nodemon --inspect dist/app.js",
