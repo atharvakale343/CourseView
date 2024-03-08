@@ -1,0 +1,43 @@
+{
+  "name": "hw01-scrabble-starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": "",
+  "keywords": [],
+  "author": {
+    "name": "Atharva Kale",
+    "email": "aukale@umass.edu",
+    "spireid": "33318980"
+  },
+  "contributors": [],
+  "scripts": {
+    "start": "http-server src -p 3000 -c-1 -o -s",
+    "test": "jest ./ts",
+    "submit": "node js/submit.js",
+    "build": "npm run dist && docker build -t timdrichards/autograder .",
+    "test-it": "npm run build && docker run -it --entrypoint bash timdrichards/autograder",
+    "points": "npm run build && docker run timdrichards/autograder ./source/bin/score"
+  },
+  "dependencies": {
+    "archiver": "^6.0.1",
+    "http-server": "^14.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2"
+  }
+}
