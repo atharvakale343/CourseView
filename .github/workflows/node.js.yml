@@ -26,10 +26,18 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
           cache-dependency-path: '**/package-lock.json'
-      - run: npm install
+      - name: Install
+        working-directory: ./backend
+        run: yarn install
       - name: Build
         working-directory: ./backend
         run: yarn build
-      - run: yarn lint
-      - run: yarn validate-prettiness
-      - run: yarn test
+      - name: lint
+        working-directory: ./backend
+        run: yarn lint
+      - name: validate
+        working-directory: ./backend
+        run: yarn validate-prettiness
+      - name: test
+        working-directory: ./backend
+        run: yarn test
