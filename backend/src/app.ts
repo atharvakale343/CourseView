@@ -1,16 +1,21 @@
-// https://javascript.plainenglish.io/express-with-typescript-and-es-modules-compilation-build-44f175150073
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express from "express";
+import logger from "morgan";
+import * as path from "path";
 
-dotenv.config();
+import { errorHandler, errorNotFoundHandler } from "./middlewares/errorHandler";
 
-const app: Express = express();
-const port = process.env.PORT || 3000;
+// Routes
+import { index } from "./routes/index";
+// Create Express server
+export const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
+// Express configuration
+app.set("port", process.env.PORT || 3000);
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
-});
+app.use(logger("dev"));
+
+app.use(express.static(path.join(__dirname, "../public")));
+app.use("/", index);
+
+app.use(errorNotFoundHandler);
+app.use(errorHandler);

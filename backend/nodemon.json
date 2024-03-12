@@ -1,7 +1,0 @@
-{
-    "watch": [
-        "src"
-    ],
-    "ext": "ts",
-    "exec": "concurrently \"npx tsc --watch\" \"node --no-warnings=ExperimentalWarning --loader ts-node/esm src/app.ts\""
-}
