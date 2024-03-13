@@ -10,13 +10,11 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: 'var(--primary)',
-        secondary: 'var(--secondary)',
-        tertiary: 'var(--tertiary)',
-        'color-light': 'var(--color-light)',
-        'color-dark': 'var(--color-dark)',
-        'accent-primary': 'var(--accent-primary)',
-        'accent-primary-state': 'var(--accent-primary-state)'
+        'custom-green-title': 'hsla(74, 32%, 76%, 1)',
+        'custom-green-white-accent': 'hsla(67, 50%, 86%, 1)',
+        'custom-background-color': 'hsla(52, 94%, 94%, 1)',
+        'custom-cream-accent': 'hsla(43, 82%, 89%, 1)',
+        'custom-brown-heading': 'hsla(30, 53%, 64%, 1)',
       }
     }
   }
