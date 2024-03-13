@@ -1,0 +1,15 @@
+{
+    "extends": [
+        "html-validate:prettier"
+    ],
+    "rules": {
+        "doctype-style": "off",
+        "close-order": "error",
+        "void-style": [
+            "warn",
+            {
+                "style": "selfclosing"
+            }
+        ]
+    }
+}
