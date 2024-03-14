@@ -14,7 +14,7 @@ module.exports = {
         'custom-green-white-accent': 'hsla(67, 50%, 86%, 1)',
         'custom-background-color': 'hsla(52, 94%, 94%, 1)',
         'custom-cream-accent': 'hsla(43, 82%, 89%, 1)',
-        'custom-brown-heading': 'hsla(30, 53%, 64%, 1)',
+        'custom-brown-heading': 'hsla(30, 53%, 64%, 1)'
       }
     }
   }
