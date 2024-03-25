@@ -1,6 +1,10 @@
+![example workflow](https://github.com/atharvakale343/326-final-project-spring-24/actions/workflows/node.js.yml/badge.svg)
+![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=team-4-326-final-project-spring-24)
 # Welcome
 
 Project description will go here. We will use this space to describe the project and its goals.
+
+View a live preview
 
 # Getting Started
 
