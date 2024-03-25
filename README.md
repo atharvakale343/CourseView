@@ -35,3 +35,5 @@ cd frontend
 npm install
 npm run milestone-1
 ```
+
+Read more about the frontend in the [frontend README](frontend/README.md).
