@@ -4,7 +4,7 @@
 
 Project description will go here. We will use this space to describe the project and its goals.
 
-View a live preview
+[Live Preview](https://team-4-326-final-project-spring-24.vercel.app/)
 
 # Getting Started
 
