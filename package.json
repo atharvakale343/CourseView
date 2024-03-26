@@ -7,8 +7,12 @@
   },
   "keywords": [],
   "author": {
-    "name": "",
-    "url": "https://github.com/atharvakale343/326-final-project-spring-24"
+    "name": "Team 4 Appsmiths",
+    "url": "https://github.com/atharvakale343/team-4-326-final-project-spring-24"
   },
-  "contributors": ["tmeshram@umass.edu"]
+  "contributors": [
+    "Atharva Kale aukale@umass.edu atharvakale343",
+    "Eric Fournier edfournier@umass.edu edfournier",
+    "Taru Meshram tmeshram@umass.edu TaruMeshram"
+  ]
 }

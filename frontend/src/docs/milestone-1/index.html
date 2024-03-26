@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+  <head id="vision">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CS326 Project - Milestone 1</title>
@@ -15,16 +15,30 @@
       <h1 class="my-4 text-center text-4xl font-bold">
         CS326 Project - Milestone 1
       </h1>
+      <h2 class="my-4 text-center text-4xl font-bold">
+        CourseView - A Course Requirements and History Tracker
+      </h2>
     </header>
 
     <button
-      class="back-to-top fixed bottom-4 right-4 rounded-lg bg-custom-green-title px-4 py-2 font-semibold text-black hover:-translate-y-1 hover:bg-custom-brown-heading"
+      id="back-to-top"
+      class="fixed bottom-4 right-4 rounded-lg bg-custom-green-title px-4 py-2 font-semibold text-black hover:-translate-y-1 hover:bg-custom-brown-heading"
     >
       Back to Top
     </button>
 
+    <button
+      id="cookie-button"
+      class="fixed bottom-16 right-4 rounded-lg bg-custom-green-title px-4 py-2 font-semibold text-black hover:-translate-y-1 hover:bg-custom-brown-heading"
+    >
+      🍪 Counter: 0
+    </button>
+
     <!-- Section for team grid-->
-    <section class="mb-4 flex w-screen flex-col items-center justify-center">
+    <section
+      id="team"
+      class="mb-4 flex w-screen flex-col items-center justify-center"
+    >
       <div class="mb-4 w-full bg-custom-brown-heading">
         <h2 class="my-4 text-center text-2xl font-semibold">Our Team</h2>
       </div>
@@ -59,10 +73,10 @@
             <div class="h-80 overflow-hidden p-1">
               <div class="flex h-full items-end justify-center">
                 <img
-                src="./assets/TaruMeshramProfessionalPicture.jpg"
-                alt="Taru Meshram"
-                class="h-600 mb-2 w-full rounded-lg"
-              />
+                  src="./assets/TaruMeshramProfessionalPicture.jpg"
+                  alt="Taru Meshram"
+                  class="h-600 mb-2 w-full rounded-lg"
+                />
               </div>
             </div>
             <h2 class="text-lg font-semibold">Taru Meshram</h2>
@@ -91,10 +105,11 @@
             <h2 class="text-lg font-semibold">Eric Fournier</h2>
             <p class="mb-4 text-sm text-gray-600">Web Developer</p>
             <p class="text-sm">
-              I'm currently a junior studying computer science at UMass Amherst, and I'm from Holyoke, MA. 
-              When it comes to programming languages, I'm most comfortable with JavaScript and Java. 
-              In the past, I've also worked with libraries such as Node, React, and Spring Boot. 
-              I'm excited to learn more about web development! 
+              I'm currently a junior studying computer science at UMass Amherst,
+              and I'm from Holyoke, MA. When it comes to programming languages,
+              I'm most comfortable with JavaScript and Java. In the past, I've
+              also worked with libraries such as Node, React, and Spring Boot.
+              I'm excited to learn more about web development!
             </p>
           </div>
 
@@ -103,10 +118,10 @@
             <div class="h-80 overflow-hidden p-1">
               <div class="flex h-full items-end justify-center">
                 <img
-                src="./assets/profile.jpg"
-                alt="Emily Brown"
-                class="h-600 mb-2 w-full rounded-lg"
-              />
+                  src="./assets/profile.jpg"
+                  alt="Emily Brown"
+                  class="h-600 mb-2 w-full rounded-lg"
+                />
               </div>
             </div>
             <h2 class="text-lg font-semibold">Emily Brown</h2>
@@ -125,12 +140,12 @@
     >
       <!-- Links to different sections/pages -->
       <a
-        href="#project-overview"
+        href="#overview"
         class="rounded-lg border border-transparent px-4 py-2 font-medium transition duration-300 ease-in-out hover:bg-custom-cream-accent"
         >Project Overview</a
       >
       <a
-        href="#application-highlights"
+        href="#application-parts"
         class="rounded-lg border border-transparent px-4 py-2 font-medium transition duration-300 ease-in-out hover:bg-custom-cream-accent"
         >Application Highlights</a
       >
@@ -145,7 +160,7 @@
         >Wireframes</a
       >
       <a
-        href="#real-world-connection"
+        href="#real-world"
         class="rounded-lg border border-transparent px-4 py-2 font-medium transition duration-300 ease-in-out hover:bg-custom-cream-accent"
         >Real-World Connection</a
       >
@@ -158,71 +173,34 @@
 
     <main>
       <!-- Main content of the document -->
-      <section id="project-overview" class="mb-4">
+      <section id="overview" class="mb-4">
         <div class="mb-4 w-full bg-custom-green-title">
           <h2 class="p-4 text-center text-2xl font-semibold">
             Project Overview
           </h2>
         </div>
         <p class="mx-56 text-justify">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-          sapien pellentesque habitant morbi tristique senectus et. Adipiscing
-          elit duis tristique sollicitudin nibh sit amet commodo. Tincidunt
-          vitae semper quis lectus nulla at volutpat diam. Cursus sit amet
-          dictum sit. Dignissim diam quis enim lobortis scelerisque. Aliquet
-          enim tortor at auctor urna nunc id. Augue interdum velit euismod in
-          pellentesque massa placerat. Pharetra magna ac placerat vestibulum. In
-          dictum non consectetur a erat. In est ante in nibh mauris cursus
-          mattis molestie. Massa sed elementum tempus egestas sed sed risus
-          pretium quam. Nunc eget lorem dolor sed viverra ipsum nunc aliquet
-          bibendum. Tortor id aliquet lectus proin nibh. Quisque id diam vel
-          quam elementum. Id volutpat lacus laoreet non curabitur. Et magnis dis
-          parturient montes nascetur. Mauris pellentesque pulvinar pellentesque
-          habitant morbi tristique senectus. Eu augue ut lectus arcu bibendum.
-          Nunc sed id semper risus in hendrerit. Ultricies integer quis auctor
-          elit sed vulputate mi sit. Purus sit amet luctus venenatis lectus.
-          Urna nec tincidunt praesent semper feugiat nibh sed. Ut tortor pretium
-          viverra suspendisse potenti nullam ac tortor. Pulvinar pellentesque
-          habitant morbi tristique senectus et netus. Eu volutpat odio facilisis
-          mauris sit amet massa vitae tortor. Arcu felis bibendum ut tristique
-          et egestas. Rhoncus mattis rhoncus urna neque viverra. Amet
-          consectetur adipiscing elit duis. Massa sed elementum tempus egestas
-          sed sed risus pretium. Aliquam vestibulum morbi blandit cursus risus
-          at. Penatibus et magnis dis parturient montes nascetur ridiculus mus.
-          Duis convallis convallis tellus id interdum velit laoreet id donec.
-          Massa sapien faucibus et molestie ac feugiat.
+          this section should provide a 150-200 word explanation of the web
+          application your team aims to design and develop. Use an h2 tag for
+          the section title. Focus on the project's vision, emphasizing the
+          real-world problem it intends to solve and its target audience, rather
+          than delving into interface details.
         </p>
       </section>
 
-      <section id="application-highlights" class="mb-4">
+      <section id="application-parts" class="mb-4">
         <div class="mb-4 w-full bg-custom-green-title">
           <h2 class="p-4 text-center text-2xl font-semibold">
-            Application Highlights
+            Application Parts
           </h2>
         </div>
         <p class="mx-56 text-justify">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-          sapien pellentesque habitant morbi tristique senectus et. Adipiscing
-          elit duis tristique sollicitudin nibh sit amet commodo. Tincidunt
-          vitae semper quis lectus nulla at volutpat diam. Cursus sit amet
-          dictum sit. Dignissim diam quis enim lobortis scelerisque. Aliquet
-          enim tortor at auctor urna nunc id. Augue interdum velit euismod in
-          pellentesque massa placerat. Pharetra magna ac placerat vestibulum. In
-          dictum non consectetur a erat. In est ante in nibh mauris cursus
-          mattis molestie. Massa sed elementum tempus egestas sed sed risus
-          pretium quam. Nunc eget lorem dolor sed viverra ipsum nunc aliquet
-          bibendum. Tortor id aliquet lectus proin nibh. Quisque id diam vel
-          quam elementum. Id volutpat lacus laoreet non curabitur. Et magnis dis
-          parturient montes nascetur. Mauris pellentesque pulvinar pellentesque
-          habitant morbi tristique senectus. Eu augue ut lectus arcu bibendum.
-          Nunc sed id semper risus in hendrerit. Ultricies integer quis auctor
-          elit sed vulputate mi sit. Purus sit amet luctus venenatis lectus.
-          Urna nec tincidunt praesent semper feugiat nibh sed. Ut tortor pretium
-          viverra suspendisse potenti nullam ac tortor. Pulvinar pellentesque
-          habitant morbi tristique senectus et netus. Eu volutpat odio facilisis
-          mauris sit amet massa vitae tortor. Arc
+          2. **Application Parts**: Identified by the id “application-parts,”
+          describe at least three **critical components** of your application in
+          separate paragraphs under this section, totaling 200-300 words. Title
+          this section with an h2 tag and ensure each application part discussed
+          represents a primary functionality of your web application. Here is an
+          example of a one component of an application:
         </p>
       </section>
 
@@ -233,30 +211,12 @@
           </h2>
         </div>
         <p class="text -justify mx-56">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-          sapien pellentesque habitant morbi tristique senectus et. Adipiscing
-          elit duis tristique sollicitudin nibh sit amet commodo. Tincidunt
-          vitae semper quis lectus nulla at volutpat diam. Cursus sit amet
-          dictum sit. Dignissim diam quis enim lobortis scelerisque. Aliquet
-          enim tortor at auctor urna nunc id. Augue interdum velit euismod in
-          pellentesque massa placerat. Pharetra magna ac placerat vestibulum. In
-          dictum non consectetur a erat. In est ante in nibh mauris cursus
-          mattis molestie. Massa sed elementum tempus egestas sed sed risus
-          pretium quam. Nunc eget lorem dolor sed viverra ipsum nunc aliquet
-          bibendum. Tortor id aliquet lectus proin nibh. Quisque id diam vel
-          quam elementum. Id volutpat lacus laoreet non curabitur. Et magnis dis
-          parturient montes nascetur. Mauris pellentesque pulvinar pellentesque
-          habitant morbi tristique senectus. Eu augue ut lectus arcu bibendum.
-          Nunc sed id semper risus in hendrerit. Ultricies integer quis auctor
-          elit sed vulputate mi sit. Purus sit amet luctus venenatis lectus.
-          Urna nec tincidunt praesent semper feugiat nibh sed. Ut tortor pretium
-          viverra suspendisse potenti nullam ac tortor. Pulvinar pellentesque
-          habitant morbi tristique senectus et netus. Eu volutpat odio facilisis
-          mauris sit amet massa vitae tortor. Arcu felis bibendum ut tristique
-          et egestas. Rhoncus mattis rhoncus urna neque viverra. Amet
-          consectetur adipiscing elit duis. Massa sed elementum tempus egestas
-          sed sed risus pretium. Aliquam vestibulum mor
+          structure this section to include an introduction, four main
+          paragraphs detailing the top types of data your application will
+          handle, and a conclusion, making up 600-700 words in total. Title the
+          section with an h2 tag. Focus on high-level data needs rather than
+          specific database designs or records. Here is an example of one data
+          requirement:
         </p>
       </section>
 
@@ -265,64 +225,30 @@
           <h2 class="p-4 text-center text-2xl font-semibold">Wireframes</h2>
         </div>
         <p class="text -justify mx-56">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-          sapien pellentesque habitant morbi tristique senectus et. Adipiscing
-          elit duis tristique sollicitudin nibh sit amet commodo. Tincidunt
-          vitae semper quis lectus nulla at volutpat diam. Cursus sit amet
-          dictum sit. Dignissim diam quis enim lobortis scelerisque. Aliquet
-          enim tortor at auctor urna nunc id. Augue interdum velit euismod in
-          pellentesque massa placerat. Pharetra magna ac placerat vestibulum. In
-          dictum non consectetur a erat. In est ante in nibh mauris cursus
-          mattis molestie. Massa sed elementum tempus egestas sed sed risus
-          pretium quam. Nunc eget lorem dolor sed viverra ipsum nunc aliquet
-          bibendum. Tortor id aliquet lectus proin nibh. Quisque id diam vel
-          quam elementum. Id volutpat lacus laoreet non curabitur. Et magnis dis
-          parturient montes nascetur. Mauris pellentesque pulvinar pellentesque
-          habitant morbi tristique senectus. Eu augue ut lectus arcu bibendum.
-          Nunc sed id semper risus in hendrerit. Ultricies integer quis auctor
-          elit sed vulputate mi sit. Purus sit amet luctus venenatis lectus.
-          Urna nec tincidunt praesent semper feugiat nibh sed. Ut tortor pretium
-          viverra suspendisse potenti nullam ac tortor. Pulvinar pellentesque
-          habitant morbi tristique senectus et netus. Eu volutpat odio facilisis
-          mauris sit amet massa vitae tortor. Arcu felis bibendum ut tristique
-          et egestas. Rhoncus mattis rhoncus urna neque viverra. Amet
-          consectetur adipiscing elit duis. Massa sed elementum tempus egestas
-          sed sed risus pretium. Aliquam vestibulum mor
+          Utilize the id “wire-frames” for this section, where you'll include
+          four wireframes representing key views/screens of your application,
+          along with a brief paragraph for each explaining its purpose and
+          design rationale. You must be able to create an image from these
+          wireframes in PNG, JPG, or GIF format to be included in the document
+          using the img tag alongside each paragraph. This section should be
+          200-300 words in length, excluding HTML tags. Here is an example of
+          one wireframe and its description:
         </p>
       </section>
 
-      <section id="real-world-connection" class="mb-4">
+      <section id="real-world" class="mb-4">
         <div class="mb-4 w-full bg-custom-green-title">
           <h2 class="p-4 text-center text-2xl font-semibold">
             Real-World Connection
           </h2>
         </div>
         <p class="text -justify mx-56">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-          sapien pellentesque habitant morbi tristique senectus et. Adipiscing
-          elit duis tristique sollicitudin nibh sit amet commodo. Tincidunt
-          vitae semper quis lectus nulla at volutpat diam. Cursus sit amet
-          dictum sit. Dignissim diam quis enim lobortis scelerisque. Aliquet
-          enim tortor at auctor urna nunc id. Augue interdum velit euismod in
-          pellentesque massa placerat. Pharetra magna ac placerat vestibulum. In
-          dictum non consectetur a erat. In est ante in nibh mauris cursus
-          mattis molestie. Massa sed elementum tempus egestas sed sed risus
-          pretium quam. Nunc eget lorem dolor sed viverra ipsum nunc aliquet
-          bibendum. Tortor id aliquet lectus proin nibh. Quisque id diam vel
-          quam elementum. Id volutpat lacus laoreet non curabitur. Et magnis dis
-          parturient montes nascetur. Mauris pellentesque pulvinar pellentesque
-          habitant morbi tristique senectus. Eu augue ut lectus arcu bibendum.
-          Nunc sed id semper risus in hendrerit. Ultricies integer quis auctor
-          elit sed vulputate mi sit. Purus sit amet luctus venenatis lectus.
-          Urna nec tincidunt praesent semper feugiat nibh sed. Ut tortor pretium
-          viverra suspendisse potenti nullam ac tortor. Pulvinar pellentesque
-          habitant morbi tristique senectus et netus. Eu volutpat odio facilisis
-          mauris sit amet massa vitae tortor. Arcu felis bibendum ut tristique
-          et egestas. Rhoncus mattis rhoncus urna neque viverra. Amet
-          consectetur adipiscing elit duis. Massa sed elementum tempus egestas
-          sed sed risus pretium. Aliquam vestibulum mor
+          With the id “real-world,” this section, spanning 500-600 words, should
+          elucidate how your application addresses a tangible real-world issue,
+          supported by an introduction and conclusion. Use real-world examples
+          as inspiration for this narrative, detailing the problem your project
+          aims to resolve. Here are some examples to give you an idea of what we
+          are looking for:
         </p>
       </section>
 
@@ -332,34 +258,22 @@
             Integrative Experience
           </h2>
         </div>
-        <p class="text -justify mx-56">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae
-          sapien pellentesque habitant morbi tristique senectus et. Adipiscing
-          elit duis tristique sollicitudin nibh sit amet commodo. Tincidunt
-          vitae semper quis lectus nulla at volutpat diam. Cursus sit amet
-          dictum sit. Dignissim diam quis enim lobortis scelerisque. Aliquet
-          enim tortor at auctor urna nunc id. Augue interdum velit euismod in
-          pellentesque massa placerat. Pharetra magna ac placerat vestibulum. In
-          dictum non consectetur a erat. In est ante in nibh mauris cursus
-          mattis molestie. Massa sed elementum tempus egestas sed sed risus
-          pretium quam. Nunc eget lorem dolor sed viverra ipsum nunc aliquet
-          bibendum. Tortor id aliquet lectus proin nibh. Quisque id diam vel
-          quam elementum. Id volutpat lacus laoreet non curabitur. Et magnis dis
-          parturient montes nascetur. Mauris pellentesque pulvinar pellentesque
-          habitant morbi tristique senectus. Eu augue ut lectus arcu bibendum.
-          Nunc sed id semper risus in hendrerit. Ultricies integer quis auctor
-          elit sed vulputate mi sit. Purus sit amet luctus venenatis lectus.
-          Urna nec tincidunt praesent semper feugiat nibh sed. Ut tortor pretium
-          viverra suspendisse potenti nullam ac tortor. Pulvinar pellentesque
-          habitant morbi tristique senectus et netus. Eu volutpat odio facilisis
-          maur
+        <p class="text-justify mx-56">
+          Marked by the id “integrative-experience,” in 500-600 words, detail
+          how this project ties into the integrative experience requirements of
+          your coursework and personal experiences. Discuss how your project is
+          a culmination of your university education and personal growth,
+          touching upon specific courses, semesters, and life experiences that
+          contribute to the development of this project.
         </p>
       </section>
     </main>
 
     <footer>
       <!-- Footer content like copyright, links to privacy policy, etc. -->
+      <div class="bg-custom-brown-heading p-4 text-center text-white">
+        <p>&copy; 2024 Team 4 Appsmiths</p>
+      </div>
     </footer>
   </body>
 </html>
