@@ -1,0 +1,21 @@
+/* BEGIN: 4. Nested-Tag / Sub-Element Selector Rule */
+nav a {
+    /* CSS properties for <a> tags within <nav> element */
+    color: black;
+    text-decoration: none;
+}
+
+a {
+    /* CSS properties for <a> tags outside <nav> element */
+    color: red;
+    text-decoration: underline;
+}
+/* END: Nested-Tag / Sub-Element Selector Rule */
+
+/* BEGIN: 5. Pseudo-Class Selector Rule */
+a:hover {
+    /* CSS properties for <a> tags when hovered */
+    color: gray;
+    text-decoration: none;
+}
+/* END: Pseudo-Class Selector Rule */
