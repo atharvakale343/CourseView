@@ -11,53 +11,10 @@
 @layer base {
   html,
   body {
-    @apply h-full w-full;
+    @apply h-full w-full font-mono;
   }
 
   /* body {
     @apply bg-primary text-color-light;
   } */
-
-  .triangle::after {
-    --border: 34px;
-
-    content: '';
-    width: 0;
-    height: 0;
-    position: absolute;
-    top: 0;
-    right: calc(var(--border) * -1);
-    z-index: -1;
-    border: var(--border) solid transparent;
-    border-top: calc(var(--border) * 2) solid var(--accent-primary);
-    border-bottom: 0;
-  }
-
-  .github-corner:hover .octo-arm {
-    animation: octocat-wave 560ms ease-in-out;
-  }
-
-  @keyframes octocat-wave {
-    0%,
-    100% {
-      transform: rotate(0);
-    }
-    20%,
-    60% {
-      transform: rotate(-25deg);
-    }
-    40%,
-    80% {
-      transform: rotate(10deg);
-    }
-  }
-
-  @media (max-width: 500px) {
-    .github-corner:hover .octo-arm {
-      animation: none;
-    }
-    .github-corner .octo-arm {
-      animation: octocat-wave 560ms ease-in-out;
-    }
-  }
 }

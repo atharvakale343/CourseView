@@ -1,35 +1,11 @@
 import '../styles/global.scss';
 import '../styles/global.css';
 
-document.addEventListener('DOMContentLoaded', () => {
-  const main = document.querySelector('main');
-  const counter = main?.querySelector('#counter');
-  const year = document.querySelector('#year');
+import { App } from './App';
 
-  if (main && counter) {
-    main.addEventListener('click', (event: MouseEvent) => {
-      const { id, tagName } = event.target as HTMLElement;
+const app = new App();
 
-      if (tagName === 'BUTTON') {
-        const currentCount = Number(counter.textContent);
-
-        switch (id) {
-          case 'increment': {
-            counter.textContent = `${currentCount + 1}`;
-
-            break;
-          }
-          case 'decrement': {
-            counter.textContent = `${currentCount - 1}`;
-
-            break;
-          }
-        }
-      }
-    });
-  }
-
-  if (year) {
-    year.textContent = new Date().getFullYear().toString();
-  }
+document.addEventListener('DOMContentLoaded', async () => {
+  const rootElement = document.getElementById('root')!;
+  rootElement.appendChild(await app.render());
 });

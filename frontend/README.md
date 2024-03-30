@@ -27,6 +27,12 @@ Short Tutorial: https://www.youtube.com/playlist?list=PL5f_mz_zU5eXWYDXHUDOLBE0s
 
 More documentation about the frontend can be found in [frontend/README.md](./frontend/README.md)
 
+# Color Scheme
+
+- Primary: amber-100
+- Secondary: red-500
+- Tertiary: indigo-500
+
 # Notes
 
 This repository is generated based on a template: [https://github.com/doinel1a/vite-vanilla-ts](https://github.com/doinel1a/vite-vanilla-ts)

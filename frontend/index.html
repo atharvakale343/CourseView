@@ -15,23 +15,38 @@
     <meta name="theme-color" content="#09090b" />
   </head>
 
-  <body>
+  <body class="bg-amber-100">
     <script type="module" src="src/ts/index.ts"></script>
-    <nav class="fixed top-0 flex w-full justify-between border-b border-black">
-      <h1 class="w-full text-center">Frontend Header</h1>
-    </nav>
-
-    <main class="flex h-full w-full items-center justify-center p-2"></main>
-
-    <footer
-      class="absolute bottom-0 flex w-full items-center justify-center border-t border-t-tertiary py-2"
+    <span class="text-xs text-gray-200 tailwind-breaks">
+      <span class="inline-block sm:hidden">XS</span>
+      <span class="hidden sm:inline-block md:hidden">SM</span>
+      <span class="hidden md:inline-block lg:hidden">MD</span>
+      <span class="hidden lg:inline-block xl:hidden">LG</span>
+      <span class="hidden xl:inline-block">XL</span>
+    </span>
+    <!-- main container -->
+    <div
+      class="container mx-auto flex min-h-screen flex-col shadow-sm shadow-slate-700"
     >
-      <p
-        href="https://business-link.d1a.app"
-        class="text-lg text-accent-primary transition-colors hover:text-accent-primary-state focus:text-accent-primary-state"
+      <script src="//unpkg.com/tailwind-breakpoint-tool" defer></script>
+      <!-- header -->
+      <header class="w-full border border-black">
+        <h1
+          class="w-full bg-red-500 flex text-center items-center justify-center text-sm sm:text-lg md:text-xl lg:text-2xl text-white font-bold h-12"
+        >
+          CourseView - A Course Requirements and History Tracker
+        </h1>
+      </header>
+
+      <!-- root element controlled by index.ts -->
+      <main id="root" class="flex flex-1 flex-wrap"></main>
+
+      <!-- footer -->
+      <footer
+        class="shrink-0 border-t text-gray-700 border-gray-600 py-2 text-center text-sm"
       >
-        CS326 Final Project
-      </p>
-    </footer>
+        <p>&copy; 2024 - Team 4 - The Appsmiths</p>
+      </footer>
+    </div>
   </body>
 </html>
