@@ -27,10 +27,10 @@ export class Navbar {
 
     // Populate the <div> element with the navigation links
     elm.innerHTML = /* HTML */ `
-      <div class="flex flex-row border-x border-b border-black items-center">
+      <div class="flex flex-row border-x border-b border-black">
         <h1
           id="view-label"
-          class="text-md flex h-20 w-full items-center justify-center px-2 text-center font-bold text-black
+          class="text-md flex w-full items-center justify-center px-2 text-center font-bold text-black
               sm:text-xl md:text-2xl"
         >
           ${viewToViewLabel[this.#currentView]}
