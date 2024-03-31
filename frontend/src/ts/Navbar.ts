@@ -9,10 +9,12 @@ const viewToViewLabel = {
 } as const;
 
 export type View = keyof typeof viewToViewLabel;
+type Icon = Exclude<View, 'add-course'>;
 
 export class Navbar {
   #events: Events;
   #currentView: View;
+  #viewToViewIcon: { [K in Icon]: HTMLAnchorElement | null } | null = null;
 
   constructor() {
     this.#events = Events.events();
@@ -25,24 +27,24 @@ export class Navbar {
 
     // Populate the <div> element with the navigation links
     elm.innerHTML = /* HTML */ `
-      <div class="flex flex-row border-b border-x border-black">
+      <div class="flex flex-row border-x border-b border-black">
         <h1
           id="view-label"
-          class="w-full flex items-center justify-center text-lg text-center sm:text-2xl
-              text-black font-bold h-20"
+          class="flex h-20 px-2 w-full items-center justify-center text-center text-md sm:text-xl md:text-2xl
+              font-bold text-black"
         >
           ${viewToViewLabel[this.#currentView]}
         </h1>
-        <div class="flex flex-row space-x-2">
+        <div class="flex flex-row">
           <a
             id="course-history-icon"
             href="#course-history"
             class="
-          px-4 hover:bg-orange-200 rounded-md
+          px-4 hover:bg-slate-100
         "
           >
             <div
-              class="flex flex-col sm:flex-row sm:space-x-2 w-12 sm:w-32 h-full px-1 justify-center items-center"
+              class="flex h-full w-12 flex-col items-center justify-center px-1 sm:w-32 sm:flex-row sm:space-x-2"
             >
               <img
                 class="size-12"
@@ -56,34 +58,27 @@ export class Navbar {
             id="degree-completion-icon"
             href="#degree-completion"
             class="
-          px-4 hover:bg-orange-200 rounded-md
+          px-4 hover:bg-slate-100
         "
           >
             <div
-              class="flex flex-col sm:flex-row sm:space-x-2 w-12 sm:w-32 h-full px-1 justify-center items-center"
+              class="flex h-full w-12 flex-col items-center justify-center px-1 sm:w-32 sm:flex-row sm:space-x-2"
             >
-              <img
-                class="size-12"
-                src="/degree-icon.svg"
-                alt="Degree"
-              />
+              <img class="size-12" src="/degree-icon.svg" alt="Degree" />
               <p class="text-center text-xs sm:text-sm">Degree Completion</p>
             </div>
           </a>
           <a
+            id="my-account-icon"
             href="#my-account"
             class="
-          px-4 hover:bg-orange-200 rounded-md
+          px-4 hover:bg-slate-100
         "
           >
             <div
-              class="flex flex-col sm:flex-row sm:space-x-2 w-12 sm:w-32 h-full px-1 justify-center items-center"
+              class="flex h-full w-12 flex-col items-center justify-center px-1 sm:w-32 sm:flex-row sm:space-x-2"
             >
-              <img
-                class="size-12"
-                src="/account-icon.svg"
-                alt="Account"
-              />
+              <img class="size-12" src="/account-icon.svg" alt="Account" />
               <p class="text-center text-xs sm:text-sm">Your Account</p>
             </div>
           </a>
@@ -113,16 +108,40 @@ export class Navbar {
       });
     });
 
+    // Get all the icon elements and store them
+    const courseHistoryIcon = elm.querySelector(
+      '#course-history-icon'
+    )! as HTMLAnchorElement;
+
+    const degreeCompletionIcon = elm.querySelector(
+      '#degree-completion-icon'
+    )! as HTMLAnchorElement;
+
+    const myAccountIcon = elm.querySelector(
+      '#my-account-icon'
+    )! as HTMLAnchorElement;
+
+    this.#viewToViewIcon = {
+      'course-history': courseHistoryIcon,
+      'degree-completion': degreeCompletionIcon,
+      'my-account': myAccountIcon
+    };
+
     // Changes the h1 element and nav icons
     this.#events.subscribe('navigateTo', (view: View) => {
       this.changeNavBarLabel(elm, view);
 
+      console.log(view);
+
       match(view)
         .with('course-history', () => {
-          this.showIcon(elm, 'degree-completion');
+          this.showIcon('course-history');
         })
         .with('degree-completion', () => {
-          this.showIcon(elm, 'course-history');
+          this.showIcon('degree-completion');
+        })
+        .with('my-account', () => {
+          this.showIcon('my-account');
         });
     });
 
@@ -130,17 +149,14 @@ export class Navbar {
     return elm;
   }
 
-  private showIcon(elm: HTMLDivElement, view: View) {
-    const courseHistoryIcon = elm.querySelector(
-      '#course-history-icon'
-    )! as HTMLAnchorElement;
-    courseHistoryIcon.style.display =
-      view === 'course-history' ? 'block' : 'none';
-    const degreeCompletionIcon = elm.querySelector(
-      '#degree-completion-icon'
-    )! as HTMLAnchorElement;
-    degreeCompletionIcon.style.display =
-      view === 'course-history' ? 'none' : 'block';
+  private showIcon(view: Icon) {
+    console.log(view);
+    Object.values(this.#viewToViewIcon!).forEach((icon) => {
+      icon?.classList?.remove('bg-slate-300'); // Add null check for classList
+    });
+    this.#viewToViewIcon![view]?.classList?.add(
+      'bg-slate-300',
+    ); // Add null check for classList
   }
 
   private changeNavBarLabel(elm: HTMLDivElement, view: View) {
