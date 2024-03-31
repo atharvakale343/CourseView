@@ -11,6 +11,10 @@ export class CourseHistory {
     elm.id = 'course-history';
     elm.innerHTML = /* HTML */ `
       <h1 class="text-2xl text-black font-bold">Course History</h1>
+      <h1 class="text-xl font-bold text-black">
+        Delete everything below, and replace it with the new code. <br/> This is just a
+        placeholder.
+      </h1>
       <button
         class="
         bg-blue-500 hover:bg-blue-700

@@ -11,10 +11,16 @@ export class DegreeCompletion {
     elm.classList.add('p-8');
     elm.id = 'degree-completion';
     elm.innerHTML = /* HTML */ `
-      <h1 class="text-2xl text-black font-bold">Degree Completion</h1>
-      <p class="text-black">
-        You have completed all the required courses for your degree.
-      </p>
+      <div class="flex flex-col space-y-4">
+        <h1 class="text-2xl font-bold text-black">Degree Completion</h1>
+        <h1 class="text-xl font-bold text-black">
+          Delete everything below, and replace it with the new code. <br />
+          This is just a placeholder.
+        </h1>
+        <p class="text-black">
+          You have completed all the required courses for your degree.
+        </p>
+      </div>
     `;
 
     return elm;

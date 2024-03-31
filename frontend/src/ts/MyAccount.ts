@@ -11,13 +11,19 @@ export class MyAccount {
     elm.classList.add('p-8');
     elm.id = 'my-account';
     elm.innerHTML = /* HTML */ `
-      <h1 class="text-2xl text-black font-bold">My Account</h1>
-      <p
-        class="text-black
+      <div class="flex flex-col space-y-4">
+        <h1 class="text-2xl font-bold text-black">My Account</h1>
+        <h1 class="text-xl font-bold text-black">
+          Delete everything below, and replace it with the new code. <br />
+          This is just a placeholder.
+        </h1>
+        <p
+          class="text-black
             "
-      >
-        You can update your account information here.
-      </p>
+        >
+          You can update your account information here.
+        </p>
+      </div>
     `;
     return elm;
   }
