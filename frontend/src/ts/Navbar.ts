@@ -25,10 +25,10 @@ export class Navbar {
 
     // Populate the <div> element with the navigation links
     elm.innerHTML = /* HTML */ `
-      <div class="flex flex-row border-b border-x border-black px-4">
+      <div class="flex flex-row border-b border-x border-black">
         <h1
           id="view-label"
-          class="w-full flex items-center justify-center text-2xl
+          class="w-full flex items-center justify-center text-lg text-center sm:text-2xl
               text-black font-bold h-20"
         >
           ${viewToViewLabel[this.#currentView]}
@@ -42,14 +42,14 @@ export class Navbar {
         "
           >
             <div
-              class="flex flex-row space-x-2 w-32 h-full px-1 justify-center items-center"
+              class="flex flex-col sm:flex-row sm:space-x-2 w-12 sm:w-32 h-full px-1 justify-center items-center"
             >
               <img
                 class="size-12"
                 src="/course-history-icon.svg"
                 alt="Course History"
               />
-              <p class="text-center text-sm">Course History</p>
+              <p class="text-center text-xs sm:text-sm">Course History</p>
             </div>
           </a>
           <a
@@ -60,14 +60,14 @@ export class Navbar {
         "
           >
             <div
-              class="flex flex-row space-x-2 w-32 h-full px-1 justify-center items-center"
+              class="flex flex-col sm:flex-row sm:space-x-2 w-12 sm:w-32 h-full px-1 justify-center items-center"
             >
               <img
                 class="size-12"
                 src="/degree-icon.svg"
                 alt="Degree"
               />
-              <p class="text-center text-sm">Degree Completion</p>
+              <p class="text-center text-xs sm:text-sm">Degree Completion</p>
             </div>
           </a>
           <a
@@ -77,14 +77,14 @@ export class Navbar {
         "
           >
             <div
-              class="flex flex-row space-x-2 w-32 h-full px-1 justify-center items-center"
+              class="flex flex-col sm:flex-row sm:space-x-2 w-12 sm:w-32 h-full px-1 justify-center items-center"
             >
               <img
                 class="size-12"
                 src="/account-icon.svg"
                 alt="Account"
               />
-              <p class="text-center text-sm">Your Account</p>
+              <p class="text-center text-xs sm:text-sm">Your Account</p>
             </div>
           </a>
         </div>
