@@ -30,17 +30,17 @@ export class Navbar {
       <div class="flex flex-row border-x border-b border-black">
         <h1
           id="view-label"
-          class="flex h-20 px-2 w-full items-center justify-center text-center text-md sm:text-xl md:text-2xl
-              font-bold text-black"
+          class="text-md flex h-20 w-full items-center justify-center px-2 text-center font-bold text-black
+              sm:text-xl md:text-2xl"
         >
           ${viewToViewLabel[this.#currentView]}
         </h1>
         <div class="flex flex-row">
-          <a
+          <button
             id="course-history-icon"
             href="#course-history"
             class="
-          px-4 hover:bg-slate-100
+          px-4 hover:bg-slate-100 focus:bg-slate-300
         "
           >
             <div
@@ -53,12 +53,12 @@ export class Navbar {
               />
               <p class="text-center text-xs sm:text-sm">Course History</p>
             </div>
-          </a>
-          <a
+          </button>
+          <button
             id="degree-completion-icon"
             href="#degree-completion"
             class="
-          px-4 hover:bg-slate-100
+          px-4 hover:bg-slate-100 focus:bg-slate-300
         "
           >
             <div
@@ -67,12 +67,12 @@ export class Navbar {
               <img class="size-12" src="/degree-icon.svg" alt="Degree" />
               <p class="text-center text-xs sm:text-sm">Degree Completion</p>
             </div>
-          </a>
-          <a
+          </button>
+          <button
             id="my-account-icon"
             href="#my-account"
             class="
-          px-4 hover:bg-slate-100
+          px-4 hover:bg-slate-100 focus:bg-slate-300
         "
           >
             <div
@@ -81,13 +81,13 @@ export class Navbar {
               <img class="size-12" src="/account-icon.svg" alt="Account" />
               <p class="text-center text-xs sm:text-sm">Your Account</p>
             </div>
-          </a>
+          </button>
         </div>
       </div>
     `;
 
     // Get all the anchor tags within the <div> element
-    const links = elm.querySelectorAll('a');
+    const links = elm.querySelectorAll('button');
 
     // Add event listeners to each anchor tag
     links.forEach((link) => {
@@ -154,9 +154,7 @@ export class Navbar {
     Object.values(this.#viewToViewIcon!).forEach((icon) => {
       icon?.classList?.remove('bg-slate-300'); // Add null check for classList
     });
-    this.#viewToViewIcon![view]?.classList?.add(
-      'bg-slate-300',
-    ); // Add null check for classList
+    this.#viewToViewIcon![view]?.classList?.add('bg-slate-300'); // Add null check for classList
   }
 
   private changeNavBarLabel(elm: HTMLDivElement, view: View) {
