@@ -69,8 +69,5 @@ export class App {
         );
       })
       .exhaustive();
-
-    const element = this.#viewToViewElementMap![view];
-    element.scrollIntoView({ behavior: 'smooth' });
   }
 }
