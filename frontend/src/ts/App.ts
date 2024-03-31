@@ -39,7 +39,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'degree-completion');
+    this.#events.publish('navigateTo', 'course-history');
 
     return rootElement;
   }

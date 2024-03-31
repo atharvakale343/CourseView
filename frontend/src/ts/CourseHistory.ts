@@ -7,6 +7,7 @@ export class CourseHistory {
   }
   async render() {
     const elm = document.createElement('div');
+    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
     elm.id = 'course-history';
     elm.innerHTML = /* HTML */ `
       <h1 class="text-2xl text-black font-bold">Course History</h1>

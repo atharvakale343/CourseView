@@ -16,7 +16,11 @@ export default {
   plugins: [
     legacy(),
     partytownVite({
-      dest: path.join(new URL('.', import.meta.url).pathname, 'dist', '~partytown')
+      dest: path.join(
+        new URL('.', import.meta.url).pathname,
+        'dist',
+        '~partytown'
+      )
     })
   ]
 };

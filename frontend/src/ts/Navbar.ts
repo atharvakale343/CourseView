@@ -25,7 +25,7 @@ export class Navbar {
 
     // Populate the <div> element with the navigation links
     elm.innerHTML = /* HTML */ `
-      <div class="flex flex-row border border-black px-4">
+      <div class="flex flex-row border-b border-x border-black px-4">
         <h1
           id="view-label"
           class="w-full flex items-center justify-center text-2xl
@@ -46,10 +46,10 @@ export class Navbar {
             >
               <img
                 class="size-12"
-                src="./src/assets/course-history-icon.svg"
+                src="/course-history-icon.svg"
                 alt="Course History"
               />
-              <p class="text-center text-xs">Course History</p>
+              <p class="text-center text-sm">Course History</p>
             </div>
           </a>
           <a
@@ -64,10 +64,10 @@ export class Navbar {
             >
               <img
                 class="size-12"
-                src="./src/assets/degree-icon.svg"
+                src="/degree-icon.svg"
                 alt="Degree"
               />
-              <p class="text-center text-xs">Degree Completion</p>
+              <p class="text-center text-sm">Degree Completion</p>
             </div>
           </a>
           <a
@@ -81,10 +81,10 @@ export class Navbar {
             >
               <img
                 class="size-12"
-                src="./src/assets/account-icon.svg"
+                src="/account-icon.svg"
                 alt="Account"
               />
-              <p class="text-center text-xs">Your Account</p>
+              <p class="text-center text-sm">Your Account</p>
             </div>
           </a>
         </div>
