@@ -44,7 +44,7 @@ export class Navbar {
         "
           >
             <div
-              class="flex h-full w-12 flex-col items-center justify-center px-1 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
             >
               <img
                 class="size-12"
@@ -62,7 +62,7 @@ export class Navbar {
         "
           >
             <div
-              class="flex h-full w-12 flex-col items-center justify-center px-1 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
             >
               <img class="size-12" src="/degree-icon.svg" alt="Degree" />
               <p class="text-center text-xs sm:text-sm">Degree Completion</p>
@@ -76,7 +76,7 @@ export class Navbar {
         "
           >
             <div
-              class="flex h-full w-12 flex-col items-center justify-center px-1 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
             >
               <img class="size-12" src="/account-icon.svg" alt="Account" />
               <p class="text-center text-xs sm:text-sm">Your Account</p>
