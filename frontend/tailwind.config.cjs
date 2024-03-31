@@ -18,5 +18,8 @@ module.exports = {
         'custom-brown-heading': 'hsla(30, 53%, 64%, 1)'
       }
     }
+  },
+  future: {
+    hoverOnlyWhenSupported: true
   }
 };
