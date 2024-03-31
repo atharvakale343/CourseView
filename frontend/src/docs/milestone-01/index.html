@@ -213,12 +213,98 @@
           </h2>
         </div>
         <p class="mx-96 flex flex-col space-y-3 text-justify">
-          structure this section to include an introduction, four main
-          paragraphs detailing the top types of data your application will
-          handle, and a conclusion, making up 600-700 words in total. Title the
-          section with an h2 tag. Focus on high-level data needs rather than
-          specific database designs or records. Here is an example of one data
-          requirement:
+          <strong>Introduction: </strong>
+
+          <br />
+
+          Our application aims to streamline course management for students,
+          providing features such as course history tracking, degree
+          requirements completion status, and optional course recommendations
+          based on user preferences and past courses. The following data
+          requirement analysis outlines the key data categories necessary for
+          the successful implementation of the application.
+
+          <br /><br />
+
+          <strong>Course History Data: </strong>
+
+          <br />
+
+          One of the core use cases of our Course Tracker application revolves
+          around managing a student's course history. This includes storing
+          information about each course taken, such as the course name,
+          semester, year, professor, credits earned, grades (optional), and any
+          additional notes. As users interact with the application, adding and
+          modifying their course history, the system must maintain accurate and
+          organized records to facilitate functions like viewing past courses,
+          tracking progress, and generating degree completion status reports
+          using the course history data. Hence, the course history data is
+          managed and displayed in the form of semester-segmented tables with
+          each section containing the courses taken, the credits earned for
+          each, and the total credits for that semester.
+
+          <br /><br />
+
+          <strong>Degree Completion Status Data: </strong>
+
+          <br />
+
+          Another crucial aspect of our application is monitoring the completion
+          status of degree requirements. This requires storing data related to
+          the specific requirements for a particular degree program, such as
+          mandatory courses, elective courses, credit thresholds, and completion
+          criteria for different academic areas (e.g., mathematics, computer
+          science core courses). Additionally, the system needs to track which
+          requirements have been fulfilled by the user's completed courses,
+          displaying progress indicators and highlighting completed sections for
+          the user's reference on the Degree Completion Status page.
+
+          <br /><br />
+
+          <strong>Course Recommendation Data: </strong>
+
+          <br />
+
+          To further enhance the functionality of our application, we are
+          conceptualizing the potential and optional idea of incorporating a
+          course recommendation feature based on various factors, including user
+          interests, past course history, remaining semesters, and graduation
+          requirements. To enable this functionality, the system requires data
+          related to course offerings, prerequisites, course descriptions, and
+          relevant academic pathways. Additionally, user preferences and
+          historical data about courses taken by similar users may help build
+          the recommendation algorithm.
+
+          <br /><br />
+
+          <strong>User Account Information Data: </strong>
+
+          <br />
+
+          Our application will also have a user account page for managing
+          personal information and preferences. This includes storing data such
+          as the user's name, date of birth (if needed), anticipated semester of
+          graduation, major, and any other relevant profile details.
+          Additionally, our application may store authentication credentials for
+          user login purposes, ensuring secure access to personalized features
+          and data. While maintaining user privacy and security, this data
+          enables personalized interactions with the application.
+
+          <br /><br />
+
+          <strong>Conclusion: </strong>
+
+          <br />
+
+          To summarize, our Course Tracker application requires rigorous data
+          management to support its core functionalities effectively. From
+          maintaining comprehensive course histories to tracking degree
+          completion progress and offering personalized recommendations, the
+          system must handle diverse data types efficiently in order to provide
+          students with valuable insights, streamline academic planning, and
+          enhance their overall educational experience.
+
+          <br />
         </p>
       </section>
 
@@ -226,16 +312,107 @@
         <div class="mb-4 w-full bg-custom-green-title">
           <h2 class="p-4 text-center text-2xl font-semibold">Wireframes</h2>
         </div>
-        <p class="mx-96 flex flex-col space-y-3 text-justify">
-          Utilize the id “wire-frames” for this section, where you'll include
-          four wireframes representing key views/screens of your application,
-          along with a brief paragraph for each explaining its purpose and
-          design rationale. You must be able to create an image from these
-          wireframes in PNG, JPG, or GIF format to be included in the document
-          using the img tag alongside each paragraph. This section should be
-          200-300 words in length, excluding HTML tags. Here is an example of
-          one wireframe and its description:
-        </p>
+        <div class="mx-96 flex flex-col space-y-3 text-justify">
+          In the following paragraphs, I have provided our website wireframes
+          alongside descriptions of their purpose and design rationale.
+
+          <br />
+          <br />
+
+          <div class="flex flex-col items-center justify-center">
+            <img
+              src="./assets/CourseHistoryPage.jpeg"
+              class="w-3/5 border border-gray-300"
+            />
+            <h1 class="mt-1 text-sm italic">Course History Page</h1>
+          </div>
+
+          <br />
+          <br />
+
+          This wireframe represents the central hub for students to visualize
+          their academic progress over time. By showcasing a carousel of past
+          semesters, ordered from latest to oldest, users can easily navigate
+          navigate through their course history. Each semester section displays
+          course details such as name, credits earned, and a cumulative total in
+          tabular form. The inclusion of an 'Add Course' option allows users to
+          update their course history in a frictionless manner. A prominent
+          progress bar serves as a visual indicator of degree completion,
+          allowing users to track their advancement towards graduation.
+
+          <br />
+          <br />
+
+          <div class="flex flex-col items-center justify-center">
+            <img
+              src="./assets/CourseCompletionStatusPage.jpeg"
+              class="w-3/5 border border-gray-300"
+            />
+            <h1 class="mt-1 text-sm italic">Course Completion Status Page</h1>
+          </div>
+
+          <br />
+          <br />
+
+          This wireframe offers students a comprehensive overview of their
+          progress towards degree completion. Through categorized sections
+          highlighting the diverse academic areas needed for graduation, users
+          can identify their course requirements. A subtle visual cue, such as a
+          green tick against completed courses, enhances clarity. Dynamic
+          progress bars provide real-time feedback, ensuring users remain
+          informed about their degree progress.
+
+          <br />
+          <br />
+
+          <div class="flex flex-col items-center justify-center">
+            <img
+              src="./assets/AddCoursePage.jpeg"
+              class="w-3/5 border border-gray-300"
+            />
+            <h1 class="mt-1 text-sm italic">Adding a Course Page</h1>
+          </div>
+
+          <br />
+          <br />
+
+          This wireframe presents a straightforward interface for students to
+          seamlessly add new courses to their tracker. The form's structured
+          layout, including mandatory fields for course details and optional
+          sections for additional information, ensures users can input data
+          efficiently. Clear labeling and input validation further enhance
+          usability, reducing errors and enhancing user satisfaction. Inclusion
+          of drop-fown features speeds up the process of selecting courses and
+          other respective attributes.
+
+          <br />
+          <br />
+
+          <div class="flex flex-col items-center justify-center">
+            <img
+              src="./assets/AccountOverviewPage.jpeg"
+              class="w-3/5 border border-gray-300"
+            />
+            <h1 class="mt-1 text-sm italic">Account Overview Page</h1>
+          </div>
+
+          <br />
+          <br />
+
+          This wireframe provides students with a personalized space to manage
+          their account details. From essential information such as username and
+          anticipated graduation semester to customizable features such as
+          primary concentration and minor concentrations, users can tailor their
+          account to reflect their academic journey accurately - changes that
+          will be percolated into other parts of the application. This wireframe
+          allows students to curate their Course Tracker experience to align
+          with their individual goals and aspirations. Options for managing and
+          changing password and other privacy features are also included in this
+          page.
+
+          <br />
+          <br />
+        </div>
       </section>
 
       <section id="real-world" class="mb-4">
