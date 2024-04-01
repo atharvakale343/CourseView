@@ -1,0 +1,14 @@
+[
+  {
+    "id": "COMPSCI",
+    "short": "COMPSCI",
+    "long": "Computer Science",
+    "title": "Computer Science"
+  },
+  {
+    "id": "MATH",
+    "short": "MATH",
+    "long": "Mathematics",
+    "title": "Mathematics"
+  }
+]

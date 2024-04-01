@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm pull_courses.ts"
+  },
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "node-fetch": "^2.7.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}
