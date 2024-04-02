@@ -5,6 +5,7 @@ import util from "util"
 const cookie_name = process.env.SCHEDULE_BUILDER_COOKIE_NAME
 const cookie_value = process.env.SCHEDULE_BUILDER_COOKIE_VALUE
 
+const base_path = "./courses"
 const base_url = "https://umass.collegescheduler.com"
 
 type Subject = {
@@ -100,12 +101,12 @@ const command = process.argv[2]
 if (command === "subjects") {
   get_subjects().then(subjects => {
     console.log("Number of subjects: ", subjects.length)
-    write_to_json_file(subjects, "subjects.json")
+    write_to_json_file(subjects, base_path + "subjects.json")
   })
 } else if (command === "courses") {
   if (process.argv.length === 3) {
     // get all courses
-    const subjects = (await read_json_from_file("subjects.json")) as Subject[]
+    const subjects = (await read_json_from_file(base_path + "subjects.json")) as Subject[]
     const coursesData = await Promise.all(
       subjects.map(subject =>
         get_courses(subject.id).then(courses => ({ subjectId: subject.id, courses: courses })),
@@ -115,7 +116,7 @@ if (command === "subjects") {
       "Number of courses: ",
       coursesData.reduce((acc, subjectData) => acc + subjectData.courses.length, 0),
     )
-    write_to_json_file(coursesData, "courses.json")
+    write_to_json_file(coursesData, base_path + "courses.json")
   } else if (process.argv.length === 4) {
     // get courses for a specific subject
     const subjectId = process.argv[3]
@@ -125,7 +126,7 @@ if (command === "subjects") {
       ),
     )
     console.log("Number of courses: ", coursesData[0].courses.length)
-    write_to_json_file(coursesData, "courses.json")
+    write_to_json_file(coursesData, base_path + "courses.json")
   } else {
     console.log("Usage: npm run start courses [subjectId]")
     process.exit(1)
@@ -134,12 +135,12 @@ if (command === "subjects") {
   let coursesData
   if (process.argv.length === 3) {
     // get all regblocks for all courses
-    coursesData = (await read_json_from_file("courses.json")) as CoursesJSON
+    coursesData = (await read_json_from_file(base_path + "courses.json")) as CoursesJSON
   } else if (process.argv.length === 5) {
     // get all regblocks for specific subjectId and courseId
     const subjectId = process.argv[3]
     const courseId = process.argv[4]
-    coursesData = (await read_json_from_file("courses.json")) as CoursesJSON
+    coursesData = (await read_json_from_file(base_path + "courses.json")) as CoursesJSON
     coursesData = coursesData.filter(subjectData => subjectData.subjectId === subjectId)
     coursesData = coursesData.map(subjectData => {
       subjectData.courses = subjectData.courses.filter(course => course.number === courseId)
@@ -164,7 +165,7 @@ if (command === "subjects") {
       ).then(courses => ({ subjectId: subjectData.subjectId, courses: courses })),
     ),
   )
-  write_to_json_file(courses_regblocks, "courses_regblocks.json")
+  write_to_json_file(courses_regblocks, base_path + "courses_regblocks.json")
 } else {
   console.log("Invalid command")
   process.exit(1)

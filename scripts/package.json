@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm pull_courses.ts"
+    "start": "node --no-warnings=ExperimentalWarning --loader ts-node/esm courses/pull_courses.ts",
+    "staff": "node --no-warnings=ExperimentalWarning --loader ts-node/esm faculty/faculty_and_staff.ts"
   },
   "type": "module",
   "dependencies": {
