@@ -34,7 +34,7 @@ In your terminal, navigate to the `frontend` directory and run the following com
 ```bash
 cd frontend
 npm install
-npm run milestone-1
+npm run milestone-01
 ```
 
 Read more about the frontend in the [frontend README](frontend/README.md).
