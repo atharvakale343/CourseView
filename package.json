@@ -10,7 +10,12 @@
     "name": "Team 4 Appsmiths",
     "url": "https://github.com/atharvakale343/CourseView"
   },
-  "contributors": [
+  "scripts": {
+    "milestone-01": "echo 'Please `cd frontend` and then `npm run milestone-01`'",
+    "validate-html": "echo 'Please `cd frontend` and then `npm run validate-html`'",
+    "prettier": "echo 'Please `cd frontend` and then `prettier`'"
+  },
+  "collaborators": [
     "Atharva Kale aukale@umass.edu atharvakale343",
     "Eric Fournier edfournier@umass.edu edfournier",
     "Taru Meshram tmeshram@umass.edu TaruMeshram"
