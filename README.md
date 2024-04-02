@@ -1,8 +1,9 @@
 ![example workflow](https://github.com/atharvakale343/CourseView/actions/workflows/node.js.yml/badge.svg)
 ![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=courseview-cs326-team-4)
-# Welcome
 
-Project description will go here. We will use this space to describe the project and its goals.
+# CourseView
+
+A Course History and Planning Tool for students of UMass Amherst. This project is a part of the CS326 Web Programming course at UMass Amherst.
 
 [Live Preview](https://courseview-cs326-team-4.vercel.app/)
 
