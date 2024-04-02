@@ -1,3 +1,9 @@
+/*
+* Get's all Faculty and Staff based on Spire's Faculty/Staff Directory PDF
+* Uses `pdftotext faculty-staff.pdf faculty-staff.txt` to generate a text file
+* Then reads the text file and extracts the names
+*/
+
 import fs from "fs"
 
 // Open and read in a text file called faculty-staff.txt
