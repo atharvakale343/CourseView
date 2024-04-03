@@ -1,5 +1,8 @@
 import { Events } from './Events';
 
+import { DropdownTextField } from './DropdownTextField';
+import { TextFieldDatalist } from './TextFieldDatalist';
+
 export class AddCourse {
   #events: Events;
 
@@ -19,11 +22,12 @@ export class AddCourse {
         Delete everything below, and replace it with the new code this is just a
         placeholder
       </h1>
-      <form id="add-course-form" class="flex flex-col">
+      <form id="add-course-form" class="flex flex-col gap-y-2">
         <label for="course-name">Course Name</label>
         <input type="text" id="course-name" name="course-name" />
         <label for="course-number">Course Number</label>
         <input type="text" id="course-number" name="course-number" />
+
         <button
           type="submit"
           class="
@@ -37,9 +41,17 @@ export class AddCourse {
     `;
 
     const form = elm.querySelector('form')!;
+
+    const dropdownTextField = new TextFieldDatalist(
+      ['COMPSCI', 'MATH', 'PHYSICS', 'ANTHRO', 'BIOLOGY', 'CHEM', 'ECON'],
+      'subject'
+    );
+    const dropdownTextFieldElm = await dropdownTextField.render();
+    form.appendChild(dropdownTextFieldElm);
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
+      console.log(formData);
       const courseName = formData.get('course-name') as string;
       const courseNumber = formData.get('course-number') as string;
       await this.#events.publish('addCourse', { courseName, courseNumber });
