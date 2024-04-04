@@ -39,7 +39,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'add-course');
+    this.#events.publish('navigateTo', 'degree-completion' satisfies View);
 
     return rootElement;
   }
