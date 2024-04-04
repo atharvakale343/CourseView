@@ -12,6 +12,7 @@
   },
   "scripts": {
     "milestone-01": "echo 'Please `cd frontend` and then `npm run milestone-01`'",
+    "milestone-02": "echo 'Please `cd frontend` and then `npm run milestone-02`'",
     "validate-html": "echo 'Please `cd frontend` and then `npm run validate-html`'",
     "prettier": "echo 'Please `cd frontend` and then `prettier`'"
   },
