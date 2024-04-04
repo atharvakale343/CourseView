@@ -1,6 +1,5 @@
 import { Events } from './Events';
 
-import { DropdownTextField } from './DropdownTextField';
 import { TextFieldDatalist } from './TextFieldDatalist';
 
 export class AddCourse {
