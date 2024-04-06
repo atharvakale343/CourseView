@@ -2,7 +2,7 @@ import { match } from 'ts-pattern';
 import { Navbar, View } from './Navbar';
 import { AddCourse } from './AddCourse';
 import { CourseHistory } from './CourseHistory';
-import { DegreeCompletion } from './DegreeCompletion';
+import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
 import { MyAccount } from './MyAccount';
 

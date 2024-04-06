@@ -3,8 +3,9 @@
 module.exports = {
   content: [
     './index.html',
-    './src/client/*.ts',
-    './src/**/*.{html, css, js, ts}',
+    './src/**/*.ts',
+    './src/**/*.html',
+    './src/**/*.css',
     './src/docs/milestone-01/index.html'
   ],
   darkMode: 'class',

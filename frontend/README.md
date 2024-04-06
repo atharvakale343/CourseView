@@ -33,6 +33,12 @@ More documentation about the frontend can be found in [frontend/README.md](./fro
 - Secondary: red-500
 - Tertiary: indigo-500
 
+# Icon Libraries
+
+https://fontawesome.com/v4/icon/exclamation-triangle
+https://www.svgrepo.com/svg/376180/retry
+
+
 # Notes
 
 This repository is generated based on a template: [https://github.com/doinel1a/vite-vanilla-ts](https://github.com/doinel1a/vite-vanilla-ts)

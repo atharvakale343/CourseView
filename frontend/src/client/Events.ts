@@ -66,6 +66,15 @@ export class Events {
       );
     }
   }
+  /**
+   * Unsubscribes a callback function from a specific event.
+   * @param {string} event The name of the event to unsubscribe from.
+   * @param {Function} callback The callback function to be removed from the
+   * event's subscription list.
+   */
+  unsubscribeAll(event: string) {
+    delete this.#subscribers[event];
+  }
 
   /**
    * Publishes a message to all subscribers of a specific event, executing their

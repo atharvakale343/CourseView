@@ -12,11 +12,25 @@
 
     <!-- <link rel="icon" type="image/svg+xml" href="/favicon.svg" /> -->
     <link rel="manifest" href="/app.webmanifest" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/themes/light.css"
+    />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.15.0/cdn/shoelace-autoloader.js"
+    ></script>
+
     <meta name="theme-color" content="#09090b" />
   </head>
 
   <body class="bg-amber-100">
     <script type="module" src="src/client/index.ts"></script>
+    <!-- This script can be ignored, it is to visualize breakpoints (https://github.com/thedevdojo/tailwind-breakpoint-tool) -->
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         let e = null,
@@ -84,7 +98,11 @@
           CourseView - A Course Requirements and History Tracker
         </h1> -->
         <div class="flex flex-row items-center justify-center bg-red-500 py-2">
-          <img src="/logo-text.png" alt="course view" class="h-12 sm:h-16 lg:h-20" />
+          <img
+            src="/logo-text.png"
+            alt="course view"
+            class="h-12 sm:h-16 lg:h-20"
+          />
         </div>
       </header>
 

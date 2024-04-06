@@ -9,7 +9,7 @@ type Course = {
 type UserCourse = {
   course: Course;
   semester: string;
-  professor: string;
   grade: string;
-  notes: string;
+  professor?: string;
+  notes?: string;
 };
