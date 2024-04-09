@@ -9,7 +9,7 @@ import { Events } from '../../Events';
 import { AssignedRequirement } from './AssignedRequirement';
 import { UnassignedRequirement } from './UnassignedRequirement';
 
-export class Cards {
+export class CardsViewList {
   #events: Events;
   #cards: [string, Card][];
   #cardsUpdateEvent: string;

@@ -1,7 +1,12 @@
+import {
+  generateCardsForUser,
+  getAllRequirements,
+  getRequirementAssignments
+} from '../../backendApi/MockBackend';
 import { DegreeRequirementAssignment } from '../../lib/types/Degree';
 import { guidGenerator, testingUserCourse } from '../../lib/utils';
 import { Events } from '../Events';
-import { Cards } from './cards/Cards';
+import { CardsViewList } from './cards/Cards';
 
 export class DegreeCompletion {
   #events: Events;
@@ -31,33 +36,8 @@ export class DegreeCompletion {
     };
 
     const cardUpdateEvent = guidGenerator();
-    const cards = new Cards(
-      [
-        { type: 'assignment', assignment: degreeAssignment },
-        { type: 'requirement', requirement: { requirementType: 'anonymous' } },
-        {
-          type: 'requirement',
-          requirement: {
-            requirementType: 'prefix',
-            courseSubjectId: 'COMPSCI',
-            prefix: '3XX+',
-            description: 'A CS 300+ Upper level elective'
-          }
-        },
-        {
-          type: 'requirement',
-          requirement: {
-            requirementType: 'fixed',
-            course: {
-              courseSubjectId: 'COMPSCI',
-              courseNumber: '187',
-              courseTitle: 'Data Structures',
-              courseDescription: '',
-              credits: 4
-            }
-          }
-        }
-      ],
+    const cards = new CardsViewList(
+      generateCardsForUser(getRequirementAssignments(), getAllRequirements()),
       cardUpdateEvent
     );
 

@@ -131,8 +131,6 @@ export class Navbar {
     this.#events.subscribe('navigateTo', (view: View) => {
       this.changeNavBarLabel(elm, view);
 
-      console.log(view);
-
       match(view)
         .with('course-history', () => {
           this.showIcon('course-history');
@@ -150,7 +148,6 @@ export class Navbar {
   }
 
   private showIcon(view: Icon) {
-    console.log(view);
     Object.values(this.#viewToViewIcon!).forEach((icon) => {
       icon?.classList?.remove('bg-slate-300'); // Add null check for classList
     });
