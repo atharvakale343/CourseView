@@ -22,9 +22,9 @@ export function guidGenerator() {
 
 export const testingUserCourse: UserCourse = {
   course: {
-    courseSubjectId: 'COMPSCI',
-    courseNumber: '121',
-    courseTitle: 'Intro to Problem Solving',
+    subjectId: 'COMPSCI',
+    number: '121',
+    title: 'Intro to Problem Solving',
     credits: 4,
     courseDescription: 'This is a course description'
   },

@@ -5,7 +5,7 @@ type _FixedRequirement = {
 
 type _PrefixRequirement = {
   requirementType: 'prefix';
-  courseSubjectId: string;
+  subjectId: string;
   prefix: string; // looks like "CS300+"
   description?: string; // looks like "A CS 300-level elective"
 };

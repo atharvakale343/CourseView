@@ -29,12 +29,6 @@ export class DegreeCompletion {
 
     const cardsElement = elm.querySelector('#cards')!;
 
-    const degreeAssignment: DegreeRequirementAssignment = {
-      requirement: { requirementType: 'anonymous' },
-      status: 'completed',
-      userCourse: testingUserCourse
-    };
-
     const cardUpdateEvent = guidGenerator();
     const cards = new CardsViewList(
       generateCardsForUser(getRequirementAssignments(), getAllRequirements()),

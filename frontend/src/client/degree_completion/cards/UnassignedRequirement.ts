@@ -95,7 +95,7 @@ export class UnassignedRequirement {
               <h2
                 class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
               >
-                ${prefixRequirement.courseSubjectId} ${prefixRequirement.prefix}
+                ${prefixRequirement.subjectId} ${prefixRequirement.prefix}
               </h2>
             </div>
             <div class="mb-4 flex h-14 items-center px-6">
@@ -154,15 +154,15 @@ export class UnassignedRequirement {
               <h2
                 class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
               >
-                ${fixedRequirement.course.courseSubjectId}
-                ${fixedRequirement.course.courseNumber}
+                ${fixedRequirement.course.subjectId}
+                ${fixedRequirement.course.number}
               </h2>
             </div>
             <div class="mb-4 flex h-14 items-center px-6">
               <h3
                 class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
               >
-                ${fixedRequirement.course.courseTitle}
+                ${fixedRequirement.course.title}
               </h3>
             </div>
             <button
@@ -196,10 +196,10 @@ export class UnassignedRequirement {
     const waitForCourseSelection = coursePickerModal.show();
     return waitForCourseSelection.then(() => {
       if (coursePickerModal.isConfirmed()) {
-        const pickedCourseDisplayTitle = coursePickerModal.getPickedCourse();
+        const pickeddisplayTitle = coursePickerModal.getPickedCourse();
         const userCoursePicked = getUserCourses().filter(
           (userCourse) =>
-            userCourse.course.courseDisplayTitle === pickedCourseDisplayTitle
+            userCourse.course.displayTitle === pickeddisplayTitle
         )[0];
         this.onAssign({
           type: 'assignment',

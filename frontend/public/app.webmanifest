@@ -1,8 +1,8 @@
 {
   "lang": "en-EN",
-  "name": "TODO: Your App Name",
-  "short_name": "TODO: Your App Name",
-  "description": "TODO: Your App Description",
+  "name": "CourseView",
+  "short_name": "Course View",
+  "description": "A Course Requirements and History Tracker",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

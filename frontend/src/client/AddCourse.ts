@@ -52,8 +52,8 @@ export class AddCourse {
       const formData = new FormData(form);
       console.log(formData);
       const courseName = formData.get('course-name') as string;
-      const courseNumber = formData.get('course-number') as string;
-      await this.#events.publish('addCourse', { courseName, courseNumber });
+      const number = formData.get('course-number') as string;
+      await this.#events.publish('addCourse', { courseName, number });
     });
 
     return elm;

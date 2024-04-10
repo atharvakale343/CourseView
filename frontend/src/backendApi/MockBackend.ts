@@ -1,73 +1,91 @@
 import {
   Card,
   DegreeRequirementAssignment,
-  Requirement
+  Requirement,
+  Section,
+  Subsection
 } from '../lib/types/Degree';
 
 export function getCourses(): Course[] {
   return [
     {
-      courseSubjectId: 'COMPSCI',
-      courseNumber: '121',
-      courseTitle: 'Intro to Programming',
-      courseDisplayTitle: '121 Intro to Programming',
-      credits: 4
+      id: 'COMPSCI 121',
+      subjectId: 'COMPSCI',
+      number: '121',
+      title: 'Intro to Programming',
+      titleLong: 'Intro to Programming',
+      displayTitle: '121 Intro to Programming',
+      credits: '4'
     },
     {
-      courseSubjectId: 'COMPSCI',
-      courseNumber: '187',
-      courseTitle: 'Data Structures',
-      courseDisplayTitle: '187 Data Structures',
-      credits: 4
+      id: 'COMPSCI 187',
+      subjectId: 'COMPSCI',
+      number: '187',
+      title: 'Data Structures',
+      titleLong: 'Data Structures',
+      displayTitle: '187 Data Structures',
+      credits: '4'
     },
     {
-      courseSubjectId: 'COMPSCI',
-      courseNumber: '220',
-      courseTitle: 'Programming Methodology',
-      courseDisplayTitle: '220 Programming Methodology',
-      credits: 4
+      id: 'COMPSCI 220',
+      subjectId: 'COMPSCI',
+      number: '220',
+      title: 'Programming Methodology',
+      titleLong: 'Programming Methodology',
+      displayTitle: '220 Programming Methodology',
+      credits: '4'
     },
     {
-      courseSubjectId: 'COMPSCI',
-      courseNumber: '240',
-      courseTitle: 'Reasoning Under Uncertainty',
-      courseDisplayTitle: '240 Reasoning Under Uncertainty',
-      credits: 4
+      id: 'COMPSCI 240',
+      subjectId: 'COMPSCI',
+      number: '240',
+      title: 'Reasoning Under Uncertainty',
+      titleLong: 'Reasoning Under Uncertainty',
+      displayTitle: '240 Reasoning Under Uncertainty',
+      credits: '4'
     },
     {
-      courseSubjectId: 'COMPSCI',
-      courseNumber: '326',
-      courseTitle: 'Web Programming',
-      courseDisplayTitle: '326 Web Programming',
-      credits: 4
+      id: 'COMPSCI 326',
+      subjectId: 'COMPSCI',
+      number: '326',
+      title: 'Web Programming',
+      titleLong: 'Web Programming',
+      displayTitle: '326 Web Programming',
+      credits: '4'
     },
     {
-      courseSubjectId: 'MATH',
-      courseNumber: '235',
-      courseTitle: 'Intro Linear Algebra',
-      courseDisplayTitle: '235 Intro Linear Algebra',
-      credits: 3
+      id: 'MATH 235',
+      subjectId: 'MATH',
+      number: '235',
+      title: 'Intro Linear Algebra',
+      titleLong: 'Intro Linear Algebra',
+      displayTitle: '235 Intro Linear Algebra',
+      credits: '3'
     },
     {
-      courseSubjectId: 'MATH',
-      courseNumber: '233',
-      courseTitle: 'Multivariate Calculus',
-      courseDisplayTitle: '233 Multivariate Calculus',
-      credits: 4
+      id: 'MATH 233',
+      subjectId: 'MATH',
+      number: '233',
+      title: 'Multivariate Calculus',
+      titleLong: 'Multivariate Calculus',
+      displayTitle: '233 Multivariate Calculus',
+      credits: '4'
     },
     {
-      courseSubjectId: 'MUSIC',
-      courseNumber: '150',
-      courseTitle: 'Lively Arts',
-      courseDisplayTitle: '150 Lively Arts',
-      credits: 4
+      id: 'MUSIC 150',
+      subjectId: 'MUSIC',
+      number: '150',
+      title: 'Lively Arts',
+      titleLong: 'Lively Arts',
+      displayTitle: '150 Lively Arts',
+      credits: '4'
     }
   ];
 }
 
 export function getUserCourses(): UserCourse[] {
   const courses = getCourses().reduce(
-    (acc, course) => ({ ...acc, [course.courseNumber]: course }),
+    (acc, course) => ({ ...acc, [course.number]: course }),
     {}
   );
   return [
@@ -107,7 +125,7 @@ export function getUserCourses(): UserCourse[] {
 
 export function getCSIntroRequirements(): Requirement[] {
   const courses = getCourses().reduce(
-    (acc, course) => ({ ...acc, [course.courseNumber]: course }),
+    (acc, course) => ({ ...acc, [course.number]: course }),
     {}
   );
   return [
@@ -125,7 +143,7 @@ export function getCSIntroRequirements(): Requirement[] {
 }
 export function getCSCoreRequirements(): Requirement[] {
   const courses = getCourses().reduce(
-    (acc, course) => ({ ...acc, [course.courseNumber]: course }),
+    (acc, course) => ({ ...acc, [course.number]: course }),
     {}
   );
   return [
@@ -145,43 +163,43 @@ export function getCSUpperLevelRequirements(): Requirement[] {
   return [
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '3XX+',
       description: 'A CS 300+ Upper level elective'
     },
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '3XX+',
       description: 'A CS 300+ Upper level elective'
     },
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '3XX+',
       description: 'A CS 300+ Upper level elective'
     },
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '3XX+',
       description: 'A CS 300+ Upper level elective'
     },
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '4XX+',
       description: 'A CS 400+ Upper level elective'
     },
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '4XX+',
       description: 'A CS 400+ Upper level elective'
     },
     {
       requirementType: 'prefix',
-      courseSubjectId: 'COMPSCI',
+      subjectId: 'COMPSCI',
       prefix: '4XX+',
       description: 'A CS 400+ Upper level elective'
     }
@@ -217,7 +235,7 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
     req: Requirement
   ) => {
     if (req.requirementType !== 'fixed') return acc;
-    return { ...acc, [req.course.courseNumber]: req };
+    return { ...acc, [req.course.number]: req };
   };
   const csIntroReqs = getCSIntroRequirements().reduce(fixedReqsReducer, {});
   const csCoreReqs = getCSCoreRequirements().reduce(fixedReqsReducer, {});
@@ -226,52 +244,52 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
   const userCourses: { [key: string]: UserCourse } = getUserCourses().reduce(
     (acc, userCourse) => ({
       ...acc,
-      [userCourse.course.courseNumber]: userCourse
+      [userCourse.course.number]: userCourse
     }),
     {}
   );
-  return Object.entries(userCourses).map(([courseNumber, userCourse]) => {
+  return Object.entries(userCourses).map(([number, userCourse]) => {
     const status =
       userCourse.semester === 'Spring 2024' ? 'in-progress' : 'completed';
-    if (csIntroReqs[courseNumber]) {
+    if (csIntroReqs[number]) {
       return {
-        requirement: csIntroReqs[courseNumber],
+        requirement: csIntroReqs[number],
         status: status,
         userCourse: userCourse
       };
     }
-    if (csCoreReqs[courseNumber]) {
+    if (csCoreReqs[number]) {
       return {
-        requirement: csCoreReqs[courseNumber],
+        requirement: csCoreReqs[number],
         status: status,
         userCourse: userCourse
       };
     }
     if (
       csUpperReqs.length > 0 &&
-      (courseNumber.startsWith('3') || courseNumber.startsWith('4'))
+      (number.startsWith('3') || number.startsWith('4'))
     ) {
       const possibleRequirements = csUpperReqs.filter(
         (req) =>
           req.requirementType === 'prefix' &&
-          courseNumber.startsWith(req.prefix.charAt(0))
+          number.startsWith(req.prefix.charAt(0))
       );
       const takeOne = possibleRequirements[0];
       csUpperReqs = csUpperReqs.filter((req) => req !== takeOne);
       return {
         requirement: takeOne,
         status: status,
-        userCourse: userCourses[courseNumber]
+        userCourse: userCourses[number]
       };
     }
     if (genedReqs.length > 0) {
       return {
         requirement: genedReqs.pop() as Requirement,
         status: status,
-        userCourse: userCourses[courseNumber]
+        userCourse: userCourses[number]
       };
     }
-    throw new Error('No requirement found for course ' + courseNumber);
+    throw new Error('No requirement found for course ' + number);
   });
 }
 
@@ -281,17 +299,14 @@ export function compareRequirements(
 ): boolean {
   if (req1.requirementType === 'fixed' && req2.requirementType === 'fixed') {
     return (
-      req1.course.courseSubjectId === req2.course.courseSubjectId &&
-      req1.course.courseNumber === req2.course.courseNumber
+      req1.course.subjectId === req2.course.subjectId &&
+      req1.course.number === req2.course.number
     );
   } else if (
     req1.requirementType === 'prefix' &&
     req2.requirementType === 'prefix'
   ) {
-    return (
-      req1.courseSubjectId === req2.courseSubjectId &&
-      req1.prefix === req2.prefix
-    );
+    return req1.subjectId === req2.subjectId && req1.prefix === req2.prefix;
   }
   return req1.requirementType === req2.requirementType;
 }
@@ -319,4 +334,6 @@ export function generateCardsForUser(
 }
 
 // TODO
-// export function getDegreeSections(): Section[] {}
+// export function getDegreeSections(): Section[] {
+//   return {}
+// }

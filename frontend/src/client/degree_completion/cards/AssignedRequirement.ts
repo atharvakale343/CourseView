@@ -22,17 +22,17 @@ export class AssignedRequirement {
             ${this.#assignment.status === 'completed' ? this.getCompletedHTML() : this.getInProgressHTML()}
             <div class="w-full bg-slate-50 p-6">
                 <div class="mb-4">
-                    <h2 class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold">${this.#userCourse.course.courseSubjectId} ${this.#userCourse.course.courseNumber}</h2>
+                    <h2 class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold">${this.#userCourse.course.subjectId} ${this.#userCourse.course.number}</h2>
                 </div>
                 <div class="mb-4 flex h-14 items-center">
-                    <h3 class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal">${this.#userCourse.course.courseTitle}</h3>
+                    <h3 class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal">${this.#userCourse.course.title}</h3>
                 </div>
                 <div class="mb-4">
                     <h4 class="text-md font-semibold">Semester: <span class="font-normal">${this.#userCourse.semester}</span></h4>
                 </div>
             </div>
         </div>
-        <div class="delete-div invisible absolute -right-8 top-8 -mr-4 group-hover:visible">
+        <div class="delete-div sm:invisible absolute -right-8 top-8 -mr-4 sm:group-hover:visible">
             <div class="fixed-size-button h-12 w-12">
                 <div class="flex flex-col divide-y divide-slate-800 rounded-md bg-white shadow-md shadow-gray-400">
                     <button class="delete-btn rounded-md bg-slate-50 p-2 text-3xl text-red-600 hover:bg-gray-200 hover:text-gray-800 focus:ring-4">
