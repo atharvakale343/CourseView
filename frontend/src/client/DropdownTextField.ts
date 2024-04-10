@@ -263,10 +263,6 @@ export class DropdownTextField {
       listener: enterHandler as EventListener
     });
 
-    const printCurrentSelection = () => {
-      console.log(this.#currentSelection?.textContent);
-    };
-
     return elm;
   }
 

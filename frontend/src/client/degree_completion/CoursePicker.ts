@@ -10,8 +10,11 @@ export class CoursePicker {
   #eventId: string = guidGenerator();
   #events: Events;
   #textFieldDatalist: DropdownTextField;
-  constructor() {
+  #userCourses: UserCourse[];
+  constructor(userCourses: UserCourse[]) {
     this.#events = Events.events();
+    this.#userCourses = userCourses;
+
     const root = document.getElementById('root')!;
     this.#pickerModal = document.createElement('div');
     this.#pickerModal.id = 'course-pick-modal';
@@ -47,10 +50,7 @@ export class CoursePicker {
 
     this.#textFieldDatalist = new DropdownTextField(
       // TODO: This should only include courses that haven't been assigned yet
-      getUserCourses().map(
-        (userCourse) =>
-          `${userCourse.course.subjectId} ${userCourse.course.displayTitle}`
-      ),
+      this.#userCourses.map((uc) => this.userCourseToDisplayStr(uc)),
       'course-pick-text',
       'Pick a course to assign...',
       'enter-key'
@@ -64,6 +64,10 @@ export class CoursePicker {
         if (!this.#textFieldDatalist.validate()) return;
         this.onPicked();
       });
+  }
+
+  private userCourseToDisplayStr(userCourse: UserCourse): string {
+    return `${userCourse.course.subjectId} ${userCourse.course.displayTitle}`;
   }
 
   private freezeBody() {
@@ -91,8 +95,13 @@ export class CoursePicker {
   isConfirmed(): boolean {
     return this.#confirmed;
   }
-  getPickedCourse(): string {
-    return this.#textFieldDatalist.getSelectedValue();
+  getPickedCourse(): UserCourse {
+    console.assert(this.#confirmed, 'Course not confirmed');
+    return this.#userCourses.find(
+      (userCourse) =>
+        this.userCourseToDisplayStr(userCourse) ===
+        this.#textFieldDatalist.getSelectedValue()
+    )!;
   }
   onPicked(): void {
     this.#confirmed = true;

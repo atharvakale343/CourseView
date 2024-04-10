@@ -192,20 +192,20 @@ export class UnassignedRequirement {
   }
 
   private showCoursePicker(): Promise<void> {
-    const coursePickerModal = new CoursePicker();
+    const coursePickerModal = new CoursePicker(getUserCourses());
     const waitForCourseSelection = coursePickerModal.show();
     return waitForCourseSelection.then(() => {
       if (coursePickerModal.isConfirmed()) {
-        const pickeddisplayTitle = coursePickerModal.getPickedCourse();
-        const userCoursePicked = getUserCourses().filter(
-          (userCourse) =>
-            userCourse.course.displayTitle === pickeddisplayTitle
-        )[0];
+        const pickedUserCourse = coursePickerModal.getPickedCourse();
+        console.assert(
+          pickedUserCourse !== undefined,
+          'Picked course not found'
+        );
         this.onAssign({
           type: 'assignment',
           assignment: {
             requirement: this.#requirement,
-            userCourse: userCoursePicked, // TODO: This should be the picked course
+            userCourse: pickedUserCourse, // TODO: This should be the picked course
             status: calculateCourseStatus(testingUserCourse) // TODO: This should be accurately set
           }
         } satisfies Card);
