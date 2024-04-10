@@ -55,7 +55,10 @@ export class UnassignedRequirement {
         </div>
       </div>
     `;
-    elm.querySelector('.assign-btn')?.addEventListener('click', () => {
+    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement
+    assignBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      assignBtn.blur()
       this.showCoursePicker();
     });
     return elm;
@@ -112,7 +115,10 @@ export class UnassignedRequirement {
         </div>
       </div>
     `;
-    elm.querySelector('.assign-btn')?.addEventListener('click', () => {
+    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement
+    assignBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      assignBtn.blur()
       this.showCoursePicker();
     });
     return elm;
@@ -169,7 +175,10 @@ export class UnassignedRequirement {
         </div>
       </div>
     `;
-    elm.querySelector('.assign-btn')?.addEventListener('click', () => {
+    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement
+    assignBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      assignBtn.blur()
       this.onAssign({
         type: 'assignment',
         assignment: {
@@ -184,8 +193,8 @@ export class UnassignedRequirement {
 
   private showCoursePicker(): Promise<void> {
     const coursePickerModal = new CoursePicker();
-    const waitForDelete = coursePickerModal.show();
-    return waitForDelete.then(() => {
+    const waitForCourseSelection = coursePickerModal.show();
+    return waitForCourseSelection.then(() => {
       if (coursePickerModal.isConfirmed()) {
         this.onAssign({
           type: 'assignment',

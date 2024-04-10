@@ -258,7 +258,6 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
       );
       const takeOne = possibleRequirements[0];
       csUpperReqs = csUpperReqs.filter((req) => req !== takeOne);
-      console.log(csUpperReqs);
       return {
         requirement: takeOne,
         status: status,
@@ -305,7 +304,6 @@ export function generateCardsForUser(
     type: 'assignment',
     assignment
   }));
-  console.log('assignmentCards', assignmentCards);
   const remainingReqs = requirements.filter(
     (req) =>
       !assignmentCards.find(
@@ -315,7 +313,6 @@ export function generateCardsForUser(
           compareRequirements(card.assignment.requirement, req)
       )
   );
-  console.log('remainingReqs', remainingReqs);
   return assignmentCards.concat(
     remainingReqs.map((req) => ({ type: 'requirement', requirement: req }))
   );
