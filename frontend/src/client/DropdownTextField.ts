@@ -167,6 +167,7 @@ export class DropdownTextField {
     };
 
     this.updateDropdown = () => {
+      this.#inputField.focus()
       updateDropdown(this.#inputField.value);
     };
 
