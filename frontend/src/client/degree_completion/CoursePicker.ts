@@ -46,14 +46,21 @@ export class CoursePicker {
     formElement.addEventListener('submit', (e) => e.preventDefault());
 
     this.#textFieldDatalist = new DropdownTextField(
+      // TODO: This should only include courses that haven't been assigned yet
       getUserCourses().map((course) => course.course.courseDisplayTitle),
       'course-pick-text',
       'Pick a course to assign...',
       'enter-key'
     );
-
     const textFieldDatalistElement = this.#textFieldDatalist.render();
     formElement.appendChild(textFieldDatalistElement);
+
+    this.#pickerModal
+      .querySelector('.assign-btn')!
+      .addEventListener('click', () => {
+        if (!this.#textFieldDatalist.validate()) return;
+        this.onPicked();
+      });
   }
 
   private freezeBody() {
@@ -65,7 +72,6 @@ export class CoursePicker {
     const scrollY = document.body.style.top;
     document.body.style.position = '';
     document.body.style.top = '';
-    console.log('scrollY', scrollY);
     window.scrollTo(0, parseInt(scrollY || '0') * -1);
   }
 
@@ -82,7 +88,10 @@ export class CoursePicker {
   isConfirmed(): boolean {
     return this.#confirmed;
   }
-  onDelete(): void {
+  getPickedCourse(): string {
+    return this.#textFieldDatalist.getSelectedValue();
+  }
+  onPicked(): void {
     this.#confirmed = true;
     this.onModalClose();
   }

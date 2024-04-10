@@ -5,10 +5,10 @@ import {
   PrefixRequirement,
   Requirement
 } from '../../../lib/types/Degree';
-import { DeleteConfirmation } from '../DeleteConfirmation';
 import { Events } from '../../Events';
 import { calculateCourseStatus, testingUserCourse } from '../../../lib/utils';
 import { CoursePicker } from '../CoursePicker';
+import { getUserCourses } from '../../../backendApi/MockBackend';
 
 export class UnassignedRequirement {
   #requirement: Requirement;
@@ -55,10 +55,10 @@ export class UnassignedRequirement {
         </div>
       </div>
     `;
-    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement
+    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement;
     assignBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      assignBtn.blur()
+      assignBtn.blur();
       this.showCoursePicker();
     });
     return elm;
@@ -115,10 +115,10 @@ export class UnassignedRequirement {
         </div>
       </div>
     `;
-    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement
+    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement;
     assignBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      assignBtn.blur()
+      assignBtn.blur();
       this.showCoursePicker();
     });
     return elm;
@@ -175,10 +175,10 @@ export class UnassignedRequirement {
         </div>
       </div>
     `;
-    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement
+    const assignBtn = elm.querySelector('.assign-btn')! as HTMLButtonElement;
     assignBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      assignBtn.blur()
+      assignBtn.blur();
       this.onAssign({
         type: 'assignment',
         assignment: {
@@ -196,11 +196,16 @@ export class UnassignedRequirement {
     const waitForCourseSelection = coursePickerModal.show();
     return waitForCourseSelection.then(() => {
       if (coursePickerModal.isConfirmed()) {
+        const pickedCourseDisplayTitle = coursePickerModal.getPickedCourse();
+        const userCoursePicked = getUserCourses().filter(
+          (userCourse) =>
+            userCourse.course.courseDisplayTitle === pickedCourseDisplayTitle
+        )[0];
         this.onAssign({
           type: 'assignment',
           assignment: {
             requirement: this.#requirement,
-            userCourse: testingUserCourse, // TODO: This should be the picked course
+            userCourse: userCoursePicked, // TODO: This should be the picked course
             status: calculateCourseStatus(testingUserCourse) // TODO: This should be accurately set
           }
         } satisfies Card);

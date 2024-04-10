@@ -167,7 +167,7 @@ export class DropdownTextField {
     };
 
     this.updateDropdown = () => {
-      this.#inputField.focus()
+      this.#inputField.focus();
       updateDropdown(this.#inputField.value);
     };
 
@@ -272,5 +272,9 @@ export class DropdownTextField {
 
   public validate(): boolean {
     return this.#validValues.includes(this.#inputField.value);
+  }
+
+  public getSelectedValue(): string {
+    return this.#inputField.value;
   }
 }
