@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern';
 import {
+  AnonymousRequirement,
   Card,
   FixedRequirement,
   PrefixRequirement,
@@ -20,7 +21,9 @@ export class UnassignedRequirement {
     this.#eventId = eventId;
   }
 
-  private getAnonRequirementHTMLDiv(): HTMLDivElement {
+  private getAnonRequirementHTMLDiv(
+    anonRequirement: AnonymousRequirement
+  ): HTMLDivElement {
     const elm = document.createElement('div');
     elm.innerHTML = /* HTML */ `
       <div
@@ -46,12 +49,14 @@ export class UnassignedRequirement {
             </svg>
             <span class="ml-2 font-semibold text-white">Planned</span>
           </div>
-          <button
-            class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
-          >
-            <i class="fa fa-plus"></i>
-            Assign
-          </button>
+          <div class="card-contents flex h-full w-full flex-col bg-slate-50">
+            <button
+              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
+            >
+              <i class="fa fa-plus"></i>
+              Assign
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -61,6 +66,22 @@ export class UnassignedRequirement {
       assignBtn.blur();
       this.showCoursePicker();
     });
+    const cardContentsDiv = elm.querySelector(
+      '.card-contents'
+    )! as HTMLDivElement;
+    if (anonRequirement.designation) {
+      const designationDiv = document.createElement('div');
+      designationDiv.innerHTML = /* HTML */ `
+        <div class="mb-4 px-6 pt-6">
+          <h2
+            class="line-clamp-2 overflow-hidden text-ellipsis text-2xl font-semibold"
+          >
+            ${anonRequirement.designation}
+          </h2>
+        </div>
+      `;
+      cardContentsDiv.prepend(designationDiv);
+    }
     return elm;
   }
 
@@ -223,7 +244,11 @@ export class UnassignedRequirement {
 
     match(this.#requirement)
       .with({ requirementType: 'anonymous' }, () => {
-        div.appendChild(this.getAnonRequirementHTMLDiv());
+        div.appendChild(
+          this.getAnonRequirementHTMLDiv(
+            this.#requirement as AnonymousRequirement
+          )
+        );
       })
       .with({ requirementType: 'prefix' }, () => {
         div.appendChild(

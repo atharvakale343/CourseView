@@ -25,21 +25,21 @@ type Course = {
   title: string;
   displayTitle: string;
   credits: string;
-  titleLong?: string;
-  subjectLong?: string;
-  subjectShort?: string;
-  topic?: string;
-  description?: string;
-  hasTopics?: false;
-  corequisites?: string;
-  prerequisites?: string;
-  hasRestrictions?: false;
+  titleLong?: string | null;
+  subjectLong?: string | null;
+  subjectShort?: string | null;
+  topic?: string | null;
+  description?: string | null;
+  hasTopics?: false | null;
+  corequisites?: string | null;
+  prerequisites?: string | null;
+  hasRestrictions?: false | null;
 };
 
 type UserCourse = {
   course: Course;
   semester: string;
-  grade?: string;
-  professor?: string;
-  notes?: string;
+  grade?: string | null;
+  professor?: string | null;
+  notes?: string | null;
 };

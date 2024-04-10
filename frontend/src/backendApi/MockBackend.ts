@@ -208,7 +208,8 @@ export function getCSUpperLevelRequirements(): Requirement[] {
 export function getGenedRequirements(): Requirement[] {
   return [
     {
-      requirementType: 'anonymous'
+      requirementType: 'anonymous',
+      designation: 'AL/AT/DB/I/SI'
     },
     {
       requirementType: 'anonymous'
