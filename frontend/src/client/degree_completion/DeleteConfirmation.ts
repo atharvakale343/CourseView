@@ -14,7 +14,7 @@ export class DeleteConfirmation {
     root.appendChild(this.#deleteModal);
 
     this.#deleteModal.innerHTML = /* HTML */ `
-      <div class="modal-bg fixed inset-0 bg-black bg-opacity-40">
+      <div class="modal-bg fixed inset-0 bg-black bg-opacity-70">
         <div
           class="fixed inset-0 m-auto flex h-40 max-h-dvh w-80 max-w-screen-sm items-center justify-center rounded-md bg-white shadow-md"
         >
@@ -62,8 +62,21 @@ export class DeleteConfirmation {
       });
   }
 
+  private freezeBody() {
+    document.body.style.top = `-${window.scrollY}px`;
+    document.body.style.position = 'fixed';
+  }
+
+  private unfreezeBody() {
+    const scrollY = document.body.style.top;
+    document.body.style.position = '';
+    document.body.style.top = '';
+    window.scrollTo(0, parseInt(scrollY || '0') * -1);
+  }
+
   async show() {
     return new Promise<void>((resolve) => {
+      this.freezeBody();
       this.#events.subscribe(this.#eventId, () => {
         this.#events.unsubscribeAll(this.#eventId);
         resolve();
@@ -82,6 +95,7 @@ export class DeleteConfirmation {
     this.onModalClose();
   }
   onModalClose(): void {
+    this.unfreezeBody();
     this.#events.publish(this.#eventId, null);
     document.getElementById('delete-modal')!.remove();
   }
