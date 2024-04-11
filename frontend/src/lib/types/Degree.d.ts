@@ -13,6 +13,7 @@ type _PrefixRequirement = {
 type _AnonymousRequirement = {
   requirementType: 'anonymous';
   designation?: string; // looks like "R1" or "BS"
+  description?: string; // looks like "A breadth requirement"
 };
 
 export type AnonymousRequirement = Readonly<_AnonymousRequirement>;

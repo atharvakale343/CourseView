@@ -16,25 +16,47 @@ export class AssignedRequirement {
   render(): HTMLDivElement {
     const div = document.createElement('div');
     div.classList.add('card');
-    div.innerHTML = /*HTML*/ `
-    <div class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1">
-        <div class="card-fixed h-56 w-72 overflow-hidden rounded-t-lg sm:rounded-b-lg shadow-lg">
-            ${this.#assignment.status === 'completed' ? this.getCompletedHTML() : this.getInProgressHTML()}
-            <div class="w-full bg-slate-50 p-6">
-                <div class="mb-4">
-                    <h2 class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold">${this.#userCourse.course.subjectId} ${this.#userCourse.course.number}</h2>
-                </div>
-                <div class="mb-4 flex h-14 items-center">
-                    <h3 class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal">${this.#userCourse.course.title}</h3>
-                </div>
-                <div class="mb-4">
-                    <h4 class="text-md font-semibold">Semester: <span class="font-normal">${this.#userCourse.semester}</span></h4>
-                </div>
+    div.innerHTML = /* HTML */ `
+      <div
+        class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1"
+      >
+        <div
+          class="card-fixed h-56 w-72 overflow-hidden rounded-t-lg shadow-lg group-hover:rounded-b-none sm:rounded-b-lg"
+        >
+          ${this.#assignment.status === 'completed'
+            ? this.getCompletedHTML()
+            : this.getInProgressHTML()}
+          <div class="w-full bg-slate-50 p-6">
+            <div class="mb-4">
+              <h2
+                class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
+              >
+                ${this.#userCourse.course.subjectId}
+                ${this.#userCourse.course.number}
+              </h2>
             </div>
+            <div class="mb-4 flex h-14 items-center">
+              <h3
+                class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
+              >
+                ${this.#userCourse.course.title}
+              </h3>
+            </div>
+            <div class="mb-4">
+              <h4 class="text-md font-semibold">
+                Semester:
+                <span class="font-normal">${this.#userCourse.semester}</span>
+              </h4>
+            </div>
+          </div>
         </div>
         <div class="delete-div">
           <button
-            class="assign-btn sm:hidden focus:shadow-outline bottom-[1] w-full grow rounded-b-md bg-gradient-to-br from-red-600 to-red-500 font-bold text-white hover:overflow-y-visible hover:from-red-500 hover:to-red-400 focus:ring-4"
+            class="delete-btn focus:shadow-outline absolute bottom-[1] w-full grow rounded-b-md
+            bg-gradient-to-br from-red-600 to-red-500 font-bold
+            text-white hover:overflow-y-visible hover:from-red-500 hover:to-red-400
+            focus:ring-4  group-hover:visible group-hover:block sm:invisible sm:hidden
+            py-1"
           >
             <div class="text-gray-50">
               <i class="fa fa-trash"></i>
@@ -42,16 +64,23 @@ export class AssignedRequirement {
             </div>
           </button>
         </div>
-        <div class="delete-div hidden sm:block invisible absolute -right-8 top-8 -mr-4 group-hover:visible">
-            <div class="fixed-size-button h-12 w-12">
-                <div class="flex flex-col divide-y divide-slate-800 rounded-md bg-white shadow-md shadow-gray-400">
-                    <button class="delete-btn rounded-md bg-slate-50 p-2 text-3xl text-red-600 hover:bg-gray-200 hover:text-gray-800 focus:ring-4">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </div>
+        <!-- Old delete button -->
+        <!-- <div
+          class="delete-div invisible absolute -right-8 top-8 -mr-4 hidden group-hover:visible sm:block"
+        >
+          <div class="fixed-size-button h-12 w-12">
+            <div
+              class="flex flex-col divide-y divide-slate-800 rounded-md bg-white shadow-md shadow-gray-400"
+            >
+              <button
+                class="delete-btn rounded-md bg-slate-50 p-2 text-3xl text-red-600 hover:bg-gray-200 hover:text-gray-800 focus:ring-4"
+              >
+                <i class="fa fa-trash"></i>
+              </button>
             </div>
-        </div>
-        </div>
+          </div>
+        </div> -->
+      </div>
     `;
 
     const cardFixed = div.querySelector('.card-fixed')! as HTMLDivElement;
@@ -60,6 +89,7 @@ export class AssignedRequirement {
       if (this.#assignment.requirement.requirementType === 'fixed') {
         (deleteDiv as HTMLDivElement).style.display = 'none';
         cardFixed.classList.add('rounded-b-md');
+        cardFixed.classList.remove('group-hover:rounded-b-none');
       }
       (deleteDiv as HTMLDivElement).style.visibility = 'block';
     });

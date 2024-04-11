@@ -39,7 +39,8 @@ export function getGenedARRConfig(): Section {
           },
           {
             requirementType: 'anonymous',
-            designation: 'JYW'
+            designation: 'JYW',
+            description: 'Major-specific Junior Year Writing'
           }
         ]
       },
@@ -50,11 +51,13 @@ export function getGenedARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
-            designation: 'R1'
+            designation: 'R1',
+            description: 'Basic Math Skills'
           },
           {
             requirementType: 'anonymous',
-            designation: 'R2'
+            designation: 'R2',
+            description: 'Analytical Reasoning'
           }
         ]
       },
@@ -65,11 +68,13 @@ export function getGenedARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
-            designation: 'BS'
+            designation: 'BS',
+            description: 'Biological Science'
           },
           {
             requirementType: 'anonymous',
-            designation: 'PS'
+            designation: 'PS',
+            description: 'Physical Science'
           }
         ]
       },
@@ -80,19 +85,24 @@ export function getGenedARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
-            designation: 'AL/AT'
+            designation: 'AL/AT',
+            description: 'Literature/Arts'
           },
           {
             requirementType: 'anonymous',
-            designation: 'HS'
+            designation: 'HS',
+            description: 'Historical Studies'
           },
           {
             requirementType: 'anonymous',
-            designation: 'SB'
+            designation: 'SB',
+            description: 'Social and Behavioral Sciences'
           },
           {
             requirementType: 'anonymous',
-            designation: 'AL/AT/DB/I/SI'
+            designation: 'AL/AT/DB/I/SI',
+            description:
+              'Additional Social World or Interdisciplinary'
           }
         ]
       }

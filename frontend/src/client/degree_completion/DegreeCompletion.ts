@@ -1,4 +1,8 @@
 import {
+  getCSMajorARRConfig,
+  getGenedARRConfig
+} from '../../backendApi/ArrConfig';
+import {
   generateCardsForUser,
   getAllRequirements,
   getRequirementAssignments
@@ -6,6 +10,7 @@ import {
 import { DegreeRequirementAssignment } from '../../lib/types/Degree';
 import { guidGenerator, testingUserCourse } from '../../lib/utils';
 import { Events } from '../Events';
+import { SectionCompletion } from './SectionCompletion';
 import { CardsViewList } from './cards/Cards';
 
 export class DegreeCompletion {
@@ -17,30 +22,21 @@ export class DegreeCompletion {
   async render() {
     const elm = document.createElement('div');
     elm.classList.add('p-8');
-    elm.id = 'degree-completion';
     elm.innerHTML = /* HTML */ `
       <div class="flex h-full items-center justify-center bg-amber-100">
-        <div
-          id="cards"
-          class="grid grid-cols-1 place-items-center gap-24"
-        ></div>
+        <div class="degree-completion flex flex-col gap-y-16"></div>
       </div>
     `;
 
-    const cardsElement = elm.querySelector('#cards')!;
-
-    const cardUpdateEvent = guidGenerator();
-    const cards = new CardsViewList(
-      generateCardsForUser(getRequirementAssignments(), getAllRequirements()),
-      cardUpdateEvent
+    const degreeCompletionElement = elm.querySelector(
+      '.degree-completion'
+    )! as HTMLDivElement;
+    degreeCompletionElement.appendChild(
+      new SectionCompletion(getGenedARRConfig()).render()
     );
-
-    this.#events.subscribe(cardUpdateEvent, () => {
-      cardsElement.innerHTML = '';
-      cardsElement.append(...cards.getCardElements());
-    });
-
-    this.#events.publish(cardUpdateEvent, cards);
+    degreeCompletionElement.appendChild(
+      new SectionCompletion(getCSMajorARRConfig()).render()
+    );
 
     return elm;
   }

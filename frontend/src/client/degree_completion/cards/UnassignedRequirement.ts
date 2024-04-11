@@ -69,12 +69,25 @@ export class UnassignedRequirement {
     const cardContentsDiv = elm.querySelector(
       '.card-contents'
     )! as HTMLDivElement;
+    if (anonRequirement.description) {
+      const descriptionDiv = document.createElement('div');
+      descriptionDiv.innerHTML = /* HTML */ `
+        <div class="mb-6 flex h-14 items-center px-6">
+          <h3
+            class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
+          >
+            ${anonRequirement.description}
+          </h3>
+        </div>
+      `;
+      cardContentsDiv.prepend(descriptionDiv);
+    }
     if (anonRequirement.designation) {
       const designationDiv = document.createElement('div');
       designationDiv.innerHTML = /* HTML */ `
-        <div class="mb-6 px-6 pt-6">
+        <div class="mb-4 px-6 pt-6">
           <h2
-            class="line-clamp-2 overflow-hidden text-ellipsis text-2xl font-semibold"
+            class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
           >
             ${anonRequirement.designation}
           </h2>
@@ -152,7 +165,9 @@ export class UnassignedRequirement {
       <div
         class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1"
       >
-        <div class="h-56 w-72 overflow-hidden rounded-lg shadow-lg">
+        <div
+          class="flex h-56 w-72 flex-col overflow-hidden rounded-lg shadow-lg"
+        >
           <div class="flex items-center justify-start bg-slate-600 p-1">
             <svg
               class="ml-2 size-5"
@@ -170,7 +185,7 @@ export class UnassignedRequirement {
             </svg>
             <span class="ml-2 font-semibold text-white">Planned</span>
           </div>
-          <div class="w-full bg-slate-50">
+          <div class="card-contents flex h-full w-full flex-col bg-slate-50">
             <div class="mb-4 px-6 pt-6">
               <h2
                 class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
@@ -179,7 +194,7 @@ export class UnassignedRequirement {
                 ${fixedRequirement.course.number}
               </h2>
             </div>
-            <div class="mb-4 flex h-14 items-center px-6">
+            <div class="mb-6 flex h-14 items-center px-6">
               <h3
                 class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
               >
@@ -187,10 +202,10 @@ export class UnassignedRequirement {
               </h3>
             </div>
             <button
-              class="assign-btn focus:shadow-outline w-full bg-gradient-to-br from-blue-600 to-blue-500 py-3 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
+              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
             >
               <i class="fa fa-plus"></i>
-              Add Course
+              Assign
             </button>
           </div>
         </div>
@@ -204,7 +219,7 @@ export class UnassignedRequirement {
         type: 'assignment',
         assignment: {
           requirement: fixedRequirement,
-          status: calculateCourseStatus(testingUserCourse), // TODO: This should be the newly added course
+          status: calculateCourseStatus(testingUserCourse), // TODO: This should always redirect to Course Add page and be the newly added course (optional)
           userCourse: testingUserCourse
         }
       });
