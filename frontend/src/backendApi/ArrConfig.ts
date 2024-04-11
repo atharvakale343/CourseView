@@ -101,8 +101,7 @@ export function getGenedARRConfig(): Section {
           {
             requirementType: 'anonymous',
             designation: 'AL/AT/DB/I/SI',
-            description:
-              'Additional Social World or Interdisciplinary'
+            description: 'Additional Social World or Interdisciplinary'
           }
         ]
       }
@@ -394,7 +393,8 @@ export function getCSMajorARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
-            designation: 'IE CS320/326'
+            designation: 'IE CS320/326',
+            description: 'Integrative Experience (IE)'
           },
           {
             requirementType: 'fixed',
@@ -426,11 +426,13 @@ export function getCSMajorARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
-            designation: 'Lab Science'
+            designation: 'Lab Science',
+            description: 'An approved Lab Science course'
           },
           {
             requirementType: 'anonymous',
-            designation: 'Lab Science'
+            designation: 'Lab Science',
+            description: 'An approved Lab Science course'
           }
         ]
       }
