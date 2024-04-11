@@ -13,7 +13,7 @@ export class SectionCompletion {
       <button
         class="dropdown-btn w-full rounded-md bg-slate-50 p-4 text-left shadow-md hover:bg-slate-200"
       >
-        <div class="flex flex-row">
+        <div class="flex flex-row gap-x-2">
           <div class="flex grow flex-col">
             <h1 class="text-xl md:text-2xl font-bold">${this.section.title}</h1>
             <h2 class="mt-1 text-sm italic lg:text-base">
