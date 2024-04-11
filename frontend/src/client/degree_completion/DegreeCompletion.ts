@@ -13,7 +13,7 @@ export class DegreeCompletion {
 
   async render() {
     const elm = document.createElement('div');
-    elm.classList.add('p-2');
+    elm.classList.add('p-4');
     elm.innerHTML = /* HTML */ `
       <div class="flex h-full items-center justify-center bg-amber-100">
         <div class="degree-completion flex flex-col gap-y-8 w-full"></div>
