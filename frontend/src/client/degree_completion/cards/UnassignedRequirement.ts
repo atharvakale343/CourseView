@@ -72,7 +72,7 @@ export class UnassignedRequirement {
     if (anonRequirement.designation) {
       const designationDiv = document.createElement('div');
       designationDiv.innerHTML = /* HTML */ `
-        <div class="mb-4 px-6 pt-6">
+        <div class="mb-6 px-6 pt-6">
           <h2
             class="line-clamp-2 overflow-hidden text-ellipsis text-2xl font-semibold"
           >

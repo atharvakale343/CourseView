@@ -18,7 +18,7 @@ export class AssignedRequirement {
     div.classList.add('card');
     div.innerHTML = /*HTML*/ `
     <div class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1">
-        <div class="h-56 w-72 overflow-hidden rounded-lg shadow-lg">
+        <div class="card-fixed h-56 w-72 overflow-hidden rounded-t-lg sm:rounded-b-lg shadow-lg">
             ${this.#assignment.status === 'completed' ? this.getCompletedHTML() : this.getInProgressHTML()}
             <div class="w-full bg-slate-50 p-6">
                 <div class="mb-4">
@@ -32,7 +32,17 @@ export class AssignedRequirement {
                 </div>
             </div>
         </div>
-        <div class="delete-div sm:invisible absolute -right-8 top-8 -mr-4 sm:group-hover:visible">
+        <div class="delete-div">
+          <button
+            class="assign-btn sm:hidden focus:shadow-outline bottom-[1] w-full grow rounded-b-md bg-gradient-to-br from-red-600 to-red-500 font-bold text-white hover:overflow-y-visible hover:from-red-500 hover:to-red-400 focus:ring-4"
+          >
+            <div class="text-gray-50">
+              <i class="fa fa-trash"></i>
+              Delete
+            </div>
+          </button>
+        </div>
+        <div class="delete-div hidden sm:block invisible absolute -right-8 top-8 -mr-4 group-hover:visible">
             <div class="fixed-size-button h-12 w-12">
                 <div class="flex flex-col divide-y divide-slate-800 rounded-md bg-white shadow-md shadow-gray-400">
                     <button class="delete-btn rounded-md bg-slate-50 p-2 text-3xl text-red-600 hover:bg-gray-200 hover:text-gray-800 focus:ring-4">
@@ -44,11 +54,15 @@ export class AssignedRequirement {
         </div>
     `;
 
-    const deleteDiv = div.querySelector('.delete-div')! as HTMLDivElement;
-    deleteDiv.style.visibility =
-      this.#assignment.requirement.requirementType === 'fixed'
-        ? 'hidden'
-        : 'block'
+    const cardFixed = div.querySelector('.card-fixed')! as HTMLDivElement;
+    const deleteDivs = div.querySelectorAll('.delete-div');
+    deleteDivs.forEach((deleteDiv) => {
+      if (this.#assignment.requirement.requirementType === 'fixed') {
+        (deleteDiv as HTMLDivElement).style.display = 'none';
+        cardFixed.classList.add('rounded-b-md');
+      }
+      (deleteDiv as HTMLDivElement).style.visibility = 'block';
+    });
 
     div.querySelector('.delete-btn')!.addEventListener('click', () => {
       this.onDelete();

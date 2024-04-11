@@ -22,7 +22,7 @@ export class DegreeCompletion {
       <div class="flex h-full items-center justify-center bg-amber-100">
         <div
           id="cards"
-          class="grid grid-cols-2 place-items-center gap-24"
+          class="grid grid-cols-1 place-items-center gap-24"
         ></div>
       </div>
     `;
