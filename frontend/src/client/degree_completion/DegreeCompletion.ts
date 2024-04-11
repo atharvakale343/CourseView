@@ -2,16 +2,8 @@ import {
   getCSMajorARRConfig,
   getGenedARRConfig
 } from '../../backendApi/ArrConfig';
-import {
-  generateCardsForUser,
-  getAllRequirements,
-  getRequirementAssignments
-} from '../../backendApi/MockBackend';
-import { DegreeRequirementAssignment } from '../../lib/types/Degree';
-import { guidGenerator, testingUserCourse } from '../../lib/utils';
 import { Events } from '../Events';
 import { SectionCompletion } from './SectionCompletion';
-import { CardsViewList } from './cards/Cards';
 
 export class DegreeCompletion {
   #events: Events;
