@@ -18,7 +18,7 @@ export class AssignedRequirement {
     div.classList.add('card');
     div.innerHTML = /* HTML */ `
       <div
-        class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1"
+        class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div
           class="card-fixed h-56 w-72 overflow-hidden rounded-t-lg shadow-lg group-hover:rounded-b-none sm:rounded-b-lg"

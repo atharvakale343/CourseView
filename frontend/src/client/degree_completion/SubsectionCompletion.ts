@@ -25,9 +25,11 @@ export class SubsectionCompletion {
     const elm = document.createElement('div');
     elm.classList.add('subsection-completion');
     elm.innerHTML = /* HTML */ `
-    <h1></h1>${this.subsection.title}</h1>
-    <h2>${this.subsection.description}</h2>
-        <div class="flex h-full items-center justify-center bg-amber-100 mt-4">
+      <div class="flex flex-col rounded-md bg-slate-50 p-4 shadow-md">
+        <h1 class="text-xl md:text-2xl font-bold">${this.subsection.title}</h1>
+        <h2 class="mt-1 text-sm md:text-base max-w-7xl">${this.subsection.description}</h2>
+      </div>
+      <div class="mt-4 flex h-full items-center justify-center">
         <div
           id="cards"
           class="grid grid-cols-1 place-items-baseline gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"

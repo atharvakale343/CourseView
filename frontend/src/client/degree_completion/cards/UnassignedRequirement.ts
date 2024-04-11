@@ -27,7 +27,7 @@ export class UnassignedRequirement {
     const elm = document.createElement('div');
     elm.innerHTML = /* HTML */ `
       <div
-        class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1"
+        class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div
           class="flex h-56 w-72 flex-col overflow-hidden rounded-lg shadow-lg"
@@ -104,7 +104,7 @@ export class UnassignedRequirement {
     const elm = document.createElement('div');
     elm.innerHTML = /* HTML */ `
       <div
-        class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1"
+        class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div class="h-56 w-72 overflow-hidden rounded-lg shadow-lg">
           <div class="flex items-center justify-start bg-slate-600 p-1">
@@ -163,7 +163,7 @@ export class UnassignedRequirement {
     const elm = document.createElement('div');
     elm.innerHTML = /* HTML */ `
       <div
-        class="card-inner group pointer-events-auto relative cursor-pointer transition hover:-translate-y-1"
+        class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div
           class="flex h-56 w-72 flex-col overflow-hidden rounded-lg shadow-lg"
