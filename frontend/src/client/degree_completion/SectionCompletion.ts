@@ -21,7 +21,7 @@ export class SectionCompletion {
       >
         <div class="flex flex-row gap-x-2">
           <div class="flex grow flex-col">
-            <h1 class="text-xl font-bold md:text-2xl">${this.section.title}</h1>
+            <h1 class="text-base font-bold md:text-2xl">${this.section.title}</h1>
             <h2 class="mt-1 text-sm italic lg:text-base">
               ${this.section.description}
             </h2>

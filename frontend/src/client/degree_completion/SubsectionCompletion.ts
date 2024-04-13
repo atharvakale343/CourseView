@@ -23,7 +23,7 @@ export class SubsectionCompletion {
     elm.classList.add('subsection-completion');
     elm.innerHTML = /* HTML */ `
       <div class="flex flex-col rounded-md bg-slate-50 p-4 shadow-md">
-        <h1 class="text-lg font-bold md:text-2xl">${this.subsection.title}</h1>
+        <h1 class="text-base font-bold md:text-2xl">${this.subsection.title}</h1>
         <h2 class="mt-1 max-w-7xl text-xs md:text-base">
           ${this.subsection.description}
         </h2>

@@ -43,8 +43,8 @@ export class DegreeCompletion {
     )! as HTMLDivElement;
 
     const sections = [
-      getGenedARRConfig(),
       getCSMajorARRConfig(),
+      getGenedARRConfig(),
     ];
 
     const autoAssignments = autoAssignCourses(
