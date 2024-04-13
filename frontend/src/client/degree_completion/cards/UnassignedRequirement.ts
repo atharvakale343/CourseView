@@ -240,7 +240,11 @@ export class UnassignedRequirement {
           id: guidGenerator(),
           requirement: fixedRequirement,
           status: calculateCourseStatus(testingUserCourse), // TODO: This should always redirect to Course Add page and be the newly added course (optional)
-          userCourse: testingUserCourse
+          userCourse: {
+            // TODO: This is not correct, you should always pick a valid course
+            course: fixedRequirement.course,
+            semester: 'Fall 2021'
+          }
         }
       });
     });
