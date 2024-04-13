@@ -24,7 +24,7 @@ export class Toolbar {
           disabled
         >
           <svg
-            class="size-8"
+            class="size-6 md:size-8"
             viewBox="0 0 25 25"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@ export class Toolbar {
               fill="currentColor"
             />
           </svg>
-          <h1>Reset Changes</h1>
+          <h1 class="text-sm md:text-base">Reset Changes</h1>
         </button>
         <button
           class="save-changes-btn focus:shadow-outline flex w-full grow flex-row items-center
@@ -46,7 +46,7 @@ export class Toolbar {
           disabled
         >
           <i class="fa fa-check"></i>
-          <h1>Save Changes</h1>
+          <h1 class="text-sm md:text-base">Save Changes</h1>
         </button>
       </div>
     `;
