@@ -1,4 +1,9 @@
-import { Card, DegreeRequirementAssignment, Requirement } from './types/Degree';
+import {
+  AnonymousRequirement,
+  Card,
+  DegreeRequirementAssignment,
+  Requirement
+} from './types/Degree';
 
 export function guidGenerator() {
   var S4 = function () {
@@ -20,6 +25,20 @@ export function guidGenerator() {
   );
 }
 
+export function createMarkedAsCompletedCourse(
+  req: AnonymousRequirement
+): Course {
+  return {
+    id: guidGenerator(),
+    subjectId: req.designation || 'ANONYMOUS',
+    number: '',
+    title: req.description || 'Anonymous Requirement',
+    displayTitle: `Anonymous Requirement`,
+    credits: req.credits || '0',
+    description: req.description
+  };
+}
+
 export const testingUserCourse: UserCourse = {
   course: {
     id: 'COMPSCI 121',
@@ -38,7 +57,7 @@ export function calculateCourseStatus(
   userCourse: UserCourse
 ): DegreeRequirementAssignment['status'] {
   // TODO Fix this with a time calculation on userCourse.semester
-  return Math.random() < 0.5 ? 'completed' : 'in-progress';
+  return userCourse.semester !== 'Spring 2024' ? 'completed' : 'in-progress';
 }
 export function compareRequirements(
   req1: Requirement,
@@ -66,6 +85,7 @@ export function compareRequirements(
   }
   return req1.requirementType === req2.requirementType;
 }
+
 export function generateCardsForUser(
   assignments: DegreeRequirementAssignment[],
   requirements: Requirement[]
@@ -86,4 +106,23 @@ export function generateCardsForUser(
       };
     }
   });
+}
+
+export function compareUserCourses(
+  userCourse1: UserCourse,
+  userCourse2: UserCourse
+): boolean {
+  return userCourse1.course.id === userCourse2.course.id;
+}
+
+export function getUnassignedCourses(
+  userCourses: UserCourse[],
+  assignments: DegreeRequirementAssignment[]
+): UserCourse[] {
+  return userCourses.filter(
+    (userCourse) =>
+      !assignments.find((assignment) =>
+        compareUserCourses(assignment.userCourse, userCourse)
+      )
+  );
 }

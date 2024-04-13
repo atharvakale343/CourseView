@@ -65,7 +65,6 @@ export class SubsectionCompletion {
     if (deleteAssignmentID && addAssignment) {
       throw new Error('Cannot delete and add at the same time');
     }
-    console.log('event', event);
     if (deleteAssignmentID) {
       this.createIfNotExistsLocalStoreCopy()
         .then(() =>

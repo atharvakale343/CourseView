@@ -36,8 +36,8 @@ export class DegreeCompletion {
     )! as HTMLDivElement;
 
     const sections = [
-      new SectionCompletion(getGenedARRConfig()),
-      new SectionCompletion(getCSMajorARRConfig())
+      new SectionCompletion(getCSMajorARRConfig()),
+      new SectionCompletion(getGenedARRConfig())
     ];
 
     this.#events.subscribe('degreeCompletionReset', async () => {

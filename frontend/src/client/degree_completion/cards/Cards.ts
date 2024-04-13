@@ -51,10 +51,6 @@ export class CardsViewList {
         added: newCard,
         changed: true
       } satisfies CardChangedEvent);
-      console.log(
-        'cards',
-        this.#cards.map((c) => c[1]).filter((r) => r.type === 'assignment')
-      );
     });
     return [id, card];
   }

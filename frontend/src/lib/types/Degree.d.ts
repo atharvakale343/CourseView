@@ -9,6 +9,7 @@ type _PrefixRequirement = {
   subjectId: string;
   prefix: string; // looks like "CS300+"
   description?: string; // looks like "A CS 300-level elective"
+  credits?: string;
 };
 
 type _AnonymousRequirement = {
@@ -16,6 +17,7 @@ type _AnonymousRequirement = {
   requirementId: string;
   designation?: string; // looks like "R1" or "BS"
   description?: string; // looks like "A breadth requirement"
+  credits?: string;
 };
 
 export type AnonymousRequirement = Readonly<_AnonymousRequirement>;

@@ -2,6 +2,7 @@ import { match } from 'ts-pattern';
 import {
   AnonymousRequirement,
   Card,
+  DegreeRequirementAssignment,
   FixedRequirement,
   PrefixRequirement,
   Requirement
@@ -9,20 +10,25 @@ import {
 import { Events } from '../../Events';
 import {
   calculateCourseStatus,
+  createMarkedAsCompletedCourse,
+  getUnassignedCourses,
   guidGenerator,
   testingUserCourse
 } from '../../../lib/utils';
 import { CoursePicker } from '../CoursePicker';
 import { getUserCourses } from '../../../backendApi/MockBackend';
+import { LocalStore } from '../../LocalStore';
 
 export class UnassignedRequirement {
   #requirement: Requirement;
   #eventId: string;
   #events: Events;
+  #localStore: LocalStore;
   constructor(requirement: Requirement, eventId: string) {
     this.#events = Events.events();
     this.#requirement = requirement;
     this.#eventId = eventId;
+    this.#localStore = LocalStore.localStore();
   }
 
   private getAnonRequirementHTMLDiv(
@@ -232,15 +238,36 @@ export class UnassignedRequirement {
     return elm;
   }
 
-  // TODO
-  // public createMarkAsCompletedUserCourse(): UserCourse {
-  // return {
-  //   'semester':
-  // }
-  // }
+  public createMarkAsCompletedUserCourse(
+    req: AnonymousRequirement
+  ): UserCourse {
+    return {
+      semester: 'Completed',
+      course: createMarkedAsCompletedCourse(req)
+    };
+  }
 
-  private showCoursePicker(): Promise<void> {
-    const coursePickerModal = new CoursePicker(getUserCourses());
+  private async getUserCourses(): Promise<UserCourse[]> {
+    return this.#localStore.getUserCourses('userCourses');
+  }
+
+  private async getUserAssignments(): Promise<DegreeRequirementAssignment[]> {
+    return this.#localStore
+      .getUserAssignments('userAssignmentsModified')
+      .catch(() => this.#localStore.getUserAssignments('userAssignments'));
+  }
+
+  private async showCoursePicker(): Promise<void> {
+    const userCourses = getUnassignedCourses(
+      await this.getUserCourses(),
+      await this.getUserAssignments()
+    );
+    if (this.#requirement.requirementType === 'anonymous') {
+      userCourses.unshift(
+        this.createMarkAsCompletedUserCourse(this.#requirement)
+      );
+    }
+    const coursePickerModal = new CoursePicker(userCourses);
     const waitForCourseSelection = coursePickerModal.show();
     return waitForCourseSelection.then(() => {
       if (coursePickerModal.isConfirmed()) {
