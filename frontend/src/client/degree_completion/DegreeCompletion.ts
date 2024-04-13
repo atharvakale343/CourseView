@@ -26,7 +26,7 @@ export class DegreeCompletion {
       <div
         class="flex h-full flex-col items-center justify-center gap-y-4 bg-amber-100"
       >
-        <div class="toolbar flex w-full"></div>
+        <div class="toolbar sticky top-4 z-10 flex w-full"></div>
         <div class="degree-completion flex w-full flex-col gap-y-8"></div>
       </div>
     `;
