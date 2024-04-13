@@ -11,7 +11,7 @@ import { getCSMajorARRConfig, getGenedARRConfig } from './ArrConfig';
 export function getCourses(): Course[] {
   return [
     {
-      id: 'COMPSCI 121',
+      id: 'COMPSCI|121',
       subjectId: 'COMPSCI',
       number: '121',
       title: 'Intro to Programming',
@@ -20,7 +20,7 @@ export function getCourses(): Course[] {
       credits: '4'
     },
     {
-      id: 'COMPSCI 187',
+      id: 'COMPSCI|187',
       subjectId: 'COMPSCI',
       number: '187',
       title: 'Data Structures',
@@ -29,7 +29,7 @@ export function getCourses(): Course[] {
       credits: '4'
     },
     {
-      id: 'COMPSCI 220',
+      id: 'COMPSCI|220',
       subjectId: 'COMPSCI',
       number: '220',
       title: 'Programming Methodology',
@@ -38,7 +38,7 @@ export function getCourses(): Course[] {
       credits: '4'
     },
     {
-      id: 'COMPSCI 240',
+      id: 'COMPSCI|240',
       subjectId: 'COMPSCI',
       number: '240',
       title: 'Reasoning Under Uncertainty',
@@ -47,7 +47,7 @@ export function getCourses(): Course[] {
       credits: '4'
     },
     {
-      id: 'COMPSCI 326',
+      id: 'COMPSCI|326',
       subjectId: 'COMPSCI',
       number: '326',
       title: 'Web Programming',
@@ -56,7 +56,7 @@ export function getCourses(): Course[] {
       credits: '4'
     },
     {
-      id: 'MATH 235',
+      id: 'MATH|235',
       subjectId: 'MATH',
       number: '235',
       title: 'Intro Linear Algebra',
@@ -65,7 +65,7 @@ export function getCourses(): Course[] {
       credits: '3'
     },
     {
-      id: 'MATH 233',
+      id: 'MATH|233',
       subjectId: 'MATH',
       number: '233',
       title: 'Multivariate Calculus',
@@ -74,7 +74,7 @@ export function getCourses(): Course[] {
       credits: '4'
     },
     {
-      id: 'MUSIC 150',
+      id: 'MUSIC|150',
       subjectId: 'MUSIC',
       number: '150',
       title: 'Lively Arts',

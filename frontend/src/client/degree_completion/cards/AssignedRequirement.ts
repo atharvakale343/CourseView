@@ -43,7 +43,7 @@ export class AssignedRequirement {
               </h3>
             </div>
             <div class="mb-1 md:mb-4">
-              <h4 class="flex flex-row text-xs md:text-base gap-x-2">
+              <h4 class="flex flex-row gap-x-2 text-xs md:text-base">
                 <span class="hidden font-semibold md:block">Semester: </span>
                 <span class="font-semibold md:font-normal"
                   >${this.#userCourse.semester}</span
@@ -134,7 +134,9 @@ export class AssignedRequirement {
             />
           </g>
         </svg>
-        <span class="ml-2 font-semibold text-white">In Progress</span>
+        <span class="ml-2 text-sm font-semibold text-white md:text-base"
+          >In Progress</span
+        >
       </div>
     `;
   }

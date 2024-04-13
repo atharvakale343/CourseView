@@ -101,6 +101,8 @@ export function autoAssignCourses(
       )
   );
 
+  console.log('requirements', requirements);
+
   // remove already taken user courses based on currentAssignments
   userCourses = userCourses.filter(
     (userCourse) =>
@@ -108,6 +110,8 @@ export function autoAssignCourses(
         compareUserCourses(assignment.userCourse, userCourse)
       )
   );
+
+  console.log('userCourses', userCourses);
 
   // auto-assign any userCourses that can be matched to a requirement
   const autoAssignments: DegreeRequirementAssignment[] = [];

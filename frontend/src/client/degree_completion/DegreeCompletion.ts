@@ -42,10 +42,7 @@ export class DegreeCompletion {
       '.degree-completion'
     )! as HTMLDivElement;
 
-    const sections = [
-      getCSMajorARRConfig(),
-      getGenedARRConfig(),
-    ];
+    const sections = [getCSMajorARRConfig(), getGenedARRConfig()];
 
     const autoAssignments = autoAssignCourses(
       await this.#localStore.getUserCourses('userCourses'),
