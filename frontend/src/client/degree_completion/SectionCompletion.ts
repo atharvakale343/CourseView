@@ -32,7 +32,7 @@ export class SectionCompletion {
           </div>
         </div>
       </button>
-      <div class="subsections mt-4 flex flex-col gap-y-16"></div>
+      <div class="subsections mt-4 flex flex-col gap-y-8 md:gap-y-16"></div>
     `;
 
     const subsections = elm.querySelector('.subsections')! as HTMLDivElement;

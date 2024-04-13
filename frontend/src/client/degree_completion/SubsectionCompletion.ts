@@ -1,5 +1,9 @@
 import { Card, Requirement, Subsection } from '../../lib/types/Degree';
-import { generateCardsForUser, guidGenerator } from '../../lib/utils';
+import {
+  autoAssignCourses,
+  generateCardsForUser,
+  guidGenerator
+} from '../../lib/utils';
 import { Events } from '../Events';
 import { LocalStore, UserAssignmentsDocumentKey } from '../LocalStore';
 import { CardChangedEvent, CardsViewList } from './cards/Cards';
@@ -19,15 +23,15 @@ export class SubsectionCompletion {
     elm.classList.add('subsection-completion');
     elm.innerHTML = /* HTML */ `
       <div class="flex flex-col rounded-md bg-slate-50 p-4 shadow-md">
-        <h1 class="text-xl font-bold md:text-2xl">${this.subsection.title}</h1>
-        <h2 class="mt-1 max-w-7xl text-sm md:text-base">
+        <h1 class="text-lg font-bold md:text-2xl">${this.subsection.title}</h1>
+        <h2 class="mt-1 max-w-7xl text-xs md:text-base">
           ${this.subsection.description}
         </h2>
       </div>
       <div class="mx-4 mb-4 mt-8 flex h-full items-center justify-center">
         <div
           id="cards"
-          class="grid grid-cols-1 place-items-baseline gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          class="grid grid-cols-2 place-items-stretch gap-8 md:gap-16 lg:grid-cols-3 2xl:grid-cols-4"
         ></div>
       </div>
     `;
@@ -105,6 +109,7 @@ export class SubsectionCompletion {
     const userAssignments =
       await this.#localStore.getUserAssignments('userAssignments');
 
-    return generateCardsForUser(userAssignments, reqs);
+    const cards = generateCardsForUser(userAssignments, reqs);
+    return cards;
   }
 }

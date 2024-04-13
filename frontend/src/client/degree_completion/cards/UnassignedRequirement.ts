@@ -16,7 +16,6 @@ import {
   testingUserCourse
 } from '../../../lib/utils';
 import { CoursePicker } from '../CoursePicker';
-import { getUserCourses } from '../../../backendApi/MockBackend';
 import { LocalStore } from '../../LocalStore';
 
 export class UnassignedRequirement {
@@ -40,7 +39,7 @@ export class UnassignedRequirement {
         class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div
-          class="flex h-56 w-72 flex-col overflow-hidden rounded-lg shadow-lg"
+          class="flex h-36 w-40 flex-col overflow-hidden rounded-lg shadow-lg md:h-56 md:w-72"
         >
           <div class="flex items-center justify-start bg-slate-600 p-1">
             <svg
@@ -57,11 +56,13 @@ export class UnassignedRequirement {
                 fill="#FFFFFF"
               />
             </svg>
-            <span class="ml-2 font-semibold text-white">Planned</span>
+            <span class="ml-2 text-sm font-semibold text-white md:text-base"
+              >Planned</span
+            >
           </div>
           <div class="card-contents flex h-full w-full flex-col bg-slate-50">
             <button
-              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
+              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 text-sm font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4 md:text-base"
             >
               <i class="fa fa-plus"></i>
               Assign
@@ -82,9 +83,9 @@ export class UnassignedRequirement {
     if (anonRequirement.description) {
       const descriptionDiv = document.createElement('div');
       descriptionDiv.innerHTML = /* HTML */ `
-        <div class="mb-6 flex h-14 items-center px-6">
+        <div class="mb-1 flex h-12 items-center px-4 md:mb-6 md:h-14 md:px-6">
           <h3
-            class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
+            class="text-md line-clamp-2 overflow-hidden text-ellipsis text-xs font-normal md:text-base"
           >
             ${anonRequirement.description}
           </h3>
@@ -95,9 +96,9 @@ export class UnassignedRequirement {
     if (anonRequirement.designation) {
       const designationDiv = document.createElement('div');
       designationDiv.innerHTML = /* HTML */ `
-        <div class="mb-4 px-6 pt-6">
+        <div class="mb-1 px-4 pt-2 md:mb-4 md:px-6 md:pt-6">
           <h2
-            class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
+            class="text-md line-clamp-1 overflow-hidden text-ellipsis font-semibold md:text-2xl"
           >
             ${anonRequirement.designation}
           </h2>
@@ -116,7 +117,9 @@ export class UnassignedRequirement {
       <div
         class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
-        <div class="h-56 w-72 overflow-hidden rounded-lg shadow-lg">
+        <div
+          class="flex h-36 w-40 flex-col overflow-hidden rounded-lg shadow-lg md:h-56 md:w-72"
+        >
           <div class="flex items-center justify-start bg-slate-600 p-1">
             <svg
               class="ml-2 size-5"
@@ -132,25 +135,27 @@ export class UnassignedRequirement {
                 fill="#FFFFFF"
               />
             </svg>
-            <span class="ml-2 font-semibold text-white">Planned</span>
+            <span class="ml-2 text-sm font-semibold text-white md:text-base"
+              >Planned</span
+            >
           </div>
-          <div class="w-full bg-slate-50">
-            <div class="mb-4 px-6 pt-6">
+          <div class="flex w-full grow flex-col bg-slate-50">
+            <div class="mb-1 px-4 pt-2 md:mb-4 md:px-6 md:pt-6">
               <h2
-                class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
+                class="line-clamp-1 overflow-hidden text-ellipsis font-semibold md:text-2xl"
               >
                 ${prefixRequirement.subjectId} ${prefixRequirement.prefix}
               </h2>
             </div>
-            <div class="mb-4 flex h-14 items-center px-6">
+            <div class="mb-1 flex h-12 items-center px-6 md:mb-6 md:h-14">
               <h3
-                class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
+                class="md:text-md line-clamp-2 overflow-hidden text-ellipsis text-xs font-normal"
               >
                 ${prefixRequirement.description}
               </h3>
             </div>
             <button
-              class="assign-btn focus:shadow-outline w-full bg-gradient-to-br from-blue-600 to-blue-500 py-3 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
+              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 text-sm font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4 md:text-base"
             >
               <i class="fa fa-plus"></i>
               Assign
@@ -176,7 +181,7 @@ export class UnassignedRequirement {
         class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div
-          class="flex h-56 w-72 flex-col overflow-hidden rounded-lg shadow-lg"
+          class="flex h-36 w-40 flex-col overflow-hidden rounded-lg shadow-lg md:h-56 md:w-72"
         >
           <div class="flex items-center justify-start bg-slate-600 p-1">
             <svg
@@ -193,26 +198,30 @@ export class UnassignedRequirement {
                 fill="#FFFFFF"
               />
             </svg>
-            <span class="ml-2 font-semibold text-white">Planned</span>
+            <span class="ml-2 text-sm font-semibold text-white md:text-base"
+              >Planned</span
+            >
           </div>
           <div class="card-contents flex h-full w-full flex-col bg-slate-50">
-            <div class="mb-4 px-6 pt-6">
+            <div class="mb-1 px-4 pt-2 md:mb-4 md:px-6 md:pt-6">
               <h2
-                class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
+                class="line-clamp-1 overflow-hidden text-ellipsis font-semibold md:text-2xl"
               >
                 ${fixedRequirement.course.subjectId}
                 ${fixedRequirement.course.number}
               </h2>
             </div>
-            <div class="mb-6 flex h-14 items-center px-6">
+            <div
+              class="mb-1 flex h-12 items-center px-4 md:mb-6 md:h-14 md:px-6"
+            >
               <h3
-                class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
+                class="text-md line-clamp-2 overflow-hidden text-ellipsis text-xs font-normal md:text-base"
               >
                 ${fixedRequirement.course.title}
               </h3>
             </div>
             <button
-              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4"
+              class="assign-btn focus:shadow-outline w-full grow bg-gradient-to-br from-blue-600 to-blue-500 text-sm font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4 md:text-base"
             >
               <i class="fa fa-plus"></i>
               Assign

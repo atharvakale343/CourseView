@@ -2,14 +2,21 @@ import {
   getCSMajorARRConfig,
   getGenedARRConfig
 } from '../../backendApi/ArrConfig';
+import {
+  autoAssignCourses,
+  getAllRequirementsFromSection
+} from '../../lib/utils';
 import { Events } from '../Events';
+import { LocalStore } from '../LocalStore';
 import { SectionCompletion } from './SectionCompletion';
 import { Toolbar } from './Toolbar';
 
 export class DegreeCompletion {
   #events: Events;
+  #localStore: LocalStore;
   constructor() {
     this.#events = Events.events();
+    this.#localStore = LocalStore.localStore();
   }
 
   public async render() {
@@ -27,7 +34,7 @@ export class DegreeCompletion {
     const dividerElement = document.createElement('div');
     dividerElement.innerHTML = /* HTML */ `
       <hr
-        class="mx-auto h-1 w-48 rounded border-0 bg-gray-300 dark:bg-gray-700"
+        class="mx-auto h-1 w-48 rounded border-0 bg-gray-400 dark:bg-gray-700"
       />
     `;
 
@@ -36,15 +43,32 @@ export class DegreeCompletion {
     )! as HTMLDivElement;
 
     const sections = [
-      new SectionCompletion(getCSMajorARRConfig()),
-      new SectionCompletion(getGenedARRConfig())
+      getCSMajorARRConfig(),
+      getGenedARRConfig(),
     ];
+
+    const autoAssignments = autoAssignCourses(
+      await this.#localStore.getUserCourses('userCourses'),
+      getAllRequirementsFromSection(sections),
+      await this.#localStore.getUserAssignments('userAssignments')
+    );
+
+    console.assert(
+      autoAssignments.length === 0,
+      'Assignments should already include auto-assignable assignments'
+    );
+
+    await Promise.all(
+      autoAssignments.map((assignment) =>
+        this.#localStore.addUserAssignment(assignment, 'userAssignments')
+      )
+    );
 
     this.#events.subscribe('degreeCompletionReset', async () => {
       degreeCompletionElement.innerHTML = '';
       const sectionElements = await Promise.all(
         sections.map(async (section) => {
-          return await section.render();
+          return await new SectionCompletion(section).render();
         })
       );
 

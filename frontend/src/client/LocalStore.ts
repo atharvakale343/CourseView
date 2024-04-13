@@ -29,17 +29,22 @@ export class LocalStore {
       if (error.name === 'not_found') {
         await this.createDocument('userCourses', { userCourses: '[]' });
       }
-      try {
-        await this.db.get('userAssignments');
-      } catch (e) {
-        const error = e as PouchDB.Core.Error;
-        if (error.name === 'not_found') {
-          await this.createDocument('userAssignments', {
-            userAssignments: '[]'
-          });
-        }
+    }
+    try {
+      await this.db.get('userAssignments');
+    } catch (e) {
+      const error = e as PouchDB.Core.Error;
+      if (error.name === 'not_found') {
+        await this.createDocument('userAssignments', {
+          userAssignments: '[]'
+        });
       }
     }
+    return this.db
+      .get('userAssignmentsModified')
+      .then((doc) => this.db.remove(doc))
+      .then(console.log)
+      .catch(() => Promise.resolve());
   }
 
   public async createDocument(

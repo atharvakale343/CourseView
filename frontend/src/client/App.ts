@@ -29,13 +29,13 @@ export class App {
 
   public async setupApp() {
     await this.#localStore.setup();
-    const uCCreation = this.#localStore.db
+    await this.#localStore.db
       .get('userCourses' satisfies UserCoursesDocumentKey)
       .catch(() =>
         this.#localStore.dumpUserCourses(getUserCourses(), 'userCourses')
       );
 
-    const UAnCreation = this.#localStore.db
+    await this.#localStore.db
       .get('userAssignments' satisfies UserAssignmentsDocumentKey)
       .catch(() =>
         this.#localStore.dumpUserAssignments(
@@ -43,8 +43,6 @@ export class App {
           'userAssignments'
         )
       );
-
-    return Promise.all([uCCreation, UAnCreation]);
   }
 
   async render(): Promise<HTMLElement> {

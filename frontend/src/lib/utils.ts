@@ -2,7 +2,9 @@ import {
   AnonymousRequirement,
   Card,
   DegreeRequirementAssignment,
-  Requirement
+  Requirement,
+  Section,
+  Subsection
 } from './types/Degree';
 
 export function guidGenerator() {
@@ -86,6 +88,48 @@ export function compareRequirements(
   return req1.requirementType === req2.requirementType;
 }
 
+export function autoAssignCourses(
+  userCourses: UserCourse[],
+  requirements: Requirement[],
+  currentAssignments: DegreeRequirementAssignment[]
+): DegreeRequirementAssignment[] {
+  // remove already taken requirements based on currentAssignments
+  requirements = requirements.filter(
+    (req) =>
+      !currentAssignments.find((assignment) =>
+        compareRequirements(assignment.requirement, req)
+      )
+  );
+
+  // remove already taken user courses based on currentAssignments
+  userCourses = userCourses.filter(
+    (userCourse) =>
+      !currentAssignments.find((assignment) =>
+        compareUserCourses(assignment.userCourse, userCourse)
+      )
+  );
+
+  // auto-assign any userCourses that can be matched to a requirement
+  const autoAssignments: DegreeRequirementAssignment[] = [];
+  userCourses.forEach((userCourse) => {
+    const req = requirements.find(
+      (req) =>
+        req.requirementType === 'fixed' &&
+        req.course.id === userCourse.course.id
+    );
+    if (req) {
+      autoAssignments.push({
+        id: guidGenerator(),
+        userCourse,
+        requirement: req,
+        status: calculateCourseStatus(userCourse)
+      });
+    }
+  });
+
+  return autoAssignments;
+}
+
 export function generateCardsForUser(
   assignments: DegreeRequirementAssignment[],
   requirements: Requirement[]
@@ -124,5 +168,29 @@ export function getUnassignedCourses(
       !assignments.find((assignment) =>
         compareUserCourses(assignment.userCourse, userCourse)
       )
+  );
+}
+
+export function getAllRequirementsFromSubsections(
+  subsections: Subsection[]
+): Requirement[] {
+  return subsections.reduce(
+    (reqs: Requirement[], subsection: Subsection) => [
+      ...reqs,
+      ...subsection.requirements
+    ],
+    [] as Requirement[]
+  );
+}
+
+export function getAllRequirementsFromSection(
+  sections: Section[]
+): Requirement[] {
+  return sections.reduce(
+    (reqs: Requirement[], section: Section) => [
+      ...reqs,
+      ...getAllRequirementsFromSubsections(section.subsections)
+    ],
+    [] as Requirement[]
   );
 }

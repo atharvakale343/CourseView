@@ -21,31 +21,33 @@ export class AssignedRequirement {
         class="card-inner group pointer-events-auto relative transition hover:-translate-y-1"
       >
         <div
-          class="card-fixed h-56 w-72 overflow-hidden rounded-t-lg shadow-lg group-hover:rounded-b-none sm:rounded-b-lg"
+          class="card-fixed h-36 w-40 overflow-hidden rounded-t-lg shadow-lg group-hover:rounded-b-none sm:rounded-b-lg md:h-56 md:w-72"
         >
           ${this.#assignment.status === 'completed'
             ? this.getCompletedHTML()
             : this.getInProgressHTML()}
-          <div class="w-full bg-slate-50 p-6">
-            <div class="mb-4">
+          <div class="w-full bg-slate-50 px-4 py-2 md:px-6 md:py-6">
+            <div class="mb-1 md:mb-4">
               <h2
-                class="line-clamp-1 overflow-hidden text-ellipsis text-2xl font-semibold"
+                class="line-clamp-1 overflow-hidden text-ellipsis font-semibold md:text-2xl"
               >
                 ${this.#userCourse.course.subjectId}
                 ${this.#userCourse.course.number}
               </h2>
             </div>
-            <div class="mb-4 flex h-14 items-center">
+            <div class="mb-1 flex h-12 items-center md:mb-4 md:h-14">
               <h3
-                class="text-md line-clamp-2 overflow-hidden text-ellipsis font-normal"
+                class="text-md line-clamp-2 overflow-hidden text-ellipsis text-xs font-normal md:text-base"
               >
                 ${this.#userCourse.course.title}
               </h3>
             </div>
-            <div class="mb-4">
-              <h4 class="text-md font-semibold">
-                Semester:
-                <span class="font-normal">${this.#userCourse.semester}</span>
+            <div class="mb-1 md:mb-4">
+              <h4 class="flex flex-row text-xs md:text-base gap-x-2">
+                <span class="hidden font-semibold md:block">Semester: </span>
+                <span class="font-semibold md:font-normal"
+                  >${this.#userCourse.semester}</span
+                >
               </h4>
             </div>
           </div>
@@ -53,33 +55,17 @@ export class AssignedRequirement {
         <div class="delete-div">
           <button
             class="delete-btn focus:shadow-outline absolute bottom-[1] w-full grow rounded-b-md
-            bg-gradient-to-br from-red-600 to-red-500 font-bold
-            text-white hover:overflow-y-visible hover:from-red-500 hover:to-red-400
-            focus:ring-4  group-hover:visible group-hover:block sm:invisible sm:hidden
-            py-1"
+            bg-gradient-to-br from-red-600 to-red-500 py-1
+            font-bold text-white hover:overflow-y-visible hover:from-red-500
+            hover:to-red-400  focus:ring-4 group-hover:visible group-hover:block sm:invisible
+            sm:hidden"
           >
-            <div class="text-gray-50">
+            <div class="text-xs text-gray-50 md:text-base">
               <i class="fa fa-trash"></i>
               Delete
             </div>
           </button>
         </div>
-        <!-- Old delete button -->
-        <!-- <div
-          class="delete-div invisible absolute -right-8 top-8 -mr-4 hidden group-hover:visible sm:block"
-        >
-          <div class="fixed-size-button h-12 w-12">
-            <div
-              class="flex flex-col divide-y divide-slate-800 rounded-md bg-white shadow-md shadow-gray-400"
-            >
-              <button
-                class="delete-btn rounded-md bg-slate-50 p-2 text-3xl text-red-600 hover:bg-gray-200 hover:text-gray-800 focus:ring-4"
-              >
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </div>
-        </div> -->
       </div>
     `;
 
@@ -117,7 +103,9 @@ export class AssignedRequirement {
     return /* HTML */ `
       <div class="flex items-center justify-start bg-green-600 p-1">
         <i class="fas fa-check ml-2 text-white"></i>
-        <span class="ml-2 font-semibold text-white">Completed</span>
+        <span class="ml-2 text-sm font-semibold text-white md:text-base"
+          >Completed</span
+        >
       </div>
     `;
   }
