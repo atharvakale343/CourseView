@@ -31,18 +31,29 @@ export class App {
     await this.#localStore.setup();
     await this.#localStore.db
       .get('userCourses' satisfies UserCoursesDocumentKey)
-      .catch(() =>
-        this.#localStore.dumpUserCourses(getUserCourses(), 'userCourses')
-      );
+      .then((doc) => {
+        // @ts-ignore
+        if (doc.userCourses === '[]') {
+          return this.#localStore.dumpUserCourses(
+            getUserCourses(),
+            'userCourses'
+          );
+        }
+      })
+      .catch((e) => console.error(e));
 
     await this.#localStore.db
       .get('userAssignments' satisfies UserAssignmentsDocumentKey)
-      .catch(() =>
-        this.#localStore.dumpUserAssignments(
-          getRequirementAssignments(),
-          'userAssignments'
-        )
-      );
+      .then((doc) => {
+        // @ts-ignore
+        if (doc.userAssignments === '[]') {
+          return this.#localStore.dumpUserAssignments(
+            getRequirementAssignments(),
+            'userAssignments'
+          );
+        }
+      })
+      .catch((e) => console.error(e));
   }
 
   async render(): Promise<HTMLElement> {
