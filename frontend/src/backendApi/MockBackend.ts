@@ -81,6 +81,91 @@ export function getCourses(): Course[] {
       titleLong: 'Lively Arts',
       displayTitle: '150 Lively Arts',
       credits: '4'
+    },
+    {
+      id: 'COMPSCI|377',
+      subjectLong: 'Computer Science',
+      subjectShort: 'CompSci',
+      subjectId: 'COMPSCI',
+      number: '377',
+      topic: null,
+      displayTitle: '377 Operating Systems',
+      title: 'Operating Systems',
+      titleLong: 'Computer Science 377 - Operating Systems',
+      description: null,
+      hasTopics: false,
+      corequisites: null,
+      prerequisites: null,
+      hasRestrictions: false,
+      credits: '4'
+    },
+    {
+      id: 'COMPSCI|383',
+      subjectLong: 'Computer Science',
+      subjectShort: 'CompSci',
+      subjectId: 'COMPSCI',
+      number: '383',
+      topic: null,
+      displayTitle: '383 Artificial Intelligence',
+      title: 'Artificial Intelligence',
+      titleLong: 'Computer Science 383 - Artificial Intelligence',
+      description: null,
+      hasTopics: false,
+      corequisites: null,
+      prerequisites: null,
+      hasRestrictions: false,
+      credits: '3'
+    },
+    {
+      id: 'COMPSCI|429',
+      subjectLong: 'Computer Science',
+      subjectShort: 'CompSci',
+      subjectId: 'COMPSCI',
+      number: '429',
+      topic: null,
+      displayTitle: '429 Software Engin Proj Management',
+      title: 'Software Engin Proj Management',
+      titleLong: 'Computer Science 429 - Software Engin Proj Management',
+      description: null,
+      hasTopics: false,
+      corequisites: null,
+      prerequisites: null,
+      hasRestrictions: false,
+      credits: '3'
+    },
+    {
+      id: 'COMPSCI|445',
+      subjectLong: 'Computer Science',
+      subjectShort: 'CompSci',
+      subjectId: 'COMPSCI',
+      number: '445',
+      topic: null,
+      displayTitle: '445 Information Systems',
+      title: 'Information Systems',
+      titleLong: 'Computer Science 445 - Information Systems',
+      description: null,
+      hasTopics: false,
+      corequisites: null,
+      prerequisites: null,
+      hasRestrictions: false,
+      credits: '3'
+    },
+    {
+      id: 'COMPSCI|446',
+      subjectLong: 'Computer Science',
+      subjectShort: 'CompSci',
+      subjectId: 'COMPSCI',
+      number: '446',
+      topic: null,
+      displayTitle: '446 Search Engines',
+      title: 'Search Engines',
+      titleLong: 'Computer Science 446 - Search Engines',
+      description: null,
+      hasTopics: false,
+      corequisites: null,
+      prerequisites: null,
+      hasRestrictions: false,
+      credits: '3'
     }
   ];
 }
@@ -126,9 +211,36 @@ export function getUserCourses(): UserCourse[] {
       // @ts-ignore
       course: courses['150'],
       semester: 'Fall 2023'
+    },
+    {
+      // @ts-ignore
+      course: courses['377'],
+      semester: 'Spring 2024'
+    },
+    {
+      // @ts-ignore
+      course: courses['383'],
+      semester: 'Spring 2024'
+    },
+    {
+      // @ts-ignore
+      course: courses['429'],
+      semester: 'Spring 2024'
+    },
+    {
+      // @ts-ignore
+      course: courses['445'],
+      semester: 'Spring 2024'
+    },
+    {
+      // @ts-ignore
+      course: courses['446'],
+      semester: 'Spring 2024'
     }
   ];
 }
+
+const taken = false;
 
 export function getRequirementAssignments(): DegreeRequirementAssignment[] {
   const fixedReqsReducer = (
@@ -173,6 +285,12 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
     }),
     {}
   );
+
+  delete userCourses['377']
+  delete userCourses['383']
+  delete userCourses['429']
+  delete userCourses['445']
+  delete userCourses['446']
   return Object.entries(userCourses).map(([number, userCourse]) => {
     const status =
       userCourse.semester === 'Spring 2024' ? 'in-progress' : 'completed';
