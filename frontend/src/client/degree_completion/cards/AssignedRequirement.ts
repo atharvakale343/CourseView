@@ -52,13 +52,13 @@ export class AssignedRequirement {
             </div>
           </div>
         </div>
-        <div class="delete-div">
+        <div class="delete-div h-6 md:h-8">
           <button
             class="delete-btn focus:shadow-outline absolute bottom-[1] w-full grow rounded-b-md
             bg-gradient-to-br from-red-600 to-red-500 py-1
             font-bold text-white hover:overflow-y-visible hover:from-red-500
             hover:to-red-400  focus:ring-4 group-hover:visible group-hover:block sm:invisible
-            sm:hidden"
+            "
           >
             <div class="text-xs text-gray-50 md:text-base">
               <i class="fa fa-trash"></i>
@@ -70,19 +70,22 @@ export class AssignedRequirement {
     `;
 
     const cardFixed = div.querySelector('.card-fixed')! as HTMLDivElement;
-    const deleteDivs = div.querySelectorAll('.delete-div');
-    deleteDivs.forEach((deleteDiv) => {
-      if (this.#assignment.requirement.requirementType === 'fixed') {
-        (deleteDiv as HTMLDivElement).style.display = 'none';
-        cardFixed.classList.add('rounded-b-md');
-        cardFixed.classList.remove('group-hover:rounded-b-none');
-      }
-      (deleteDiv as HTMLDivElement).style.visibility = 'block';
-    });
 
-    div.querySelector('.delete-btn')!.addEventListener('click', () => {
+    const deleteBtn = div.querySelector('.delete-btn')! as HTMLButtonElement;
+
+    deleteBtn.addEventListener('click', () => {
       this.onDelete();
     });
+
+    const deleteDiv = div.querySelector('.delete-div')! as HTMLDivElement;
+    if (this.#assignment.requirement.requirementType === 'fixed') {
+      (deleteDiv as HTMLDivElement).style.display = 'none';
+      cardFixed.classList.add('rounded-b-md');
+      cardFixed.classList.remove('group-hover:rounded-b-none');
+    }
+    (deleteDiv as HTMLDivElement).style.visibility = 'block';
+    console.log('deleteBtn', deleteBtn.clientHeight);
+
     return div;
   }
 
