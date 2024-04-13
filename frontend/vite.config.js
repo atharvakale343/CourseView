@@ -2,6 +2,7 @@ import path from 'node:path';
 
 import { partytownVite } from '@builder.io/partytown/utils';
 import legacy from '@vitejs/plugin-legacy';
+import vitePluginRequire from 'vite-plugin-require';
 
 import _config from './_config.js';
 
@@ -21,6 +22,7 @@ export default {
         'dist',
         '~partytown'
       )
-    })
+    }),
+    vitePluginRequire.default()
   ]
 };

@@ -1,10 +1,12 @@
 import {
-  Card,
+  AnonymousRequirement,
   DegreeRequirementAssignment,
   Requirement,
   Section,
   Subsection
 } from '../lib/types/Degree';
+import { guidGenerator } from '../lib/utils';
+import { getCSMajorARRConfig, getGenedARRConfig } from './ArrConfig';
 
 export function getCourses(): Course[] {
   return [
@@ -119,115 +121,13 @@ export function getUserCourses(): UserCourse[] {
       course: courses['326'],
       semester: 'Spring 2024',
       notes: 'Some notes go here'
-    }
-  ];
-}
-
-export function getCSIntroRequirements(): Requirement[] {
-  const courses = getCourses().reduce(
-    (acc, course) => ({ ...acc, [course.number]: course }),
-    {}
-  );
-  return [
+    },
     {
-      requirementType: 'fixed',
       // @ts-ignore
-      course: courses['121']
-    },
-    {
-      requirementType: 'fixed',
-      // @ts-ignore
-      course: courses['187']
+      course: courses['150'],
+      semester: 'Fall 2023'
     }
   ];
-}
-export function getCSCoreRequirements(): Requirement[] {
-  const courses = getCourses().reduce(
-    (acc, course) => ({ ...acc, [course.number]: course }),
-    {}
-  );
-  return [
-    {
-      requirementType: 'fixed',
-      // @ts-ignore
-      course: courses['220']
-    },
-    {
-      requirementType: 'fixed',
-      // @ts-ignore
-      course: courses['240']
-    }
-  ];
-}
-export function getCSUpperLevelRequirements(): Requirement[] {
-  return [
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '3XX+',
-      description: 'A CS 300+ Upper level elective'
-    },
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '3XX+',
-      description: 'A CS 300+ Upper level elective'
-    },
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '3XX+',
-      description: 'A CS 300+ Upper level elective'
-    },
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '3XX+',
-      description: 'A CS 300+ Upper level elective'
-    },
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '4XX+',
-      description: 'A CS 400+ Upper level elective'
-    },
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '4XX+',
-      description: 'A CS 400+ Upper level elective'
-    },
-    {
-      requirementType: 'prefix',
-      subjectId: 'COMPSCI',
-      prefix: '4XX+',
-      description: 'A CS 400+ Upper level elective'
-    }
-  ];
-}
-export function getGenedRequirements(): Requirement[] {
-  return [
-    {
-      requirementType: 'anonymous',
-      designation: 'AL/AT/DB/I/SI'
-    },
-    {
-      requirementType: 'anonymous'
-    },
-    {
-      requirementType: 'anonymous'
-    },
-    {
-      requirementType: 'anonymous'
-    }
-  ];
-}
-
-export function getAllRequirements(): Requirement[] {
-  return getCSIntroRequirements()
-    .concat(getCSCoreRequirements())
-    .concat(getCSUpperLevelRequirements())
-    .concat(getGenedRequirements());
 }
 
 export function getRequirementAssignments(): DegreeRequirementAssignment[] {
@@ -238,10 +138,34 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
     if (req.requirementType !== 'fixed') return acc;
     return { ...acc, [req.course.number]: req };
   };
-  const csIntroReqs = getCSIntroRequirements().reduce(fixedReqsReducer, {});
-  const csCoreReqs = getCSCoreRequirements().reduce(fixedReqsReducer, {});
-  let csUpperReqs = getCSUpperLevelRequirements();
-  const genedReqs = getGenedRequirements();
+  const csArr = getCSMajorARRConfig();
+
+  // Intro subsection
+  const csIntroReqs = csArr.subsections[0].requirements.reduce(
+    fixedReqsReducer,
+    {}
+  );
+
+  // Math subsection
+  const csMathReqs = csArr.subsections[1].requirements.reduce(
+    fixedReqsReducer,
+    {}
+  );
+
+  // Core subsection
+  const csCoreReqs = csArr.subsections[2].requirements.reduce(
+    fixedReqsReducer,
+    {}
+  );
+
+  // Upper level subsection
+  let csUpperReqs = csArr.subsections[3].requirements;
+
+  const genedReqs: Requirement[] = getGenedARRConfig().subsections.reduce(
+    (reqs, subsection) => [...reqs, ...subsection.requirements],
+    [] as Requirement[]
+  );
+
   const userCourses: { [key: string]: UserCourse } = getUserCourses().reduce(
     (acc, userCourse) => ({
       ...acc,
@@ -256,14 +180,16 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
       return {
         requirement: csIntroReqs[number],
         status: status,
-        userCourse: userCourse
+        userCourse: userCourse,
+        id: guidGenerator()
       };
     }
     if (csCoreReqs[number]) {
       return {
         requirement: csCoreReqs[number],
         status: status,
-        userCourse: userCourse
+        userCourse: userCourse,
+        id: guidGenerator()
       };
     }
     if (
@@ -280,61 +206,22 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
       return {
         requirement: takeOne,
         status: status,
-        userCourse: userCourses[number]
+        userCourse: userCourses[number],
+        id: guidGenerator()
       };
     }
     if (genedReqs.length > 0) {
+      const requirement = genedReqs.find(
+        (req) =>
+          req.requirementType === 'anonymous' && req.requirementId === 'AL/AT'
+      );
       return {
-        requirement: genedReqs.pop() as Requirement,
+        requirement: requirement as Requirement,
         status: status,
-        userCourse: userCourses[number]
+        userCourse: userCourses[number],
+        id: guidGenerator()
       };
     }
     throw new Error('No requirement found for course ' + number);
   });
 }
-
-export function compareRequirements(
-  req1: Requirement,
-  req2: Requirement
-): boolean {
-  if (req1.requirementType === 'fixed' && req2.requirementType === 'fixed') {
-    return (
-      req1.course.subjectId === req2.course.subjectId &&
-      req1.course.number === req2.course.number
-    );
-  } else if (
-    req1.requirementType === 'prefix' &&
-    req2.requirementType === 'prefix'
-  ) {
-    return req1.subjectId === req2.subjectId && req1.prefix === req2.prefix;
-  }
-  return req1.requirementType === req2.requirementType;
-}
-
-export function generateCardsForUser(
-  assignments: DegreeRequirementAssignment[],
-  requirements: Requirement[]
-): Card[] {
-  const assignmentCards: Card[] = assignments.map((assignment) => ({
-    type: 'assignment',
-    assignment
-  }));
-  const remainingReqs = requirements.filter(
-    (req) =>
-      !assignmentCards.find(
-        (card) =>
-          card.type === 'assignment' &&
-          card.assignment.requirement.requirementType !== 'prefix' &&
-          compareRequirements(card.assignment.requirement, req)
-      )
-  );
-  return assignmentCards.concat(
-    remainingReqs.map((req) => ({ type: 'requirement', requirement: req }))
-  );
-}
-
-// TODO
-// export function getDegreeSections(): Section[] {
-//   return {}
-// }

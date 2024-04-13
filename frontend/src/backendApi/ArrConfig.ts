@@ -39,6 +39,7 @@ export function getGenedARRConfig(): Section {
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'JYW-Major-specific Junior Year Writing',
             designation: 'JYW',
             description: 'Major-specific Junior Year Writing'
           }
@@ -51,11 +52,13 @@ export function getGenedARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
+            requirementId: 'R1-Basic Math Skills',
             designation: 'R1',
             description: 'Basic Math Skills'
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'R2-Analytical Reasoning',
             designation: 'R2',
             description: 'Analytical Reasoning'
           }
@@ -68,11 +71,13 @@ export function getGenedARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
+            requirementId: 'BS-Biological Science',
             designation: 'BS',
             description: 'Biological Science'
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'PS-Physical Science',
             designation: 'PS',
             description: 'Physical Science'
           }
@@ -85,21 +90,25 @@ export function getGenedARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
+            requirementId: 'AL/AT',
             designation: 'AL/AT',
             description: 'Literature/Arts'
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'HS',
             designation: 'HS',
             description: 'Historical Studies'
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'SB',
             designation: 'SB',
             description: 'Social and Behavioral Sciences'
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'AL/AT/DB/I/SI',
             designation: 'AL/AT/DB/I/SI',
             description: 'Additional Social World or Interdisciplinary'
           }
@@ -344,42 +353,49 @@ export function getCSMajorARRConfig(): Section {
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-300-1',
             subjectId: 'COMPSCI',
             prefix: '300+',
             description: ''
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-300-2',
             subjectId: 'COMPSCI',
             prefix: '300+',
             description: ''
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-300-3',
             subjectId: 'COMPSCI',
             prefix: '300+',
             description: ''
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-300-4',
             subjectId: 'COMPSCI',
             prefix: '300+',
             description: ''
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-400-1',
             subjectId: 'COMPSCI',
             prefix: '400+',
             description: ''
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-400-2',
             subjectId: 'COMPSCI',
             prefix: '400+',
             description: ''
           },
           {
             requirementType: 'prefix',
+            requirementId: 'CS-400-3',
             subjectId: 'COMPSCI',
             prefix: '400+',
             description: ''
@@ -393,6 +409,7 @@ export function getCSMajorARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
+            requirementId: 'IE-Integrative Experience-CS',
             designation: 'IE CS320/326',
             description: 'Integrative Experience (IE)'
           },
@@ -426,11 +443,13 @@ export function getCSMajorARRConfig(): Section {
         requirements: [
           {
             requirementType: 'anonymous',
+            requirementId: 'CS-Lab Science-1',
             designation: 'Lab Science',
             description: 'An approved Lab Science course'
           },
           {
             requirementType: 'anonymous',
+            requirementId: 'CS-Lab Science-2',
             designation: 'Lab Science',
             description: 'An approved Lab Science course'
           }

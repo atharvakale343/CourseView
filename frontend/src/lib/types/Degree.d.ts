@@ -5,6 +5,7 @@ type _FixedRequirement = {
 
 type _PrefixRequirement = {
   requirementType: 'prefix';
+  requirementId: string;
   subjectId: string;
   prefix: string; // looks like "CS300+"
   description?: string; // looks like "A CS 300-level elective"
@@ -12,6 +13,7 @@ type _PrefixRequirement = {
 
 type _AnonymousRequirement = {
   requirementType: 'anonymous';
+  requirementId: string;
   designation?: string; // looks like "R1" or "BS"
   description?: string; // looks like "A breadth requirement"
 };
@@ -39,6 +41,7 @@ export type Subsection = {
 
 export type DegreeRequirementAssignment = {
   status: 'in-progress' | 'completed';
+  id: string;
   requirement: Requirement;
   userCourse: UserCourse;
 };

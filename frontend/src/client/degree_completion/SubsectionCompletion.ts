@@ -1,35 +1,30 @@
 import { Card, Requirement, Subsection } from '../../lib/types/Degree';
-import { guidGenerator } from '../../lib/utils';
+import { generateCardsForUser, guidGenerator } from '../../lib/utils';
 import { Events } from '../Events';
-import { CardsViewList } from './cards/Cards';
-
-// Actually do this TODO
-function generateCardsFromUserCourses(reqs: Requirement[]): Card[] {
-  return reqs.map((req: Requirement) => {
-    return {
-      type: 'requirement',
-      requirement: req
-    };
-  });
-}
+import { LocalStore, UserAssignmentsDocumentKey } from '../LocalStore';
+import { CardChangedEvent, CardsViewList } from './cards/Cards';
 
 export class SubsectionCompletion {
   subsection: Subsection;
   #events: Events;
+  #localStore: LocalStore;
   constructor(subsection: Subsection) {
     this.#events = Events.events();
+    this.#localStore = LocalStore.localStore();
     this.subsection = subsection;
   }
 
-  public render(): HTMLDivElement {
+  public async render(): Promise<HTMLDivElement> {
     const elm = document.createElement('div');
     elm.classList.add('subsection-completion');
     elm.innerHTML = /* HTML */ `
       <div class="flex flex-col rounded-md bg-slate-50 p-4 shadow-md">
-        <h1 class="text-xl md:text-2xl font-bold">${this.subsection.title}</h1>
-        <h2 class="mt-1 text-sm md:text-base max-w-7xl">${this.subsection.description}</h2>
+        <h1 class="text-xl font-bold md:text-2xl">${this.subsection.title}</h1>
+        <h2 class="mt-1 max-w-7xl text-sm md:text-base">
+          ${this.subsection.description}
+        </h2>
       </div>
-      <div class="mt-4 flex h-full items-center justify-center">
+      <div class="mx-4 mb-4 mt-8 flex h-full items-center justify-center">
         <div
           id="cards"
           class="grid grid-cols-1 place-items-baseline gap-16 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -41,17 +36,76 @@ export class SubsectionCompletion {
 
     const cardUpdateEvent = guidGenerator();
     const cards = new CardsViewList(
-      generateCardsFromUserCourses(this.subsection.requirements),
+      await this.generateCards(this.subsection.requirements),
       cardUpdateEvent
     );
 
-    this.#events.subscribe(cardUpdateEvent, () => {
-      cardsElement.innerHTML = '';
-      cardsElement.append(...cards.getCardElements());
-    });
+    this.#events.subscribe(
+      cardUpdateEvent,
+      async (cardChangeEvent: CardChangedEvent) => {
+        await this.cardChanged(cardChangeEvent);
+        cardsElement.innerHTML = '';
+        cardsElement.append(...cards.getCardElements());
+      }
+    );
 
-    this.#events.publish(cardUpdateEvent, cards);
+    this.#events.publish(cardUpdateEvent, {
+      changed: false
+    } satisfies CardChangedEvent);
 
     return elm;
+  }
+
+  private async cardChanged(event: CardChangedEvent) {
+    if (!event.changed) return;
+    const deleteAssignmentID =
+      event.deleted.type === 'assignment' ? event.deleted.assignment.id : null;
+    const addAssignment =
+      event.added.type === 'assignment' ? event.added.assignment : null;
+    if (deleteAssignmentID && addAssignment) {
+      throw new Error('Cannot delete and add at the same time');
+    }
+    console.log('event', event);
+    if (deleteAssignmentID) {
+      this.createIfNotExistsLocalStoreCopy()
+        .then(() =>
+          this.#localStore.deleteUserAssignmentById(
+            deleteAssignmentID,
+            'userAssignmentsModified'
+          )
+        )
+        .then(() =>
+          this.#events.publish('userAssignmentsModifiedStoreChanged', null)
+        );
+    } else if (addAssignment) {
+      this.createIfNotExistsLocalStoreCopy()
+        .then(() =>
+          this.#localStore.addUserAssignment(
+            addAssignment,
+            'userAssignmentsModified'
+          )
+        )
+        .then(() =>
+          this.#events.publish('userAssignmentsModifiedStoreChanged', null)
+        );
+    }
+  }
+
+  private async createIfNotExistsLocalStoreCopy() {
+    const id: UserAssignmentsDocumentKey = 'userAssignmentsModified';
+    return this.#localStore.db.get(id).catch(() => {
+      return this.#localStore
+        .createDocument(id, { userAssignments: '[]' })
+        .then(() =>
+          this.#localStore.cloneUserAssignments('userAssignments', id)
+        );
+    });
+  }
+
+  private async generateCards(reqs: Requirement[]): Promise<Card[]> {
+    const userAssignments =
+      await this.#localStore.getUserAssignments('userAssignments');
+
+    return generateCardsForUser(userAssignments, reqs);
   }
 }

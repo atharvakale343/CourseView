@@ -5,6 +5,15 @@ import { CourseHistory } from './CourseHistory';
 import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
 import { MyAccount } from './MyAccount';
+import {
+  LocalStore,
+  UserAssignmentsDocumentKey,
+  UserCoursesDocumentKey
+} from './LocalStore';
+import {
+  getRequirementAssignments,
+  getUserCourses
+} from '../backendApi/MockBackend';
 
 type ViewElementMap = { [K in View]: HTMLElement };
 
@@ -12,8 +21,30 @@ export class App {
   #events: Events = Events.events();
   #mainViewElement: HTMLDivElement;
   #viewToViewElementMap: ViewElementMap | null = null;
+  #localStore: LocalStore;
   constructor() {
     this.#mainViewElement = document.createElement('div');
+    this.#localStore = LocalStore.localStore();
+  }
+
+  public async setupApp() {
+    await this.#localStore.setup();
+    const uCCreation = this.#localStore.db
+      .get('userCourses' satisfies UserCoursesDocumentKey)
+      .catch(() =>
+        this.#localStore.dumpUserCourses(getUserCourses(), 'userCourses')
+      );
+
+    const UAnCreation = this.#localStore.db
+      .get('userAssignments' satisfies UserAssignmentsDocumentKey)
+      .catch(() =>
+        this.#localStore.dumpUserAssignments(
+          getRequirementAssignments(),
+          'userAssignments'
+        )
+      );
+
+    return Promise.all([uCCreation, UAnCreation]);
   }
 
   async render(): Promise<HTMLElement> {

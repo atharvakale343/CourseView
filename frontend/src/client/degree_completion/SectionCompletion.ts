@@ -3,10 +3,16 @@ import { SubsectionCompletion } from './SubsectionCompletion';
 
 export class SectionCompletion {
   section: Section;
+  #subsections: SubsectionCompletion[];
   constructor(section: Section) {
     this.section = section;
+    this.#subsections = this.section.subsections.map(
+      (subsection) => new SubsectionCompletion(subsection)
+    );
   }
-  public render(): HTMLDivElement {
+
+
+  public async render(): Promise<HTMLDivElement> {
     const elm = document.createElement('div');
 
     elm.innerHTML = /* HTML */ `
@@ -15,7 +21,7 @@ export class SectionCompletion {
       >
         <div class="flex flex-row gap-x-2">
           <div class="flex grow flex-col">
-            <h1 class="text-xl md:text-2xl font-bold">${this.section.title}</h1>
+            <h1 class="text-xl font-bold md:text-2xl">${this.section.title}</h1>
             <h2 class="mt-1 text-sm italic lg:text-base">
               ${this.section.description}
             </h2>
@@ -31,9 +37,9 @@ export class SectionCompletion {
 
     const subsections = elm.querySelector('.subsections')! as HTMLDivElement;
     subsections.append(
-      ...this.section.subsections.map((subsection) => {
-        return new SubsectionCompletion(subsection).render();
-      })
+      ...(await Promise.all(
+        this.#subsections.map(async (subsection) => await subsection.render())
+      ))
     );
 
     const faCaretRight = elm.querySelector('.fa-caret-right')!;

@@ -7,7 +7,11 @@ import {
   Requirement
 } from '../../../lib/types/Degree';
 import { Events } from '../../Events';
-import { calculateCourseStatus, testingUserCourse } from '../../../lib/utils';
+import {
+  calculateCourseStatus,
+  guidGenerator,
+  testingUserCourse
+} from '../../../lib/utils';
 import { CoursePicker } from '../CoursePicker';
 import { getUserCourses } from '../../../backendApi/MockBackend';
 
@@ -218,6 +222,7 @@ export class UnassignedRequirement {
       this.onAssign({
         type: 'assignment',
         assignment: {
+          id: guidGenerator(),
           requirement: fixedRequirement,
           status: calculateCourseStatus(testingUserCourse), // TODO: This should always redirect to Course Add page and be the newly added course (optional)
           userCourse: testingUserCourse
@@ -226,6 +231,13 @@ export class UnassignedRequirement {
     });
     return elm;
   }
+
+  // TODO
+  // public createMarkAsCompletedUserCourse(): UserCourse {
+  // return {
+  //   'semester':
+  // }
+  // }
 
   private showCoursePicker(): Promise<void> {
     const coursePickerModal = new CoursePicker(getUserCourses());
@@ -240,6 +252,7 @@ export class UnassignedRequirement {
         this.onAssign({
           type: 'assignment',
           assignment: {
+            id: guidGenerator(),
             requirement: this.#requirement,
             userCourse: pickedUserCourse, // TODO: This should be the picked course
             status: calculateCourseStatus(testingUserCourse) // TODO: This should be accurately set

@@ -9,6 +9,14 @@ import { Events } from '../../Events';
 import { AssignedRequirement } from './AssignedRequirement';
 import { UnassignedRequirement } from './UnassignedRequirement';
 
+export type CardChangedEvent =
+  | {
+      changed: true;
+      deleted: Card;
+      added: Card;
+    }
+  | { changed: false };
+
 export class CardsViewList {
   #events: Events;
   #cards: [string, Card][];
@@ -34,11 +42,19 @@ export class CardsViewList {
 
   private createNewCardElement(card: Card): [string, Card] {
     const id = guidGenerator();
-    this.#events.subscribe(`${id}`, (card: Card) => {
+    this.#events.subscribe(id, (newCard: Card) => {
       const oldCardIdx = this.#cards.findIndex(([key, _]) => key === id);
-      this.#events.unsubscribeAll(`${id}`);
-      this.#cards[oldCardIdx] = this.createNewCardElement(card);
-      this.#events.publish(this.#cardsUpdateEvent, this);
+      this.#events.unsubscribeAll(id);
+      this.#cards[oldCardIdx] = this.createNewCardElement(newCard);
+      this.#events.publish(this.#cardsUpdateEvent, {
+        deleted: card,
+        added: newCard,
+        changed: true
+      } satisfies CardChangedEvent);
+      console.log(
+        'cards',
+        this.#cards.map((c) => c[1]).filter((r) => r.type === 'assignment')
+      );
     });
     return [id, card];
   }
