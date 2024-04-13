@@ -21,7 +21,7 @@ export class CoursePicker {
     root.appendChild(this.#pickerModal);
 
     this.#pickerModal.innerHTML = /* HTML */ `
-      <div class="modal-bg fixed inset-0 bg-black bg-opacity-70">
+      <div class="modal-bg fixed inset-0 bg-black bg-opacity-70 z-20">
         <div
           class="fixed inset-0 m-auto flex h-fit max-h-dvh max-w-lg items-center justify-center overflow-visible rounded-md bg-white shadow-md"
         >
