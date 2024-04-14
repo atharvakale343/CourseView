@@ -14,21 +14,27 @@ export class CourseHistory {
     // fetch user course history
     const userCourses = getUserCourses();
 
+    // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+    const distinct = (value: string, index: number, self: Array<string>) =>
+      self.indexOf(value) === index;
+
+    // get all the unique semesters from the userCourses
+    const semesters = userCourses
+      .map((course) => course.semester)
+      .filter(distinct);
+
     // grouping courses by semester and storing them in an object
-    const coursesBySemester = Object.create(null);
+    const coursesBySemester = semesters.reduce(
+      (acc, semester) => {
+        acc[semester] = userCourses.filter(
+          (course) => course.semester === semester
+        );
+        return acc;
+      },
+      {} as { [key: string]: UserCourse[] }
+    );
 
-    for (let i = 0; i < userCourses.length; i++) {
-      const userCourse = userCourses[i];
-
-      const currSemester = userCourse.semester;
-
-      if (!coursesBySemester[currSemester]) {
-        coursesBySemester[currSemester] = [];
-      }
-      coursesBySemester[userCourse.semester].push(userCourse);
-    }
-
-    // sort the semesters in descending order by copmaring the string in semester attribute
+    // sort the semesters in descending order by comparing the string in semester attribute
     // compare the last part of the string to sort the semesters based on year
     // if the years are same, compare the first part of the string to sort the semesters based on spring or fall - fall comes first in descending order
     const sortedSemesters = Object.keys(coursesBySemester).sort((a, b) => {
@@ -115,10 +121,10 @@ export class CourseHistory {
                   <tbody>
                     ${coursesBySemester[semester]
                       .map(
-                        (course: Course) => `
+                        (userCourse: UserCourse) => `
                           <tr>
-                            <td class="px-4 py-2">${course.id}</td>
-                            <td class="px-4 py-2">${course.credits}</td>
+                            <td class="px-4 py-2">${userCourse.course.subjectId} ${userCourse.course.number}</td>
+                            <td class="px-4 py-2">${userCourse.course.credits}</td>
                           </tr>
                         `
                       )
