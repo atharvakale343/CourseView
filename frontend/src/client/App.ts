@@ -1,6 +1,6 @@
 import { match } from 'ts-pattern';
 import { Navbar, View } from './Navbar';
-import { AddCourse } from './AddCourse';
+import { AddCourse } from './add_course/AddCourse';
 import { CourseHistory } from './CourseHistory';
 import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
@@ -79,7 +79,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'degree-completion' satisfies View);
+    this.#events.publish('navigateTo', 'add-course' satisfies View);
 
     return rootElement;
   }

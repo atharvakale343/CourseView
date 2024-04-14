@@ -84,7 +84,6 @@ export class AssignedRequirement {
       cardFixed.classList.remove('group-hover:rounded-b-none');
     }
     (deleteDiv as HTMLDivElement).style.visibility = 'block';
-    console.log('deleteBtn', deleteBtn.clientHeight);
 
     return div;
   }

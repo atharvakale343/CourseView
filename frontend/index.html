@@ -4,7 +4,10 @@
     <!-- ESSENTIAL -->
     <meta charset="utf-8" />
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
 
     <!-- GENERAL -->
     <title>CourseView: A Course Requirements and History Tracker</title>
@@ -26,13 +29,15 @@
 
     <meta name="theme-color" content="#09090b" />
     <!-- https://stackoverflow.com/questions/77061323/error-pouchdb-on-vite-referenceerror-global-is-not-defined -->
-    <script>window.global = window</script>
+    <script>
+      window.global = window;
+    </script>
   </head>
 
   <body class="bg-amber-100">
     <script type="module" src="src/client/index.ts"></script>
     <!-- This script can be ignored, it is to visualize breakpoints (https://github.com/thedevdojo/tailwind-breakpoint-tool) -->
-    <!-- <script>
+    <script>
       document.addEventListener('DOMContentLoaded', function () {
         let e = null,
           n = 'breakPoints',
@@ -86,7 +91,7 @@
             }, 3e3));
         });
       });
-    </script> -->
+    </script>
     <!-- main container -->
     <div
       class="container mx-auto flex min-h-screen flex-col shadow-sm shadow-slate-700"
