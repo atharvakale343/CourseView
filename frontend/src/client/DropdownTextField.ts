@@ -88,7 +88,7 @@ export class DropdownTextField {
           <!-- Div that contains dropdown elements -->
           <div
             id="autocomplete-dropdown"
-            class="absolute left-0 top-full z-10 hidden max-h-48 w-full overflow-y-auto rounded-b-md border border-gray-200 bg-white ease-out"
+            class="absolute left-0 top-full z-20 hidden max-h-48 w-full overflow-y-auto rounded-b-md border border-gray-200 bg-white ease-out"
           >
             <!-- Dropdown items will be dynamically inserted here -->
           </div>

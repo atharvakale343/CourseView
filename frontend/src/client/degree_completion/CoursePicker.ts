@@ -1,8 +1,6 @@
-import { getUserCourses } from '../../backendApi/MockBackend';
 import { guidGenerator } from '../../lib/utils';
 import { DropdownTextField } from '../DropdownTextField';
 import { Events } from '../Events';
-import { TextFieldDatalist } from '../TextFieldDatalist';
 
 export class CoursePicker {
   #pickerModal: HTMLDivElement;
