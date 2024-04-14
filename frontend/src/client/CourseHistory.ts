@@ -68,12 +68,14 @@ export class CourseHistory {
       </button>
       <p class="text-black">You have completed the following courses:</p>
 
-      <div class="relative grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+      <div
+        class="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
         ${sortedSemesters
           .map(
             (semester) => /* HTML */ `
               <button
-                class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 hover:-translate-y-1"
+                class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 transition hover:-translate-y-1"
               >
                 <h2 class="mb-2 text-center text-2xl font-bold text-black">
                   ${semester}
@@ -81,8 +83,16 @@ export class CourseHistory {
                 <table class="w-full">
                   <thead>
                     <tr>
-                      <th class="px-4 py-2">Course ID</th>
-                      <th class="px-4 py-2">Credits</th>
+                      <th
+                        class="px-4 py-2 text-gray-700"
+                      >
+                        Course ID
+                      </th>
+                      <th
+                        class="border-b-2 border-gray-600 px-4 py-2 text-gray-700"
+                      >
+                        Credits
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -91,7 +101,7 @@ export class CourseHistory {
                         (userCourse: UserCourse) => `
                           <tr>
                             <td class="px-4 py-2">${userCourse.course.subjectId} ${userCourse.course.number}</td>
-                            <td class="px-4 py-2">${userCourse.course.credits}</td>
+                            <td class="px-4 py-2 border-y border-gray-500">${userCourse.course.credits}</td>
                           </tr>
                         `
                       )
