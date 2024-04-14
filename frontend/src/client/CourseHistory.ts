@@ -164,3 +164,5 @@ export class CourseHistory {
     return elm;
   }
 }
+
+// how to ensure that our page is loading the course history component every time we come back to the page or open it or refresh it?
