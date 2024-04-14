@@ -57,6 +57,7 @@ export class DeleteConfirmation {
     this.#deleteModal
       .querySelector('.modal-bg')!
       .addEventListener('click', (e) => {
+        if (e.target !== e.currentTarget) return;
         this.onCancel();
         e.stopPropagation();
       });

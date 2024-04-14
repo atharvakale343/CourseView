@@ -15,10 +15,10 @@ export class SemesterEdit {
     this.#semesterEditModal.innerHTML = /* HTML */ `
       <div class="modal-bg fixed inset-0 bg-black bg-opacity-70">
         <div
-          class="fixed inset-0 m-auto flex h-fit max-h-96 md:max-h-dvh w-fit max-w-screen-sm items-center justify-center rounded-md bg-white shadow-md"
+          class="fixed inset-0 m-auto flex h-fit max-h-96 w-fit max-w-screen-sm items-center justify-center rounded-md bg-white shadow-md md:max-h-dvh"
         >
           <div
-            class="flex max-h-96 md:max-h-dvh w-full flex-col items-center gap-y-4 overflow-scroll"
+            class="flex max-h-96 w-full flex-col items-center gap-y-4 overflow-scroll md:max-h-dvh"
           >
             <div class="flex w-full flex-row justify-between px-5 pt-4">
               <h1 class="text-left text-xl font-bold">${semesterString}</h1>
@@ -55,7 +55,8 @@ export class SemesterEdit {
                       (userCourse) => /* HTML */ `
                         <tr>
                           <td class="px-6 py-4">
-                            ${userCourse.course.subjectId} ${userCourse.course.number}
+                            ${userCourse.course.subjectId}
+                            ${userCourse.course.number}
                           </td>
                           <td class="px-6 py-4 text-center">
                             ${userCourse.course.credits}
@@ -81,6 +82,14 @@ export class SemesterEdit {
 
     this.#semesterEditModal
       .querySelector('.modal-bg')!
+      .addEventListener('click', (e) => {
+        if (e.target !== e.currentTarget) return;
+        this.onModalClose();
+        e.stopPropagation();
+      });
+
+    this.#semesterEditModal
+      .querySelector('.close-semester-btn')!
       .addEventListener('click', (e) => {
         this.onModalClose();
         e.stopPropagation();
