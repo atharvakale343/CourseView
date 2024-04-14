@@ -108,7 +108,7 @@ export class CourseHistory {
         </button>
         ${sortedSemesters
           .map(
-            (semester, index) => `
+            (semester, index) => /* HTML */ `
               <div class="semester-table bg-gray-100 rounded-lg p-4" style="width: calc(50% - 2rem);">
                 <h2 class="text-2xl font-bold text-black mb-2">${semester}</h2>
                 <table class="w-full">
@@ -135,7 +135,7 @@ export class CourseHistory {
               ${index % 2 === 1 && index !== sortedSemesters.length - 1 ? '<div style="width: calc(50% - 2rem);" class="semester-table bg-gray-100 rounded-lg p-4"></div>' : ''}
             `
           )
-          .join('')}
+          .join('\n')}
       </div>
     `;
 
