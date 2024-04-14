@@ -97,6 +97,6 @@ export class DeleteConfirmation {
   onModalClose(): void {
     this.unfreezeBody();
     this.#events.publish(this.#eventId, null);
-    document.getElementById('delete-modal')!.remove();
+    document.getElementById(this.#deleteModal.id)!.remove();
   }
 }

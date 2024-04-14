@@ -113,6 +113,6 @@ export class CoursePicker {
     this.unfreezeBody();
     this.#textFieldDatalist.cleanup();
     this.#events.publish(this.#eventId, null);
-    document.getElementById('course-pick-modal')!.remove();
+    document.getElementById(this.#pickerModal.id)!.remove();
   }
 }

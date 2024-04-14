@@ -1,5 +1,6 @@
 import { Events } from './Events';
 import { getUserCourses } from '../backendApi/MockBackend';
+import { SemesterEdit } from './semester/SemesterEdit';
 
 export class CourseHistory {
   #events: Events;
@@ -67,50 +68,16 @@ export class CourseHistory {
       </button>
       <p class="text-black">You have completed the following courses:</p>
 
-      <div class="carousel flex-no-wrap relative flex space-x-4" id="carousel">
-        <button
-          class="absolute left-0 top-1/2 flex h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-700"
-          id="prev-page-btn"
-        >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-        </button>
-        <button
-          class="absolute right-0 top-1/2 flex h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-700"
-          id="next-page-btn"
-        >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </button>
+      <div class="relative grid grid-cols-3 gap-4">
         ${sortedSemesters
           .map(
-            (semester, index) => /* HTML */ `
-              <div class="semester-table bg-gray-100 rounded-lg p-4" style="width: calc(50% - 2rem);">
-                <h2 class="text-2xl font-bold text-black mb-2">${semester}</h2>
+            (semester) => /* HTML */ `
+              <button
+                class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 hover:-translate-y-1"
+              >
+                <h2 class="mb-2 text-center text-2xl font-bold text-black">
+                  ${semester}
+                </h2>
                 <table class="w-full">
                   <thead>
                     <tr>
@@ -131,35 +98,28 @@ export class CourseHistory {
                       .join('')}
                   </tbody>
                 </table>
-              </div>
-              ${index % 2 === 1 && index !== sortedSemesters.length - 1 ? '<div style="width: calc(50% - 2rem);" class="semester-table bg-gray-100 rounded-lg p-4"></div>' : ''}
+              </button>
             `
           )
           .join('\n')}
       </div>
     `;
 
-    const prevPageBtn = elm.querySelector('#prev-page-btn');
-    const nextPageBtn = elm.querySelector('#next-page-btn');
-    const carousel = elm.querySelector('#carousel');
-    let currentPage = 0;
+    const semesterTables = elm.querySelectorAll('.semester-table');
 
-    // Adding event listener for previous page button
-    prevPageBtn?.addEventListener('click', () => {
-      if (currentPage > 0) {
-        currentPage--;
-        const carouselElement = carousel as HTMLElement;
-        carouselElement.style.transform = `translateX(-${currentPage * 50}%)`;
-      }
-    });
-
-    // Adding event listener for next page button
-    nextPageBtn?.addEventListener('click', () => {
-      if (currentPage < Math.ceil(sortedSemesters.length / 2) - 1) {
-        currentPage++;
-        const carouselElement = carousel as HTMLElement;
-        carouselElement.style.transform = `translateX(-${currentPage * 50}%)`;
-      }
+    // add event listener to each semester table
+    semesterTables.forEach((semesterTable, index) => {
+      semesterTable.addEventListener('click', async (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const semesterString =
+          target.firstChild?.nextSibling?.textContent?.trim();
+        console.assert(
+          semesterString !== undefined,
+          'semesterString is undefined'
+        );
+        const userCourses = coursesBySemester[semesterString!] as UserCourse[];
+        await this.showSemesterEdit(semesterString!, userCourses);
+      });
     });
 
     const addCourseBtn = elm.querySelector('#add-course-btn');
@@ -168,6 +128,15 @@ export class CourseHistory {
     });
 
     return elm;
+  }
+
+  private async showSemesterEdit(
+    semesterString: string,
+    userCourses: UserCourse[]
+  ): Promise<void> {
+    const semesterModal = new SemesterEdit(semesterString, userCourses);
+    const waitForCourseSelection = semesterModal.show();
+    return waitForCourseSelection;
   }
 }
 
