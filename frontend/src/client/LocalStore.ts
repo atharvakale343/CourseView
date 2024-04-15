@@ -47,10 +47,7 @@ export class LocalStore {
       .catch(() => Promise.resolve());
   }
 
-  public async createDocument(
-    id: UserCoursesDocumentKey | UserAssignmentsDocumentKey,
-    initialData: { userCourses: string } | { userAssignments: string }
-  ) {
+  public async createDocument(id: string, initialData: object) {
     return this.db.put({
       _id: id,
       ...initialData
@@ -77,6 +74,18 @@ export class LocalStore {
       // @ts-ignore
       return JSON.parse(doc.userCourses);
     }) as Promise<UserCourse[]>;
+  }
+
+  public async deleteUserCourseByCourseId(
+    courseId: string,
+    source: UserCoursesDocumentKey
+  ) {
+    return this.getUserCourses(source).then((userCourses) => {
+      const updatedCourses = userCourses.filter(
+        (userCourse) => userCourse.course.id !== courseId
+      );
+      return this.dumpUserCourses(updatedCourses, source);
+    });
   }
 
   public async dumpUserAssignments(

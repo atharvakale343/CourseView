@@ -1,12 +1,17 @@
 import { guidGenerator } from '../../lib/utils';
 import { Events } from '../Events';
+import { LocalStore } from '../LocalStore';
 
 export class SemesterEdit {
   #semesterEditModal: HTMLDivElement;
   #events: Events;
   #eventId: string = guidGenerator();
+  #userCourses: UserCourse[];
+  #localStore: LocalStore;
   constructor(semesterString: string, userCourses: UserCourse[]) {
     this.#events = Events.events();
+    this.#userCourses = userCourses;
+    this.#localStore = LocalStore.localStore();
     const root = document.getElementById('root')!;
     this.#semesterEditModal = document.createElement('div');
     this.#semesterEditModal.id = 'semester-edit';
@@ -63,7 +68,7 @@ export class SemesterEdit {
                           </td>
                           <td class="px-6 py-4 text-center">
                             <button
-                              class="focus:shadow-outline rounded-lg bg-red-600 px-4 py-2 text-xs font-bold text-white hover:bg-red-500 focus:outline-none"
+                              class="course-delete-btn focus:shadow-outline rounded-lg bg-red-600 px-4 py-2 text-xs font-bold text-white hover:bg-red-500 focus:outline-none"
                             >
                               Delete
                             </button>
@@ -93,6 +98,23 @@ export class SemesterEdit {
       .addEventListener('click', (e) => {
         this.onModalClose();
         e.stopPropagation();
+      });
+
+    this.#semesterEditModal
+      .querySelectorAll('.course-delete-btn')
+      .forEach((btn, index) => {
+        btn.addEventListener('click', async (e) => {
+          const target = e.currentTarget as HTMLButtonElement;
+          const courseRow = target.parentElement
+            ?.parentElement as HTMLTableRowElement;
+          const toDelete = this.#userCourses[index];
+          await this.#localStore.deleteUserCourseByCourseId(
+            toDelete.course.id,
+            'userCourses'
+          );
+          this.#events.publish('userCoursesChanged', null);
+          courseRow.remove();
+        });
       });
   }
 

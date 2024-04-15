@@ -1,19 +1,18 @@
 import { Events } from './Events';
-import { getUserCourses } from '../backendApi/MockBackend';
 import { SemesterEdit } from './semester/SemesterEdit';
+import { LocalStore } from './LocalStore';
 
 export class CourseHistory {
   #events: Events;
+  #localStore: LocalStore;
   constructor() {
     this.#events = Events.events();
+    this.#localStore = LocalStore.localStore();
   }
-  async render() {
-    const elm = document.createElement('div');
-    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
-    elm.id = 'course-history';
 
+  async refreshView(elm: HTMLDivElement) {
     // fetch user course history
-    const userCourses = getUserCourses();
+    const userCourses = await this.#localStore.getUserCourses('userCourses');
 
     // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
     const distinct = (value: string, index: number, self: Array<string>) =>
@@ -77,17 +76,15 @@ export class CourseHistory {
               <button
                 class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 transition hover:-translate-y-1"
               >
-                <h2 class="mb-2 w-full text-center text-2xl font-bold text-black">
+                <h2
+                  class="mb-2 w-full text-center text-2xl font-bold text-black"
+                >
                   ${semester}
                 </h2>
                 <table class="w-full">
                   <thead>
                     <tr>
-                      <th
-                        class="px-4 py-2 text-gray-700"
-                      >
-                        Course ID
-                      </th>
+                      <th class="px-4 py-2 text-gray-700">Course ID</th>
                       <th
                         class="border-b-2 border-gray-600 px-4 py-2 text-gray-700"
                       >
@@ -118,7 +115,7 @@ export class CourseHistory {
     const semesterTables = elm.querySelectorAll('.semester-table');
 
     // add event listener to each semester table
-    semesterTables.forEach((semesterTable, index) => {
+    semesterTables.forEach((semesterTable) => {
       semesterTable.addEventListener('click', async (e) => {
         const target = e.currentTarget as HTMLButtonElement;
         const semesterString =
@@ -136,6 +133,15 @@ export class CourseHistory {
     addCourseBtn?.addEventListener('click', async () => {
       await this.#events.publish('navigateTo', 'add-course');
     });
+  }
+
+  async render() {
+    const elm = document.createElement('div');
+    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
+    elm.id = 'course-history';
+
+    this.#events.subscribe('userCoursesChanged', () => this.refreshView(elm));
+    await this.refreshView(elm);
 
     return elm;
   }
