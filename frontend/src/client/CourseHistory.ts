@@ -77,7 +77,7 @@ export class CourseHistory {
               <button
                 class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 transition hover:-translate-y-1"
               >
-                <h2 class="mb-2 text-center text-2xl font-bold text-black">
+                <h2 class="mb-2 w-full text-center text-2xl font-bold text-black">
                   ${semester}
                 </h2>
                 <table class="w-full">
