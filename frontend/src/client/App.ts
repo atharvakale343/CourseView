@@ -78,7 +78,6 @@ export class App {
     await this.#localStore.db.get('refreshed').then(async (doc) => {
       // @ts-ignore
       let number = doc.number;
-      console.log('number', number);
       if (number >= REFRESH_EVERY_N_RELOADS) {
         number = 0;
       } else {

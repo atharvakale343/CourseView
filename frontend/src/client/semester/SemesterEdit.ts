@@ -1,6 +1,7 @@
 import { guidGenerator } from '../../lib/utils';
 import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
+import { StateManager } from '../StateManagement';
 
 export class SemesterEdit {
   #semesterEditModal: HTMLDivElement;
@@ -8,8 +9,10 @@ export class SemesterEdit {
   #eventId: string = guidGenerator();
   #userCourses: UserCourse[];
   #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor(semesterString: string, userCourses: UserCourse[]) {
     this.#events = Events.events();
+    this.#stateManager = StateManager.getManager();
     this.#userCourses = userCourses;
     this.#localStore = LocalStore.localStore();
     const root = document.getElementById('root')!;
@@ -108,11 +111,7 @@ export class SemesterEdit {
           const courseRow = target.parentElement
             ?.parentElement as HTMLTableRowElement;
           const toDelete = this.#userCourses[index];
-          await this.#localStore.deleteUserCourseByCourseId(
-            toDelete.course.id,
-            'userCourses'
-          );
-          this.#events.publish('userCoursesChanged', null);
+          await this.#stateManager.deleteUserCourse(toDelete);
           courseRow.remove();
         });
       });

@@ -1,7 +1,7 @@
 const PouchDB = require('pouchdb-browser');
 import { DegreeRequirementAssignment } from '../lib/types/Degree';
 
-export type UserCoursesDocumentKey = 'userCourses' | 'userCoursesModified';
+export type UserCoursesDocumentKey = 'userCourses';
 export type UserAssignmentsDocumentKey =
   | 'userAssignments'
   | 'userAssignmentsModified';
@@ -43,7 +43,6 @@ export class LocalStore {
     return this.db
       .get('userAssignmentsModified')
       .then((doc) => this.db.remove(doc))
-      .then(console.log)
       .catch(() => Promise.resolve());
   }
 
@@ -65,6 +64,15 @@ export class LocalStore {
         userCourses: JSON.stringify(userCourses)
       })
     );
+  }
+
+  public async addUserCourse(
+    userCourse: UserCourse,
+    destination: UserCoursesDocumentKey
+  ) {
+    return this.getUserCourses(destination).then((userCourses) => {
+      return this.dumpUserCourses([...userCourses, userCourse], destination);
+    });
   }
 
   public async getUserCourses(

@@ -1,13 +1,16 @@
 import { Events } from './Events';
 import { SemesterEdit } from './semester/SemesterEdit';
 import { LocalStore } from './LocalStore';
+import { StateManager } from './StateManagement';
 
 export class CourseHistory {
   #events: Events;
   #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor() {
     this.#events = Events.events();
     this.#localStore = LocalStore.localStore();
+    this.#stateManager = StateManager.getManager();
   }
 
   async refreshView(elm: HTMLDivElement) {
@@ -140,7 +143,9 @@ export class CourseHistory {
     elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
     elm.id = 'course-history';
 
-    this.#events.subscribe('userCoursesChanged', () => this.refreshView(elm));
+    this.#stateManager.subscribeToUserCourseChanges(() =>
+      this.refreshView(elm)
+    );
     await this.refreshView(elm);
 
     return elm;
