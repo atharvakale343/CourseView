@@ -83,7 +83,7 @@ export class CourseHistory {
               >
                 <div>
                   <h2
-                    class="mb-2 w-full text-center text-2xl font-bold text-black"
+                    class="semester-string mb-2 w-full text-center text-2xl font-bold text-black"
                   >
                     ${semester}
                   </h2>
@@ -103,7 +103,7 @@ export class CourseHistory {
                         .map(
                           (userCourse: UserCourse) => `
                         <tr>
-                          <td class="px-4 py-2">${userCourse.course.subjectId} ${userCourse.course.number}</td>
+                          <td class="px-4 py-2 ">${userCourse.course.subjectId} ${userCourse.course.number}</td>
                           <td class="px-4 py-2 border-t border-gray-500">${userCourse.course.credits}</td>
                         </tr>
                       `
@@ -113,10 +113,12 @@ export class CourseHistory {
                   </table>
                 </div>
 
-                <table class="table-fixed border border-black w-full">
+                <table class="w-full table-fixed border border-black">
                   <tr class="bg-gray-300 font-bold text-black">
                     <td class="w-1/2 px-4 py-2">Total:</td>
-                    <td class="w-1/2 px-4 py-2 underline text-lg underline-offset-4">
+                    <td
+                      class="w-1/2 px-4 py-2 text-lg underline underline-offset-4"
+                    >
                       ${coursesBySemester[semester].reduce(
                         (total, userCourse) =>
                           total + parseInt(userCourse.course.credits),
@@ -138,13 +140,16 @@ export class CourseHistory {
     semesterTables.forEach((semesterTable) => {
       semesterTable.addEventListener('click', async (e) => {
         const target = e.currentTarget as HTMLButtonElement;
-        const semesterString =
-          target.firstChild?.nextSibling?.textContent?.trim();
+        const semesterString = target
+          .querySelector('.semester-string')
+          ?.textContent?.trim();
+
         console.assert(
           semesterString !== undefined,
           'semesterString is undefined'
         );
         const userCourses = coursesBySemester[semesterString!] as UserCourse[];
+        console.assert(userCourses !== undefined, 'userCourses is undefined');
         await this.showSemesterEdit(semesterString!, userCourses);
       });
     });
