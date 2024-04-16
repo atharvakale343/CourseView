@@ -12,8 +12,37 @@ export class Toolbar {
 
   public async render() {
     const elm = document.createElement('div');
-    elm.classList.add('w-full', 'justify-center', 'flex', 'sm:justify-end');
+    elm.classList.add(
+      'w-full',
+      'justify-center',
+      'flex',
+      'sm:justify-between',
+      'items-center',
+    );
     elm.innerHTML = /* HTML */ `
+      <sl-dropdown size="large" stay-open-on-select="" class="mr-2">
+        <sl-button slot="trigger" caret
+          ><i class="fa fa-cog" aria-hidden="true"></i
+        ></sl-button>
+        <sl-menu>
+          <sl-menu-item>Dropdown Item 1</sl-menu-item>
+          <sl-menu-item>Dropdown Item 2</sl-menu-item>
+          <sl-menu-item>Dropdown Item 3</sl-menu-item>
+          <sl-divider></sl-divider>
+          <sl-menu-item type="checkbox" checked>Checkbox</sl-menu-item>
+          <sl-menu-item disabled>Disabled</sl-menu-item>
+          <sl-divider></sl-divider>
+          <sl-menu-item>
+            Prefix
+            <sl-icon slot="prefix" name="gift"></sl-icon>
+          </sl-menu-item>
+          <sl-menu-item>
+            Suffix Icon
+            <sl-icon slot="suffix" name="heart"></sl-icon>
+          </sl-menu-item>
+        </sl-menu>
+      </sl-dropdown>
+
       <div class="flex w-full flex-row gap-x-2 sm:w-96">
         <button
           class="reset-btn focus:shadow-outline flex w-full grow flex-row items-center
@@ -35,19 +64,19 @@ export class Toolbar {
               fill="currentColor"
             />
           </svg>
-          <h1 class="text-sm md:text-base">Reset Changes</h1>
+          <h1 class="text-xs md:text-base">Reset Changes</h1>
         </button>
         <button
           class="save-changes-btn focus:shadow-outline flex w-full grow flex-row items-center
-    justify-center gap-x-4 rounded-md bg-gradient-to-br from-emerald-600 to-emerald-500
-    p-2 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
-    hover:to-emerald-400 focus:ring-4
-    disabled:pointer-events-none disabled:cursor-not-allowed
-        disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
+                justify-center gap-x-4 rounded-md bg-gradient-to-br from-emerald-600 to-emerald-500
+                p-2 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
+                hover:to-emerald-400 focus:ring-4
+                disabled:pointer-events-none disabled:cursor-not-allowed
+              disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
           disabled
         >
           <i class="fa fa-check"></i>
-          <h1 class="text-sm md:text-base">Save Changes</h1>
+          <h1 class="text-xs md:text-base">Save Changes</h1>
         </button>
       </div>
     `;
@@ -75,6 +104,8 @@ export class Toolbar {
       saveChangesButton.setAttribute('disabled', '');
       await this.#stateManager.replicateUserAssignmentsToLocalStore();
     });
+
+    const slDropdown = elm.querySelector('sl-dropdown')!;
 
     return elm;
   }

@@ -18,3 +18,19 @@
     @apply bg-primary text-color-light;
   } */
 }
+
+/* Define the keyframes for the fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Start with opacity 0 */
+  }
+  to {
+    opacity: 1; /* End with opacity 1 */
+  }
+}
+
+/* Apply the fade-in effect to the element */
+.fade-in-element {
+  opacity: 0; /* Set initial opacity to 0 */
+  animation: fadeIn 0.125s ease-in forwards;
+}

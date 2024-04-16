@@ -1,6 +1,5 @@
 import { match } from 'ts-pattern';
 import { Navbar, View } from './Navbar';
-import { AddCourse } from './AddCourse';
 import { CourseHistory } from './CourseHistory';
 import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
@@ -14,6 +13,7 @@ import {
   getRequirementAssignments,
   getUserCourses
 } from '../backendApi/MockBackend';
+import { AddCourse } from './AddCourse';
 
 type ViewElementMap = { [K in View]: HTMLElement };
 const REFRESH_EVERY_N_RELOADS = 5;
@@ -112,7 +112,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'course-history' satisfies View);
+    this.#events.publish('navigateTo', 'degree-completion' satisfies View);
 
     return rootElement;
   }
