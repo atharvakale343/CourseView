@@ -162,7 +162,7 @@ export class CourseHistory {
 
   async render() {
     const elm = document.createElement('div');
-    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
+    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4', 'fade-in-element');
     elm.id = 'course-history';
 
     this.#stateManager.subscribeToUserCourseChanges(() =>

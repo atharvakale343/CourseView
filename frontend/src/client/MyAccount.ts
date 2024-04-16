@@ -19,7 +19,7 @@ export class MyAccount {
    */
   async render() {
     const elm = document.createElement('div');
-    elm.classList.add('p-8');
+    elm.classList.add('p-8', 'fade-in-element');
     elm.id = 'my-account';
     elm.innerHTML = /* HTML */ `
       <div class="flex flex-col space-y-4">
