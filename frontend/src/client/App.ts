@@ -112,7 +112,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'course-history' satisfies View);
+    this.#events.publish('navigateTo', 'add-course' satisfies View);
 
     return rootElement;
   }
