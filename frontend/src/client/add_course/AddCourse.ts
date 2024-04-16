@@ -1,6 +1,5 @@
 import { Events } from '../Events';
-
-import { TextFieldDatalist } from '../TextFieldDatalist';
+import { serialize } from '@shoelace-style/shoelace/dist/utilities/form.js';
 import {
   getAllCoursesDropdown,
   getGradeOptions,
@@ -51,6 +50,7 @@ export class AddCourse {
             size="small"
             label="Subject"
             class="subject-dropdown"
+            name="subject"
             clearable
             required
           >
@@ -67,6 +67,7 @@ export class AddCourse {
             size="small"
             label="Course"
             class="courses-dropdown"
+            name="course"
             clearable
             required
             disabled
@@ -77,6 +78,7 @@ export class AddCourse {
             size="small"
             label="Semester"
             class="semester-dropdown"
+            name="semester"
             clearable
             required
           >
@@ -95,6 +97,7 @@ export class AddCourse {
             size="small"
             label="Professor"
             class="professor-dropdown"
+            name="professor"
             clearable
           >
           </sl-input>
@@ -104,6 +107,7 @@ export class AddCourse {
             size="small"
             label="Grade"
             class="grade-dropdown"
+            name="grade"
             clearable
           >
             ${getGradeOptions()
@@ -129,7 +133,9 @@ export class AddCourse {
       </div>
     `;
 
-    const form = elm.querySelector('.input-validation-required')!;
+    const form = elm.querySelector(
+      '.input-validation-required'
+    )! as HTMLFormElement;
     const subjectDropdown = elm.querySelector(
       '.subject-dropdown'
     ) as HTMLSelectElement;
@@ -156,6 +162,12 @@ export class AddCourse {
       coursesDropdown.removeAttribute('disabled');
     });
 
+    function formSubmitHandler(form: HTMLFormElement) {
+      console.log('formdata', new FormData(form))
+      const data = serialize(form);
+      console.log('data', data);
+    }
+
     // Wait for controls to be defined before attaching form listeners
     Promise.allSettled([
       customElements.whenDefined('sl-button'),
@@ -167,10 +179,9 @@ export class AddCourse {
       .then(() => {
         elm.querySelector('.form-div')!.classList.remove('hidden');
         elm.querySelector('.progress-ring')!.classList.add('hidden');
-        console.log('form', form);
         form.addEventListener('submit', (event) => {
           event.preventDefault();
-          alert('All fields are valid!');
+          formSubmitHandler(form);
         });
       })
       .catch(console.error);
