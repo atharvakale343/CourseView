@@ -8,6 +8,7 @@ import {
 } from '../../lib/utils';
 import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
+import { View } from '../Navbar';
 import { SectionCompletion } from './SectionCompletion';
 import { Toolbar } from './Toolbar';
 
@@ -44,24 +45,30 @@ export class DegreeCompletion {
 
     const sections = [getCSMajorARRConfig(), getGenedARRConfig()];
 
-    const autoAssignments = autoAssignCourses(
-      await this.#localStore.getUserCourses('userCourses'),
-      getAllRequirementsFromSection(sections),
-      await this.#localStore.getUserAssignments('userAssignments')
-    );
-
-    console.assert(
-      autoAssignments.length === 0,
-      'Assignments should already include auto-assignable assignments'
-    );
-
-    await Promise.all(
-      autoAssignments.map((assignment) =>
-        this.#localStore.addUserAssignment(assignment, 'userAssignments')
-      )
-    );
+    this.#events.subscribe('navigateTo', (view: View) => {
+      if (view === 'degree-completion') {
+        this.#events.publish('degreeCompletionReset', null);
+      }
+    });
 
     this.#events.subscribe('degreeCompletionReset', async () => {
+      const autoAssignments = autoAssignCourses(
+        await this.#localStore.getUserCourses('userCourses'),
+        getAllRequirementsFromSection(sections),
+        await this.#localStore.getUserAssignments('userAssignments')
+      );
+
+      console.assert(
+        autoAssignments.length === 0,
+        'Assignments should already include auto-assignable assignments'
+      );
+
+      await Promise.all(
+        autoAssignments.map((assignment) =>
+          this.#localStore.addUserAssignment(assignment, 'userAssignments')
+        )
+      );
+
       degreeCompletionElement.innerHTML = '';
       const sectionElements = await Promise.all(
         sections.map(async (section) => {
