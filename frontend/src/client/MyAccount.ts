@@ -1,11 +1,22 @@
 import { Events } from './Events';
 
+/**
+ * Represents the user's account information.
+ */
 export class MyAccount {
   #events: Events;
+
+  /**
+   * Constructs a new instance of the MyAccount class.
+   */
   constructor() {
     this.#events = Events.events();
   }
 
+  /**
+   * Renders the MyAccount component.
+   * @returns The rendered HTML element.
+   */
   async render() {
     const elm = document.createElement('div');
     elm.classList.add('p-8');
@@ -17,10 +28,7 @@ export class MyAccount {
           Delete everything below, and replace it with the new code. <br />
           This is just a placeholder.
         </h1>
-        <p
-          class="text-black
-            "
-        >
+        <p class="text-black">
           You can update your account information here.
         </p>
       </div>

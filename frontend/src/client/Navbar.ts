@@ -11,6 +11,9 @@ const viewToViewLabel = {
 export type View = keyof typeof viewToViewLabel;
 type Icon = Exclude<View, 'add-course'>;
 
+/**
+ * Represents a navigation bar component.
+ */
 export class Navbar {
   #events: Events;
   #currentView: View;

@@ -56,7 +56,7 @@ export class DegreeCompletion {
       );
 
       console.assert(
-        autoAssignments.length === 0,
+        autoAssignments.length !== 0,
         'Assignments should already include auto-assignable assignments'
       );
 
