@@ -16,6 +16,7 @@ import {
 } from '../backendApi/MockBackend';
 
 type ViewElementMap = { [K in View]: HTMLElement };
+const REFRESH_EVERY_N_RELOADS = 5;
 
 export class App {
   #events: Events = Events.events();
@@ -29,11 +30,23 @@ export class App {
 
   public async setupApp() {
     await this.#localStore.setup();
+
+    // TODO: Delete this when ready to implement the real backend
+    await this.#localStore.db.get('refreshed').catch(async () => {
+      this.#localStore.createDocument('refreshed', { number: 0 });
+    });
+
+    // TODO: Delete this when ready to implement the real backend
     await this.#localStore.db
       .get('userCourses' satisfies UserCoursesDocumentKey)
-      .then((doc) => {
-        // @ts-ignore
-        if (doc.userCourses === '[]') {
+      .then(async (doc) => {
+        if (
+          // @ts-ignore
+          doc.userCourses === '[]' ||
+          // @ts-ignore
+          (await this.#localStore.db.get('refreshed')).number ===
+            REFRESH_EVERY_N_RELOADS
+        ) {
           return this.#localStore.dumpUserCourses(
             getUserCourses(),
             'userCourses'
@@ -42,11 +55,17 @@ export class App {
       })
       .catch((e) => console.error(e));
 
+    // TODO: Delete this when ready to implement the real backend
     await this.#localStore.db
       .get('userAssignments' satisfies UserAssignmentsDocumentKey)
-      .then((doc) => {
-        // @ts-ignore
-        if (doc.userAssignments === '[]') {
+      .then(async (doc) => {
+        if (
+          // @ts-ignore
+          doc.userAssignments === '[]' ||
+          // @ts-ignore
+          (await this.#localStore.db.get('refreshed')).number ===
+            REFRESH_EVERY_N_RELOADS
+        ) {
           return this.#localStore.dumpUserAssignments(
             getRequirementAssignments(),
             'userAssignments'
@@ -54,6 +73,20 @@ export class App {
         }
       })
       .catch((e) => console.error(e));
+
+    // TODO: Delete this when ready to implement the real backend
+    await this.#localStore.db.get('refreshed').then(async (doc) => {
+      // @ts-ignore
+      let number = doc.number;
+      if (number >= REFRESH_EVERY_N_RELOADS) {
+        number = 0;
+      } else {
+        number = number + 1;
+      }
+      // @ts-ignore
+      doc.number = number;
+      return this.#localStore.db.put(doc);
+    });
   }
 
   async render(): Promise<HTMLElement> {
@@ -79,7 +112,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'add-course' satisfies View);
+    this.#events.publish('navigateTo', 'course-history' satisfies View);
 
     return rootElement;
   }

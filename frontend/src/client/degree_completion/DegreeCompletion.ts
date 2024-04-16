@@ -8,15 +8,19 @@ import {
 } from '../../lib/utils';
 import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
+import { View } from '../Navbar';
+import { ModificationEvent, StateManager } from '../StateManagement';
 import { SectionCompletion } from './SectionCompletion';
 import { Toolbar } from './Toolbar';
 
 export class DegreeCompletion {
   #events: Events;
   #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor() {
     this.#events = Events.events();
     this.#localStore = LocalStore.localStore();
+    this.#stateManager = StateManager.getManager();
   }
 
   public async render() {
@@ -44,24 +48,27 @@ export class DegreeCompletion {
 
     const sections = [getCSMajorARRConfig(), getGenedARRConfig()];
 
-    const autoAssignments = autoAssignCourses(
-      await this.#localStore.getUserCourses('userCourses'),
-      getAllRequirementsFromSection(sections),
-      await this.#localStore.getUserAssignments('userAssignments')
-    );
+    this.#stateManager.subscribeToUserCourseChanges(async () => {
+      const autoAssignments = autoAssignCourses(
+        await this.#localStore.getUserCourses('userCourses'),
+        getAllRequirementsFromSection(sections),
+        await this.#localStore.getUserAssignments('userAssignments')
+      );
 
-    console.assert(
-      autoAssignments.length === 0,
-      'Assignments should already include auto-assignable assignments'
-    );
+      console.assert(
+        autoAssignments.length === 0,
+        'Assignments should already include auto-assignable assignments'
+      );
 
-    await Promise.all(
-      autoAssignments.map((assignment) =>
-        this.#localStore.addUserAssignment(assignment, 'userAssignments')
-      )
-    );
+      await Promise.all(
+        autoAssignments.map((assignment) =>
+          this.#stateManager.addUserAssignment(assignment)
+        )
+      );
+    });
 
-    this.#events.subscribe('degreeCompletionReset', async () => {
+    const userAssignmentsChangedHandler = async (event: ModificationEvent) => {
+      if (event.type !== 'delete' && !event.changeRequired) return;
       degreeCompletionElement.innerHTML = '';
       const sectionElements = await Promise.all(
         sections.map(async (section) => {
@@ -75,9 +82,20 @@ export class DegreeCompletion {
           degreeCompletionElement.appendChild(dividerElement.cloneNode(true));
         }
       });
-    });
+    };
 
-    this.#events.publish('degreeCompletionReset', null);
+    this.#stateManager.subscribeToUserAssignmentChanges(
+      userAssignmentsChangedHandler
+    );
+
+    this.#stateManager.subscribeToUserAssignmentsModifiedStoreChanges(
+      userAssignmentsChangedHandler
+    );
+
+    userAssignmentsChangedHandler({
+      type: 'delete',
+      changeRequired: true
+    } satisfies ModificationEvent);
 
     const toolbarElement = elm.querySelector('.toolbar')! as HTMLDivElement;
     toolbarElement.appendChild(await new Toolbar().render());

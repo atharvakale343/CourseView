@@ -1,34 +1,43 @@
 import { Events } from './Events';
-import { getUserCourses } from '../backendApi/MockBackend';
+import { SemesterEdit } from './semester/SemesterEdit';
+import { LocalStore } from './LocalStore';
+import { StateManager } from './StateManagement';
 
 export class CourseHistory {
   #events: Events;
+  #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor() {
     this.#events = Events.events();
+    this.#localStore = LocalStore.localStore();
+    this.#stateManager = StateManager.getManager();
   }
-  async render() {
-    const elm = document.createElement('div');
-    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
-    elm.id = 'course-history';
 
+  async refreshView(elm: HTMLDivElement) {
     // fetch user course history
-    const userCourses = getUserCourses();
+    const userCourses = await this.#localStore.getUserCourses('userCourses');
+
+    // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+    const distinct = (value: string, index: number, self: Array<string>) =>
+      self.indexOf(value) === index;
+
+    // get all the unique semesters from the userCourses
+    const semesters = userCourses
+      .map((course) => course.semester)
+      .filter(distinct);
 
     // grouping courses by semester and storing them in an object
-    const coursesBySemester = Object.create(null);
+    const coursesBySemester = semesters.reduce(
+      (acc, semester) => {
+        acc[semester] = userCourses.filter(
+          (course) => course.semester === semester
+        );
+        return acc;
+      },
+      {} as { [key: string]: UserCourse[] }
+    );
 
-    for (let i = 0; i < userCourses.length; i++) {
-      const userCourse = userCourses[i];
-
-      const currSemester = userCourse.semester;
-
-      if (!coursesBySemester[currSemester]) {
-        coursesBySemester[currSemester] = [];
-      }
-      coursesBySemester[userCourse.semester].push(userCourse);
-    }
-
-    // sort the semesters in descending order by copmaring the string in semester attribute
+    // sort the semesters in descending order by comparing the string in semester attribute
     // compare the last part of the string to sort the semesters based on year
     // if the years are same, compare the first part of the string to sort the semesters based on spring or fall - fall comes first in descending order
     const sortedSemesters = Object.keys(coursesBySemester).sort((a, b) => {
@@ -61,106 +70,117 @@ export class CourseHistory {
       </button>
       <p class="text-black">You have completed the following courses:</p>
 
-      <div class="carousel flex-no-wrap relative flex space-x-4" id="carousel">
-        <button
-          class="absolute left-0 top-1/2 flex h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-700"
-          id="prev-page-btn"
-        >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 19l-7-7 7-7"
-            ></path>
-          </svg>
-        </button>
-        <button
-          class="absolute right-0 top-1/2 flex h-8 w-8 -translate-y-1/2 transform items-center justify-center rounded-full bg-blue-500 text-white hover:bg-blue-700"
-          id="next-page-btn"
-        >
-          <svg
-            class="h-4 w-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M9 5l7 7-7 7"
-            ></path>
-          </svg>
-        </button>
+      <div
+        class="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
         ${sortedSemesters
           .map(
-            (semester, index) => `
-              <div class="semester-table bg-gray-100 rounded-lg p-4" style="width: calc(50% - 2rem);">
-                <h2 class="text-2xl font-bold text-black mb-2">${semester}</h2>
-                <table class="w-full">
-                  <thead>
-                    <tr>
-                      <th class="px-4 py-2">Course ID</th>
-                      <th class="px-4 py-2">Credits</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${coursesBySemester[semester]
-                      .map(
-                        (course: Course) => `
-                          <tr>
-                            <td class="px-4 py-2">${course.id}</td>
-                            <td class="px-4 py-2">${course.credits}</td>
-                          </tr>
-                        `
-                      )
-                      .join('')}
-                  </tbody>
+            (semester) => /* HTML */ `
+              <button
+                class="semester-table flex w-full cursor-pointer flex-col justify-between rounded-lg
+                border border-black bg-gray-100 p-4 transition hover:-translate-y-1
+                "
+              >
+                <div>
+                  <h2
+                    class="semester-string mb-2 w-full text-center text-2xl font-bold text-black"
+                  >
+                    ${semester}
+                  </h2>
+                  <table class="w-full table-fixed">
+                    <thead>
+                      <tr>
+                        <th class="w-1/2 px-4 py-2 text-gray-700">Course ID</th>
+                        <th
+                          class="w-1/2 border-b-2 border-gray-600 px-4 py-2 text-gray-700"
+                        >
+                          Credits
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${coursesBySemester[semester]
+                        .map(
+                          (userCourse: UserCourse) => `
+                        <tr>
+                          <td class="px-4 py-2 ">${userCourse.course.subjectId} ${userCourse.course.number}</td>
+                          <td class="px-4 py-2 border-t border-gray-500">${userCourse.course.credits}</td>
+                        </tr>
+                      `
+                        )
+                        .join('')}
+                    </tbody>
+                  </table>
+                </div>
+
+                <table class="w-full table-fixed border border-black">
+                  <tr class="bg-gray-300 font-bold text-black">
+                    <td class="w-1/2 px-4 py-2">Total:</td>
+                    <td
+                      class="w-1/2 px-4 py-2 text-lg underline underline-offset-4"
+                    >
+                      ${coursesBySemester[semester].reduce(
+                        (total, userCourse) =>
+                          total + parseInt(userCourse.course.credits),
+                        0
+                      )}
+                    </td>
+                  </tr>
                 </table>
-              </div>
-              ${index % 2 === 1 && index !== sortedSemesters.length - 1 ? '<div style="width: calc(50% - 2rem);" class="semester-table bg-gray-100 rounded-lg p-4"></div>' : ''}
+              </button>
             `
           )
-          .join('')}
+          .join('\n')}
       </div>
     `;
 
-    const prevPageBtn = elm.querySelector('#prev-page-btn');
-    const nextPageBtn = elm.querySelector('#next-page-btn');
-    const carousel = elm.querySelector('#carousel');
-    let currentPage = 0;
+    const semesterTables = elm.querySelectorAll('.semester-table');
 
-    // Adding event listener for previous page button
-    prevPageBtn?.addEventListener('click', () => {
-      if (currentPage > 0) {
-        currentPage--;
-        const carouselElement = carousel as HTMLElement;
-        carouselElement.style.transform = `translateX(-${currentPage * 50}%)`;
-      }
-    });
+    // add event listener to each semester table
+    semesterTables.forEach((semesterTable) => {
+      semesterTable.addEventListener('click', async (e) => {
+        const target = e.currentTarget as HTMLButtonElement;
+        const semesterString = target
+          .querySelector('.semester-string')
+          ?.textContent?.trim();
 
-    // Adding event listener for next page button
-    nextPageBtn?.addEventListener('click', () => {
-      if (currentPage < Math.ceil(sortedSemesters.length / 2) - 1) {
-        currentPage++;
-        const carouselElement = carousel as HTMLElement;
-        carouselElement.style.transform = `translateX(-${currentPage * 50}%)`;
-      }
+        console.assert(
+          semesterString !== undefined,
+          'semesterString is undefined'
+        );
+        const userCourses = coursesBySemester[semesterString!] as UserCourse[];
+        console.assert(userCourses !== undefined, 'userCourses is undefined');
+        await this.showSemesterEdit(semesterString!, userCourses);
+      });
     });
 
     const addCourseBtn = elm.querySelector('#add-course-btn');
     addCourseBtn?.addEventListener('click', async () => {
       await this.#events.publish('navigateTo', 'add-course');
     });
+  }
+
+  async render() {
+    const elm = document.createElement('div');
+    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
+    elm.id = 'course-history';
+
+    this.#stateManager.subscribeToUserCourseChanges(() =>
+      this.refreshView(elm)
+    );
+    await this.refreshView(elm);
 
     return elm;
   }
+
+  private async showSemesterEdit(
+    semesterString: string,
+    userCourses: UserCourse[]
+  ): Promise<void> {
+    const semesterModal = new SemesterEdit(semesterString, userCourses);
+    const waitForCourseSelection = semesterModal.show();
+    return waitForCourseSelection;
+  }
 }
+
+// how to ensure that our page is loading the course history component every time we come back to the page or open it or refresh it?

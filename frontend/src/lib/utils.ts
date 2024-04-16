@@ -101,7 +101,6 @@ export function autoAssignCourses(
       )
   );
 
-
   // remove already taken user courses based on currentAssignments
   userCourses = userCourses.filter(
     (userCourse) =>

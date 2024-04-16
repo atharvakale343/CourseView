@@ -1,7 +1,7 @@
 const PouchDB = require('pouchdb-browser');
 import { DegreeRequirementAssignment } from '../lib/types/Degree';
 
-export type UserCoursesDocumentKey = 'userCourses' | 'userCoursesModified';
+export type UserCoursesDocumentKey = 'userCourses';
 export type UserAssignmentsDocumentKey =
   | 'userAssignments'
   | 'userAssignmentsModified';
@@ -43,14 +43,10 @@ export class LocalStore {
     return this.db
       .get('userAssignmentsModified')
       .then((doc) => this.db.remove(doc))
-      .then(console.log)
       .catch(() => Promise.resolve());
   }
 
-  public async createDocument(
-    id: UserCoursesDocumentKey | UserAssignmentsDocumentKey,
-    initialData: { userCourses: string } | { userAssignments: string }
-  ) {
+  public async createDocument(id: string, initialData: object) {
     return this.db.put({
       _id: id,
       ...initialData
@@ -70,6 +66,15 @@ export class LocalStore {
     );
   }
 
+  public async addUserCourse(
+    userCourse: UserCourse,
+    destination: UserCoursesDocumentKey
+  ) {
+    return this.getUserCourses(destination).then((userCourses) => {
+      return this.dumpUserCourses([...userCourses, userCourse], destination);
+    });
+  }
+
   public async getUserCourses(
     source: UserCoursesDocumentKey
   ): Promise<UserCourse[]> {
@@ -77,6 +82,18 @@ export class LocalStore {
       // @ts-ignore
       return JSON.parse(doc.userCourses);
     }) as Promise<UserCourse[]>;
+  }
+
+  public async deleteUserCourseByCourseId(
+    courseId: string,
+    source: UserCoursesDocumentKey
+  ) {
+    return this.getUserCourses(source).then((userCourses) => {
+      const updatedCourses = userCourses.filter(
+        (userCourse) => userCourse.course.id !== courseId
+      );
+      return this.dumpUserCourses(updatedCourses, source);
+    });
   }
 
   public async dumpUserAssignments(

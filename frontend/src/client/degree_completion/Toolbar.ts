@@ -1,12 +1,13 @@
 import { Events } from '../Events';
 import { LocalStore, UserAssignmentsDocumentKey } from '../LocalStore';
+import { ModificationEvent, StateManager } from '../StateManagement';
 
 export class Toolbar {
   #events: Events;
-  #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor() {
     this.#events = Events.events();
-    this.#localStore = LocalStore.localStore();
+    this.#stateManager = StateManager.getManager();
   }
 
   public async render() {
@@ -54,39 +55,27 @@ export class Toolbar {
     const resetButton = elm.querySelector('.reset-btn')!;
     const saveChangesButton = elm.querySelector('.save-changes-btn')!;
 
-    this.#events.subscribe('userAssignmentsModifiedStoreChanged', () => {
-      resetButton.removeAttribute('disabled');
-      saveChangesButton.removeAttribute('disabled');
-    });
+    this.#events.subscribe(
+      'userAssignmentsModifiedStoreChanged',
+      (event: ModificationEvent) => {
+        if (event.type !== 'change') return;
+        resetButton.removeAttribute('disabled');
+        saveChangesButton.removeAttribute('disabled');
+      }
+    );
 
     resetButton.addEventListener('click', async () => {
       resetButton.setAttribute('disabled', '');
       saveChangesButton.setAttribute('disabled', '');
-      await this.deleteUserAssignmentsModifiedStore();
-      this.#events.publish('degreeCompletionReset', null);
+      await this.#stateManager.deleteUserAssignmentsModifiedStore();
     });
 
     saveChangesButton.addEventListener('click', async () => {
       resetButton.setAttribute('disabled', '');
       saveChangesButton.setAttribute('disabled', '');
-      await this.replicateUserAssignmentsToLocalStore();
+      await this.#stateManager.replicateUserAssignmentsToLocalStore();
     });
 
     return elm;
-  }
-
-  private async deleteUserAssignmentsModifiedStore() {
-    return this.#localStore.db
-      .get('userAssignmentsModified' satisfies UserAssignmentsDocumentKey)
-      .then((doc) => this.#localStore.db.remove(doc));
-  }
-
-  private async replicateUserAssignmentsToLocalStore() {
-    return this.#localStore
-      .dumpUserAssignments(
-        await this.#localStore.getUserAssignments('userAssignmentsModified'),
-        'userAssignments'
-      )
-      .then(() => this.deleteUserAssignmentsModifiedStore());
   }
 }

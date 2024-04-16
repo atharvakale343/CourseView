@@ -57,6 +57,7 @@ export class DeleteConfirmation {
     this.#deleteModal
       .querySelector('.modal-bg')!
       .addEventListener('click', (e) => {
+        if (e.target !== e.currentTarget) return;
         this.onCancel();
         e.stopPropagation();
       });
@@ -97,6 +98,6 @@ export class DeleteConfirmation {
   onModalClose(): void {
     this.unfreezeBody();
     this.#events.publish(this.#eventId, null);
-    document.getElementById('delete-modal')!.remove();
+    document.getElementById(this.#deleteModal.id)!.remove();
   }
 }
