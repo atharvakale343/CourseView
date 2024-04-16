@@ -31,6 +31,11 @@ export class StateManager {
       .then(() => this.#events.publish('userAssignmentsChanged', null));
   }
 
+  public async hasUserAlreadyTakenCourse(course: Course) {
+    const userCourses = await this.#localStore.getUserCourses('userCourses');
+    return userCourses.some((userCourse) => userCourse.course.id === course.id);
+  }
+
   private async deleteAssignmentIfNeeded(deletedUserCourse: UserCourse) {
     const userAssignments =
       await this.#localStore.getUserAssignments('userAssignments');

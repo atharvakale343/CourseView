@@ -6,12 +6,13 @@ import {
   getPastSemesterStrings,
   getSubjects
 } from './CoursesConfig';
+import { StateManager } from '../StateManagement';
 
 export class AddCourse {
-  #events: Events;
+  #stateManager: StateManager;
 
   constructor() {
-    this.#events = Events.events();
+    this.#stateManager = StateManager.getManager();
   }
 
   async render() {
@@ -143,15 +144,19 @@ export class AddCourse {
       '.courses-dropdown'
     ) as HTMLSelectElement;
 
+    function getCoursesOfSubject(subjectId: string) {
+      return getAllCoursesDropdown().filter(
+        (json) => json.subjectId === subjectId
+      )[0].courses;
+    }
+
     subjectDropdown.addEventListener('sl-change', () => {
       if (!subjectDropdown.validity.valid) {
         coursesDropdown.value = '';
         coursesDropdown.setAttribute('disabled', '');
         return;
       }
-      const courses = getAllCoursesDropdown().filter(
-        (json) => json.subjectId === subjectDropdown.value
-      )[0].courses;
+      const courses = getCoursesOfSubject(subjectDropdown.value);
       coursesDropdown.innerHTML = `${courses
         .map((course) => {
           return /* HTML */ `<sl-option value="${course.id}"
@@ -162,11 +167,30 @@ export class AddCourse {
       coursesDropdown.removeAttribute('disabled');
     });
 
-    function formSubmitHandler(form: HTMLFormElement) {
-      console.log('formdata', new FormData(form))
-      const data = serialize(form);
+    const formSubmitHandler = async (form: HTMLFormElement) => {
+      console.log('formdata', new FormData(form));
+      const data = serialize(form) as Record<string, string>;
       console.log('data', data);
-    }
+      const course = getCoursesOfSubject(data.subject).filter(
+        (course) => course.id === data.course
+      )[0] as Course;
+
+      if (await this.#stateManager.hasUserAlreadyTakenCourse(course)) {
+        alert('You have already taken this course!');
+        return;
+      }
+
+      this.#stateManager.saveUserCourse({
+        grade: data.grade,
+        notes: data.notes,
+        professor: data.professor,
+        semester: getPastSemesterStrings().filter(
+          (o) => o.value === data.semester
+        )[0].display,
+        course
+      });
+      alert('Added Course Successfully!');
+    };
 
     // Wait for controls to be defined before attaching form listeners
     Promise.allSettled([
