@@ -113,7 +113,7 @@ export class CourseHistory {
                   </table>
                 </div>
 
-                <table class="table-fixed border border-black">
+                <table class="table-fixed border border-black w-full">
                   <tr class="bg-gray-300 font-bold text-black">
                     <td class="w-1/2 px-4 py-2">Total:</td>
                     <td class="w-1/2 px-4 py-2 underline text-lg underline-offset-4">
