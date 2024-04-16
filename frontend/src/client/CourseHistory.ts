@@ -73,45 +73,52 @@ export class CourseHistory {
       <div
         class="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
-        ${sortedSemesters
-          .map(
-            (semester) => /* HTML */ `
-              <button
-                class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 transition hover:-translate-y-1"
+      ${sortedSemesters
+        .map(
+          (semester) => /* HTML */ `
+            <button
+              class="semester-table flex w-full cursor-pointer flex-col justify-start rounded-lg border border-black bg-gray-100 p-4 transition hover:-translate-y-1"
+            >
+              <h2
+                class="mb-2 w-full text-center text-2xl font-bold text-black"
               >
-                <h2
-                  class="mb-2 w-full text-center text-2xl font-bold text-black"
-                >
-                  ${semester}
-                </h2>
-                <table class="w-full">
-                  <thead>
-                    <tr>
-                      <th class="px-4 py-2 text-gray-700">Course ID</th>
-                      <th
-                        class="border-b-2 border-gray-600 px-4 py-2 text-gray-700"
-                      >
-                        Credits
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${coursesBySemester[semester]
-                      .map(
-                        (userCourse: UserCourse) => `
-                          <tr>
-                            <td class="px-4 py-2">${userCourse.course.subjectId} ${userCourse.course.number}</td>
-                            <td class="px-4 py-2 border-y border-gray-500">${userCourse.course.credits}</td>
-                          </tr>
-                        `
-                      )
-                      .join('')}
-                  </tbody>
-                </table>
-              </button>
-            `
-          )
-          .join('\n')}
+                ${semester}
+              </h2>
+              <table class="w-full">
+                <thead>
+                  <tr>
+                    <th class="px-4 py-2 text-gray-700">Course ID</th>
+                    <th
+                      class="border-b-2 border-gray-600 px-4 py-2 text-gray-700"
+                    >
+                      Credits
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${coursesBySemester[semester]
+                    .map(
+                      (userCourse: UserCourse) => `
+                        <tr>
+                          <td class="px-4 py-2">${userCourse.course.subjectId} ${userCourse.course.number}</td>
+                          <td class="px-4 py-2 border-y border-gray-500">${userCourse.course.credits}</td>
+                        </tr>
+                      `
+                    )
+                    .join('')}
+                  <tr class="font-bold bg-custom-cream-accent">
+                    <td class="px-4 py-2">Total Credits</td>
+                    <td class="px-4 py-2 border-y border-gray-500">
+                      ${coursesBySemester[semester]
+                        .reduce((total, userCourse) => total + parseInt(userCourse.course.credits), 0)}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </button>
+          `
+        )
+        .join('\n')}
       </div>
     `;
 
