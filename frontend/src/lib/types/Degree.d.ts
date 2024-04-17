@@ -30,6 +30,7 @@ export type Requirement =
   | AnonymousRequirement;
 
 export type Section = {
+  id: string;
   title: string;
   description: string;
   subsections: Subsection[];

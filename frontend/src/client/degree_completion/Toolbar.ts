@@ -1,6 +1,6 @@
 import { Events } from '../Events';
-import { LocalStore, UserAssignmentsDocumentKey } from '../LocalStore';
 import { ModificationEvent, StateManager } from '../StateManagement';
+import { SlMenuItem } from '@shoelace-style/shoelace';
 
 export class Toolbar {
   #events: Events;
@@ -17,28 +17,44 @@ export class Toolbar {
       'justify-center',
       'flex',
       'sm:justify-between',
-      'items-center',
+      'items-center'
     );
     elm.innerHTML = /* HTML */ `
-      <sl-dropdown size="large" stay-open-on-select="" class="mr-2">
-        <sl-button slot="trigger" caret
-          ><i class="fa fa-cog" aria-hidden="true"></i
-        ></sl-button>
+      <sl-dropdown size="large" stay-open-on-select="" class="settings mr-2">
+        <sl-button slot="trigger" caret>
+          <div class="flex h-full flex-row items-center gap-x-3">
+            <i class="fa fa-cog" aria-hidden="true"></i>
+            <span class="font-mono text-xs font-semibold md:text-base">
+              Preferences
+            </span>
+          </div>
+        </sl-button>
         <sl-menu>
-          <sl-menu-item>Dropdown Item 1</sl-menu-item>
-          <sl-menu-item>Dropdown Item 2</sl-menu-item>
-          <sl-menu-item>Dropdown Item 3</sl-menu-item>
-          <sl-divider></sl-divider>
-          <sl-menu-item type="checkbox" checked>Checkbox</sl-menu-item>
-          <sl-menu-item disabled>Disabled</sl-menu-item>
-          <sl-divider></sl-divider>
-          <sl-menu-item>
-            Prefix
-            <sl-icon slot="prefix" name="gift"></sl-icon>
+          <sl-menu-item
+            type="checkbox"
+            class="checked border-b border-gray-400"
+            value="1"
+            checked
+          >
+            <span class="font-medium">Computer Science Major Requirements</span>
+            <span class="text-xs">Effective Fall 2016</span>
           </sl-menu-item>
-          <sl-menu-item>
-            Suffix Icon
-            <sl-icon slot="suffix" name="heart"></sl-icon>
+          <sl-menu-item
+            type="checkbox"
+            value="2"
+            class="border-b border-gray-400"
+          >
+            <span class="font-medium">Computer Science Major Requirements</span>
+            <span class="text-xs">Effective Fall 2021</span>
+          </sl-menu-item>
+          <sl-menu-item
+            type="checkbox"
+            value="3"
+            class="checked border-b border-gray-400"
+            checked
+          >
+            <span class="font-medium">General Education Requirements</span>
+            <span class="text-xs">Effective Fall 2018</span>
           </sl-menu-item>
         </sl-menu>
       </sl-dropdown>
@@ -47,7 +63,7 @@ export class Toolbar {
         <button
           class="reset-btn focus:shadow-outline flex w-full grow flex-row items-center
         justify-center gap-x-2 rounded-md bg-gradient-to-br from-red-600 to-red-500
-        p-2 font-bold text-white hover:overflow-y-visible hover:from-red-500
+        px-4 py-1 font-bold text-white hover:overflow-y-visible hover:from-red-500
         hover:to-red-400 focus:ring-4
         disabled:pointer-events-none disabled:cursor-not-allowed
         disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
@@ -64,19 +80,25 @@ export class Toolbar {
               fill="currentColor"
             />
           </svg>
-          <h1 class="text-xs md:text-base">Reset Changes</h1>
+          <h1 class="flex grow flex-row text-xs md:text-base items-center justify-center gap-x-2">
+            <div>Reset</div>
+            <div class="hidden md:block">Changes</div>
+          </h1>
         </button>
         <button
           class="save-changes-btn focus:shadow-outline flex w-full grow flex-row items-center
                 justify-center gap-x-4 rounded-md bg-gradient-to-br from-emerald-600 to-emerald-500
-                p-2 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
+                px-4 py-1 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
                 hover:to-emerald-400 focus:ring-4
                 disabled:pointer-events-none disabled:cursor-not-allowed
               disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
           disabled
         >
           <i class="fa fa-check"></i>
-          <h1 class="text-xs md:text-base">Save Changes</h1>
+          <h1 class="flex grow flex-row text-xs md:text-base items-center justify-center gap-x-2">
+            <div>Save</div>
+            <div class="hidden md:block">Changes</div>
+          </h1>
         </button>
       </div>
     `;
@@ -105,7 +127,17 @@ export class Toolbar {
       await this.#stateManager.replicateUserAssignmentsToLocalStore();
     });
 
-    const slDropdown = elm.querySelector('sl-dropdown')!;
+    const slMenuElement = elm.querySelector('sl-menu')!;
+    slMenuElement.addEventListener(
+      'sl-select',
+      // @ts-ignore
+      async (e: CustomEvent) => {
+        const item = e.detail.item as SlMenuItem;
+        console.log(item.value);
+        console.log(item.checked);
+        item.classList.toggle('checked');
+      }
+    );
 
     return elm;
   }

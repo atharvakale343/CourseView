@@ -34,3 +34,17 @@
   opacity: 0; /* Set initial opacity to 0 */
   animation: fadeIn 0.125s ease-in forwards;
 }
+
+sl-menu-item::part(base) {
+  @apply font-mono text-black;
+}
+sl-menu-item::part(label) {
+  @apply my-1 flex flex-col justify-center;
+}
+
+sl-menu-item.checked::part(base) {
+  @apply bg-gradient-to-br from-blue-600 to-blue-500 text-white;
+}
+sl-menu-item.checked:hover:part(base) {
+  @apply bg-gradient-to-br from-blue-500 to-blue-400 text-white;
+}

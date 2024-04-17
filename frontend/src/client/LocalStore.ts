@@ -1,5 +1,5 @@
 const PouchDB = require('pouchdb-browser');
-import { DegreeRequirementAssignment } from '../lib/types/Degree';
+import { DegreeRequirementAssignment, Section } from '../lib/types/Degree';
 
 export type UserCoursesDocumentKey = 'userCourses';
 export type UserAssignmentsDocumentKey =
@@ -21,7 +21,7 @@ export class LocalStore {
   }
 
   constructor() {
-    this.db = new PouchDB('course-view-db');
+    this.db = new PouchDB('course-view-db', {'revs_limit': 10});
   }
 
   /**
@@ -31,24 +31,20 @@ export class LocalStore {
    * @returns A promise that resolves when the setup is complete.
    */
   public async setup() {
-    try {
-      await this.db.get('userCourses');
-    } catch (e) {
-      const error = e as PouchDB.Core.Error;
-      if (error.name === 'not_found') {
-        await this.createDocument('userCourses', { userCourses: '[]' });
-      }
-    }
-    try {
-      await this.db.get('userAssignments');
-    } catch (e) {
-      const error = e as PouchDB.Core.Error;
-      if (error.name === 'not_found') {
-        await this.createDocument('userAssignments', {
-          userAssignments: '[]'
-        });
-      }
-    }
+    const docsToSetUp = ['userCourses', 'userAssignments'];
+
+    await Promise.all(
+      docsToSetUp.map(async (doc_key) => {
+        try {
+          await this.db.get(doc_key);
+        } catch (e) {
+          const error = e as PouchDB.Core.Error;
+          if (error.name === 'not_found') {
+            await this.createDocument(doc_key, { [doc_key]: '[]' });
+          }
+        }
+      })
+    );
     return this.db
       .get('userAssignmentsModified')
       .then((doc) => this.db.remove(doc))
@@ -89,7 +85,7 @@ export class LocalStore {
 
   /**
    * Adds a user course to the specified destination in the local store.
-   * 
+   *
    * @param userCourse - The user course to be added.
    * @param destination - The destination where the user course should be added.
    * @returns A promise that resolves to the updated user courses.
@@ -105,7 +101,7 @@ export class LocalStore {
 
   /**
    * Retrieves the user's courses from the database.
-   * 
+   *
    * @param source - The document key for the user's courses.
    * @returns A promise that resolves to an array of UserCourse objects.
    */
@@ -120,7 +116,7 @@ export class LocalStore {
 
   /**
    * Deletes a user course by courseId.
-   * 
+   *
    * @param courseId - The ID of the course to be deleted.
    * @param source - The source of the user courses.
    * @returns A promise that resolves to the updated user courses after deleting the specified course.
@@ -158,7 +154,7 @@ export class LocalStore {
 
   /**
    * Clones the user assignments from the source document to the destination document.
-   * 
+   *
    * @param source - The key of the source document containing user assignments.
    * @param destination - The key of the destination document where user assignments will be cloned.
    * @returns A promise that resolves to the cloned user assignments.
@@ -174,7 +170,7 @@ export class LocalStore {
 
   /**
    * Retrieves the user assignments from the specified source.
-   * 
+   *
    * @param source - The key to identify the document containing user assignments.
    * @returns A promise that resolves to an array of DegreeRequirementAssignment objects.
    */
@@ -189,7 +185,7 @@ export class LocalStore {
 
   /**
    * Deletes a user assignment by its ID from the specified source.
-   * 
+   *
    * @param id - The ID of the assignment to delete.
    * @param source - The source of the user assignments.
    * @returns A promise that resolves to the updated user assignments after deletion.
@@ -208,7 +204,7 @@ export class LocalStore {
 
   /**
    * Adds a user assignment to the specified destination in the local store.
-   * 
+   *
    * @param assignment - The assignment to be added.
    * @param destination - The destination where the assignment should be added.
    * @returns A promise that resolves to the updated user assignments.
@@ -223,5 +219,25 @@ export class LocalStore {
         destination
       );
     });
+  }
+
+  public dumpAllArrConfigs(sections: Section[], destination: string) {
+    return this.db.get(destination).then((doc) =>
+      this.db.put({
+        _id: destination,
+        _rev: doc._rev,
+        [destination]: JSON.stringify(sections)
+      })
+    );
+  }
+
+  public dumpUserSelectedArrConfigIds(ids: string[], destination: string) {
+    return this.db.get(destination).then((doc) =>
+      this.db.put({
+        _id: destination,
+        _rev: doc._rev,
+        [destination]: JSON.stringify(ids)
+      })
+    );
   }
 }

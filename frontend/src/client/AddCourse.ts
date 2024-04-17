@@ -13,7 +13,7 @@ export class AddCourse {
     // delete everything below, and replace it with the new code
     // this is just a placeholder
     const elm = document.createElement('div');
-    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4');
+    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4' );
     elm.id = 'add-course';
     elm.innerHTML = /* HTML */ `
       <h1 class="text-2xl font-bold text-black">Add Course</h1>

@@ -8,6 +8,7 @@ import {
 
 export function getGenedARRConfig(): Section {
   return {
+    id: 'gened-arr-config',
     title: 'General Education Requirements',
     description:
       'Students who enrolled Fall 2018 or later, see requirements below.',
@@ -121,6 +122,7 @@ export function getGenedARRConfig(): Section {
 
 export function getCSMajorARRConfig(): Section {
   return {
+    id: 'cs-major-arr-config-2016',
     title: 'Computer Science Major Requirements',
     description: 'Effective Fall 2016',
     subsections: [

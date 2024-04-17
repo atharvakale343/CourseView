@@ -14,6 +14,10 @@ import {
   getUserCourses
 } from '../backendApi/MockBackend';
 import { AddCourse } from './AddCourse';
+import {
+  getCSMajorARRConfig,
+  getGenedARRConfig
+} from '../backendApi/ArrConfig';
 
 type ViewElementMap = { [K in View]: HTMLElement };
 const REFRESH_EVERY_N_RELOADS = 5;
@@ -36,43 +40,56 @@ export class App {
       this.#localStore.createDocument('refreshed', { number: 0 });
     });
 
-    // TODO: Delete this when ready to implement the real backend
-    await this.#localStore.db
-      .get('userCourses' satisfies UserCoursesDocumentKey)
-      .then(async (doc) => {
-        if (
-          // @ts-ignore
-          doc.userCourses === '[]' ||
-          // @ts-ignore
-          (await this.#localStore.db.get('refreshed')).number ===
-            REFRESH_EVERY_N_RELOADS
-        ) {
-          return this.#localStore.dumpUserCourses(
-            getUserCourses(),
-            'userCourses'
-          );
-        }
-      })
-      .catch((e) => console.error(e));
-
-    // TODO: Delete this when ready to implement the real backend
-    await this.#localStore.db
-      .get('userAssignments' satisfies UserAssignmentsDocumentKey)
-      .then(async (doc) => {
-        if (
-          // @ts-ignore
-          doc.userAssignments === '[]' ||
-          // @ts-ignore
-          (await this.#localStore.db.get('refreshed')).number ===
-            REFRESH_EVERY_N_RELOADS
-        ) {
-          return this.#localStore.dumpUserAssignments(
+    const docsToSetUpAndCallbacks: [string, Function][] = [
+      [
+        'userCourses',
+        () => this.#localStore.dumpUserCourses(getUserCourses(), 'userCourses')
+      ],
+      [
+        'userAssignments',
+        () =>
+          this.#localStore.dumpUserAssignments(
             getRequirementAssignments(),
             'userAssignments'
-          );
-        }
+          )
+      ],
+      [
+        'allArrConfigs',
+        () =>
+          this.#localStore.dumpAllArrConfigs(
+            [getCSMajorARRConfig(), getGenedARRConfig() ],
+            'allArrConfigs'
+          )
+      ],
+      [
+        'userSelectedArrConfigIds',
+        () =>
+          this.#localStore.dumpUserSelectedArrConfigIds(
+            ['gened-arr-config', 'cs-major-arr-config-2016'],
+            'userSelectedArrConfigIds'
+          )
+      ]
+    ];
+
+    await Promise.all(
+      docsToSetUpAndCallbacks.map(async ([doc_key, callback]) => {
+        // TODO: Delete this when ready to implement the real backend
+        await this.#localStore.db
+          .get(doc_key)
+          .then(async (doc) => {
+            if (
+              // @ts-ignore
+              doc.doc_key === '[]' ||
+              // @ts-ignore
+              (await this.#localStore.db.get('refreshed')).number ===
+                REFRESH_EVERY_N_RELOADS
+            ) {
+              return callback();
+            }
+          })
+          .catch((e) => console.error(e));
       })
-      .catch((e) => console.error(e));
+    );
 
     // TODO: Delete this when ready to implement the real backend
     await this.#localStore.db.get('refreshed').then(async (doc) => {

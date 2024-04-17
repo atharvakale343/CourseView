@@ -8,17 +8,14 @@ import {
 } from '../../lib/utils';
 import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
-import { View } from '../Navbar';
 import { ModificationEvent, StateManager } from '../StateManagement';
 import { SectionCompletion } from './SectionCompletion';
 import { Toolbar } from './Toolbar';
 
 export class DegreeCompletion {
-  #events: Events;
   #localStore: LocalStore;
   #stateManager: StateManager;
   constructor() {
-    this.#events = Events.events();
     this.#localStore = LocalStore.localStore();
     this.#stateManager = StateManager.getManager();
   }
@@ -128,8 +125,6 @@ export class DegreeCompletion {
       customElements.whenDefined('sl-dropdown'),
       customElements.whenDefined('sl-menu'),
       customElements.whenDefined('sl-menu-item'),
-      customElements.whenDefined('sl-divider'),
-      customElements.whenDefined('sl-icon')
     ]).then(() => {
       progressRing.classList.add('hidden');
       elm.querySelector('.degree-container')!.classList.remove('hidden');
