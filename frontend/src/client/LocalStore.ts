@@ -5,7 +5,8 @@ export type UserCoursesDocumentKey = 'userCourses';
 export type UserAssignmentsDocumentKey =
   | 'userAssignments'
   | 'userAssignmentsModified';
-
+export type UserSelectedArrConfigIdsDocumentKey = 'userSelectedArrConfigIds';
+export type AllArrConfigsDocumentKey = 'allArrConfigs';
 /**
  * Represents a local store for managing user courses and assignments.
  */
@@ -21,7 +22,7 @@ export class LocalStore {
   }
 
   constructor() {
-    this.db = new PouchDB('course-view-db', {'revs_limit': 10});
+    this.db = new PouchDB('course-view-db', { revs_limit: 10 });
   }
 
   /**
@@ -31,7 +32,12 @@ export class LocalStore {
    * @returns A promise that resolves when the setup is complete.
    */
   public async setup() {
-    const docsToSetUp = ['userCourses', 'userAssignments'];
+    const docsToSetUp = [
+      'userCourses',
+      'userAssignments',
+      'userSelectedArrConfigIds',
+      'allArrConfigs'
+    ];
 
     await Promise.all(
       docsToSetUp.map(async (doc_key) => {
@@ -221,7 +227,10 @@ export class LocalStore {
     });
   }
 
-  public dumpAllArrConfigs(sections: Section[], destination: string) {
+  public dumpAllArrConfigs(
+    sections: Section[],
+    destination: AllArrConfigsDocumentKey
+  ) {
     return this.db.get(destination).then((doc) =>
       this.db.put({
         _id: destination,
@@ -231,7 +240,19 @@ export class LocalStore {
     );
   }
 
-  public dumpUserSelectedArrConfigIds(ids: string[], destination: string) {
+  public getAllArrConfigs(
+    source: AllArrConfigsDocumentKey
+  ): Promise<Section[]> {
+    return this.db.get(source).then((doc) => {
+      // @ts-ignore
+      return JSON.parse(doc[source]);
+    }) as Promise<Section[]>;
+  }
+
+  public dumpUserSelectedArrConfigIds(
+    ids: string[],
+    destination: UserSelectedArrConfigIdsDocumentKey
+  ) {
     return this.db.get(destination).then((doc) =>
       this.db.put({
         _id: destination,
@@ -239,5 +260,14 @@ export class LocalStore {
         [destination]: JSON.stringify(ids)
       })
     );
+  }
+
+  public getUserSelectedArrConfigIds(
+    destination: UserSelectedArrConfigIdsDocumentKey
+  ): Promise<string[]> {
+    return this.db.get(destination).then((doc) => {
+      // @ts-ignore
+      return JSON.parse(doc[destination]);
+    }) as Promise<string[]>;
   }
 }

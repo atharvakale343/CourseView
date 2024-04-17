@@ -1,13 +1,16 @@
 import { Events } from '../Events';
+import { LocalStore } from '../LocalStore';
 import { ModificationEvent, StateManager } from '../StateManagement';
 import { SlMenuItem } from '@shoelace-style/shoelace';
 
 export class Toolbar {
   #events: Events;
   #stateManager: StateManager;
+  #localStore: LocalStore;
   constructor() {
     this.#events = Events.events();
     this.#stateManager = StateManager.getManager();
+    this.#localStore = LocalStore.localStore();
   }
 
   public async render() {
@@ -19,43 +22,41 @@ export class Toolbar {
       'sm:justify-between',
       'items-center'
     );
+
+    const checkedSections = await this.#localStore.getUserSelectedArrConfigIds(
+      'userSelectedArrConfigIds'
+    );
+
     elm.innerHTML = /* HTML */ `
       <sl-dropdown size="large" stay-open-on-select="" class="settings mr-2">
         <sl-button slot="trigger" caret>
           <div class="flex h-full flex-row items-center gap-x-3">
             <i class="fa fa-cog" aria-hidden="true"></i>
-            <span class="font-mono text-xs font-semibold md:text-base">
+            <span class="font-mono text-xs font-semibold md:text-base text-black">
               Preferences
             </span>
           </div>
         </sl-button>
         <sl-menu>
-          <sl-menu-item
-            type="checkbox"
-            class="checked border-b border-gray-400"
-            value="1"
-            checked
-          >
-            <span class="font-medium">Computer Science Major Requirements</span>
-            <span class="text-xs">Effective Fall 2016</span>
-          </sl-menu-item>
-          <sl-menu-item
-            type="checkbox"
-            value="2"
-            class="border-b border-gray-400"
-          >
-            <span class="font-medium">Computer Science Major Requirements</span>
-            <span class="text-xs">Effective Fall 2021</span>
-          </sl-menu-item>
-          <sl-menu-item
-            type="checkbox"
-            value="3"
-            class="checked border-b border-gray-400"
-            checked
-          >
-            <span class="font-medium">General Education Requirements</span>
-            <span class="text-xs">Effective Fall 2018</span>
-          </sl-menu-item>
+          ${(await this.#localStore.getAllArrConfigs('allArrConfigs'))
+            .map((section, index) => {
+              return /* HTML */ `
+                <sl-menu-item
+                  type="checkbox"
+                  value="${section.id}"
+                  class="${checkedSections.includes(section.id)
+                    ? 'checked'
+                    : null} ${index === 0
+                    ? 'border-t'
+                    : ''} border-b border-gray-400"
+                  ${checkedSections.includes(section.id) ? 'checked' : null}
+                >
+                  <span class="font-medium">${section.title}</span>
+                  <span class="text-xs">${section.description}</span>
+                </sl-menu-item>
+              `;
+            })
+            .join('')}
         </sl-menu>
       </sl-dropdown>
 
@@ -80,7 +81,9 @@ export class Toolbar {
               fill="currentColor"
             />
           </svg>
-          <h1 class="flex grow flex-row text-xs md:text-base items-center justify-center gap-x-2">
+          <h1
+            class="flex grow flex-row items-center justify-center gap-x-2 text-xs md:text-base"
+          >
             <div>Reset</div>
             <div class="hidden md:block">Changes</div>
           </h1>
@@ -95,7 +98,9 @@ export class Toolbar {
           disabled
         >
           <i class="fa fa-check"></i>
-          <h1 class="flex grow flex-row text-xs md:text-base items-center justify-center gap-x-2">
+          <h1
+            class="flex grow flex-row items-center justify-center gap-x-2 text-xs md:text-base"
+          >
             <div>Save</div>
             <div class="hidden md:block">Changes</div>
           </h1>
@@ -133,9 +138,14 @@ export class Toolbar {
       // @ts-ignore
       async (e: CustomEvent) => {
         const item = e.detail.item as SlMenuItem;
-        console.log(item.value);
-        console.log(item.checked);
         item.classList.toggle('checked');
+        const id = item.value as string;
+
+        if (item.checked) {
+          await this.#stateManager.addUserSelectedArrConfig(id);
+        } else {
+          await this.#stateManager.removeUserSelectedArrConfig(id);
+        }
       }
     );
 

@@ -1,12 +1,8 @@
-import {
-  getCSMajorARRConfig,
-  getGenedARRConfig
-} from '../../backendApi/ArrConfig';
+import { Section } from '../../lib/types/Degree';
 import {
   autoAssignCourses,
   getAllRequirementsFromSection
 } from '../../lib/utils';
-import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
 import { ModificationEvent, StateManager } from '../StateManagement';
 import { SectionCompletion } from './SectionCompletion';
@@ -22,7 +18,7 @@ export class DegreeCompletion {
 
   public async render() {
     const elm = document.createElement('div');
-    elm.classList.add('p-4');
+    elm.classList.add('p-4', 'h-full');
     elm.innerHTML = /* HTML */ `
       <div class="h-full bg-amber-100">
         <div class="progress-ring flex h-svh items-center justify-center">
@@ -47,9 +43,14 @@ export class DegreeCompletion {
           </div>
         </div>
         <div
-          class="degree-container fade-in-element transition flex hidden h-full flex-col items-center justify-center gap-y-4"
+          class="degree-container fade-in-element flex hidden h-full flex-col justify-start gap-y-4 transition"
         >
           <div class="toolbar sticky top-4 z-10 flex w-full"></div>
+          <div class="default-msg flex grow items-center">
+            <h1 class="text-center text-gray-600">
+              Select your preferences to view your degree completion progress.
+            </h1>
+          </div>
           <div class="degree-completion flex w-full flex-col gap-y-8"></div>
         </div>
       </div>
@@ -66,7 +67,26 @@ export class DegreeCompletion {
       '.degree-completion'
     )! as HTMLDivElement;
 
-    const sections = [getCSMajorARRConfig(), getGenedARRConfig()];
+    let sections: Section[];
+    const reloadSections = async () => {
+      sections = await this.#localStore.getAllArrConfigs('allArrConfigs');
+      const userSelectedSectionIds =
+        await this.#localStore.getUserSelectedArrConfigIds(
+          'userSelectedArrConfigIds'
+        );
+      sections = sections.filter((section) =>
+        userSelectedSectionIds.includes(section.id)
+      );
+    };
+
+    await reloadSections();
+    this.#stateManager.subscribeToUserSelectedArrConfigChanges(async () => {
+      await reloadSections();
+      userAssignmentsChangedHandler({
+        changeRequired: true,
+        type: 'delete'
+      } satisfies ModificationEvent);
+    });
 
     this.#stateManager.subscribeToUserCourseChanges(async () => {
       const autoAssignments = autoAssignCourses(
@@ -87,9 +107,19 @@ export class DegreeCompletion {
       );
     });
 
+    const defaultMsgElement = elm.querySelector(
+      '.default-msg'
+    )! as HTMLDivElement;
+
     const userAssignmentsChangedHandler = async (event: ModificationEvent) => {
       if (event.type !== 'delete' && !event.changeRequired) return;
       degreeCompletionElement.innerHTML = '';
+
+      // display the default message if no sections are selected
+      sections.length === 0
+        ? defaultMsgElement.classList.remove('hidden')
+        : defaultMsgElement.classList.add('hidden');
+
       const sectionElements = await Promise.all(
         sections.map(async (section) => {
           return await new SectionCompletion(section).render();
@@ -124,7 +154,7 @@ export class DegreeCompletion {
     Promise.all([
       customElements.whenDefined('sl-dropdown'),
       customElements.whenDefined('sl-menu'),
-      customElements.whenDefined('sl-menu-item'),
+      customElements.whenDefined('sl-menu-item')
     ]).then(() => {
       progressRing.classList.add('hidden');
       elm.querySelector('.degree-container')!.classList.remove('hidden');

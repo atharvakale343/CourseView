@@ -57,7 +57,7 @@ export class App {
         'allArrConfigs',
         () =>
           this.#localStore.dumpAllArrConfigs(
-            [getCSMajorARRConfig(), getGenedARRConfig() ],
+            [getCSMajorARRConfig(), getGenedARRConfig()],
             'allArrConfigs'
           )
       ],
@@ -109,7 +109,7 @@ export class App {
   async render(): Promise<HTMLElement> {
     // all app contents reside within rootElement
     const rootElement = document.createElement('div')!;
-    rootElement.classList.add('w-full');
+    rootElement.classList.add('w-full', 'flex', 'flex-col');
 
     const navbarElement = await new Navbar().render();
     rootElement.appendChild(navbarElement);
@@ -123,6 +123,7 @@ export class App {
 
     this.#mainViewElement = document.createElement('div')!;
     this.#mainViewElement.id = 'main-view';
+    this.#mainViewElement.classList.add('grow', 'justify-start');
     rootElement.appendChild(this.#mainViewElement);
 
     this.#events.subscribe('navigateTo', (view: View) =>

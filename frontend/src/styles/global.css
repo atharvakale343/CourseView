@@ -65,10 +65,7 @@ sl-menu-item::part(label) {
 }
 
 sl-menu-item.checked::part(base) {
-  @apply bg-gradient-to-br from-blue-600 to-blue-500 text-white;
-}
-sl-menu-item.checked:hover:part(base) {
-  @apply bg-gradient-to-br from-blue-500 to-blue-400 text-white;
+  @apply bg-gradient-to-br from-blue-600 to-blue-500 text-gray-50;
 }
 /* parts can be targeted using @apply */
 /* sl-button::part(base) {

@@ -11,7 +11,7 @@ export function getGenedARRConfig(): Section {
     id: 'gened-arr-config',
     title: 'General Education Requirements',
     description:
-      'Students who enrolled Fall 2018 or later, see requirements below.',
+      'Effective Fall 2018',
     subsections: [
       {
         title: 'Writing',

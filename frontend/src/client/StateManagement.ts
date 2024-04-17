@@ -100,6 +100,34 @@ export class StateManager {
       .then(() => this.deleteAssignmentIfNeeded(user_course));
   }
 
+  public async addUserSelectedArrConfig(config_id: string) {
+    return this.#localStore
+      .getUserSelectedArrConfigIds('userSelectedArrConfigIds')
+      .then((config_ids) => {
+        return this.#localStore.dumpUserSelectedArrConfigIds(
+          [...config_ids, config_id],
+          'userSelectedArrConfigIds'
+        );
+      })
+      .then(() =>
+        this.#events.publish('userSelectedArrConfigIdsChanged', null)
+      );
+  }
+
+  public async removeUserSelectedArrConfig(config_id: string) {
+    return this.#localStore
+      .getUserSelectedArrConfigIds('userSelectedArrConfigIds')
+      .then((config_ids) => {
+        return this.#localStore.dumpUserSelectedArrConfigIds(
+          config_ids.filter((id) => id !== config_id),
+          'userSelectedArrConfigIds'
+        );
+      })
+      .then(() =>
+        this.#events.publish('userSelectedArrConfigIdsChanged', null)
+      );
+  }
+
   /**
    * Subscribes to changes in the user's courses.
    *
@@ -124,6 +152,10 @@ export class StateManager {
    */
   public subscribeToUserAssignmentsModifiedStoreChanges(callback: Function) {
     this.#events.subscribe('userAssignmentsModifiedStoreChanged', callback);
+  }
+
+  public subscribeToUserSelectedArrConfigChanges(callback: Function) {
+    this.#events.subscribe('userSelectedArrConfigIdsChanged', callback);
   }
 
   /**
