@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern';
 import { Navbar, View } from './Navbar';
+import { AddCourse } from './add_course/AddCourse';
 import { CourseHistory } from './CourseHistory';
 import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
@@ -13,7 +14,6 @@ import {
   getRequirementAssignments,
   getUserCourses
 } from '../backendApi/MockBackend';
-import { AddCourse } from './AddCourse';
 import {
   getCSMajorARRConfig,
   getGenedARRConfig

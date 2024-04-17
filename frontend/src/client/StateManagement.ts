@@ -39,6 +39,11 @@ export class StateManager {
       .then(() => this.#events.publish('userAssignmentsChanged', null));
   }
 
+  public async hasUserAlreadyTakenCourse(course: Course) {
+    const userCourses = await this.#localStore.getUserCourses('userCourses');
+    return userCourses.some((userCourse) => userCourse.course.id === course.id);
+  }
+
   /**
    * Deletes an assignment if needed based on the deleted user course.
    * @param deletedUserCourse - The user course that was deleted.

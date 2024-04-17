@@ -6,12 +6,34 @@
   /*
 		https://tailwindcss.com/docs/customizing-colors
 	*/
+  /* Changes the primary theme color to blue using primitives */
+  --sl-color-primary-50: var(--sl-color-blue-50);
+  --sl-color-primary-100: var(--sl-color-blue-100);
+  --sl-color-primary-200: var(--sl-color-blue-200);
+  --sl-color-primary-300: var(--sl-color-blue-300);
+  --sl-color-primary-400: var(--sl-color-blue-400);
+  --sl-color-primary-500: var(--sl-color-blue-500);
+  --sl-color-primary-600: var(--sl-color-blue-600);
+  --sl-color-primary-700: var(--sl-color-blue-700);
+  --sl-color-primary-800: var(--sl-color-blue-800);
+  --sl-color-primary-900: var(--sl-color-blue-900);
+  --sl-color-primary-950: var(--sl-color-blue-950);
 }
+
+:not(:defined) {
+  visibility: hidden;
+}
+
 
 @layer base {
   html,
   body {
     @apply h-full w-full font-mono;
+  }
+
+  body.ready {
+    opacity: 1;
+    transition: 0.25s opacity;
   }
 
   /* body {
@@ -47,4 +69,20 @@ sl-menu-item.checked::part(base) {
 }
 sl-menu-item.checked:hover:part(base) {
   @apply bg-gradient-to-br from-blue-500 to-blue-400 text-white;
+}
+/* parts can be targeted using @apply */
+/* sl-button::part(base) {
+  @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+}
+
+sl-button::part(base) {
+  @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+} */
+
+sl-select::part(listbox) {
+  @apply max-h-80 overflow-auto;
+}
+
+sl-select::part(display-input) {
+  @apply cursor-text
 }
