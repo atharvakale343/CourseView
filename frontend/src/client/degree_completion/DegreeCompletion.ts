@@ -46,8 +46,8 @@ export class DegreeCompletion {
           class="degree-container fade-in-element flex hidden h-full flex-col justify-start gap-y-4 transition"
         >
           <div class="toolbar sticky top-4 z-10 flex w-full"></div>
-          <div class="default-msg flex grow items-center">
-            <h1 class="text-center text-gray-600">
+          <div class="default-msg flex grow items-center justify-center">
+            <h1 class="text-center text-gray-700">
               Select your preferences to view your degree completion progress.
             </h1>
           </div>
@@ -154,7 +154,6 @@ export class DegreeCompletion {
     Promise.all([
       customElements.whenDefined('sl-dropdown'),
       customElements.whenDefined('sl-menu'),
-      customElements.whenDefined('sl-menu-item')
     ]).then(() => {
       progressRing.classList.add('hidden');
       elm.querySelector('.degree-container')!.classList.remove('hidden');

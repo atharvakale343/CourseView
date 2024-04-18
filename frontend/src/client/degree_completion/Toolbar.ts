@@ -64,7 +64,7 @@ export class Toolbar {
         <button
           class="reset-btn focus:shadow-outline flex w-full grow flex-row items-center
         justify-center gap-x-2 rounded-md bg-gradient-to-br from-red-600 to-red-500
-        px-4 py-1 font-bold text-white hover:overflow-y-visible hover:from-red-500
+        px-4 py-2 md:py-1 font-bold text-white hover:overflow-y-visible hover:from-red-500
         hover:to-red-400 focus:ring-4
         disabled:pointer-events-none disabled:cursor-not-allowed
         disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
@@ -82,7 +82,7 @@ export class Toolbar {
             />
           </svg>
           <h1
-            class="flex grow flex-row items-center justify-center gap-x-2 text-xs md:text-base"
+            class="flex grow flex-row items-center justify-center gap-x-2 text-sm md:text-base"
           >
             <div>Reset</div>
             <div class="hidden md:block">Changes</div>
@@ -91,7 +91,7 @@ export class Toolbar {
         <button
           class="save-changes-btn focus:shadow-outline flex w-full grow flex-row items-center
                 justify-center gap-x-4 rounded-md bg-gradient-to-br from-emerald-600 to-emerald-500
-                px-4 py-1 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
+                px-4 py-2 md:py-1 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
                 hover:to-emerald-400 focus:ring-4
                 disabled:pointer-events-none disabled:cursor-not-allowed
               disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
@@ -99,7 +99,7 @@ export class Toolbar {
         >
           <i class="fa fa-check"></i>
           <h1
-            class="flex grow flex-row items-center justify-center gap-x-2 text-xs md:text-base"
+            class="flex grow flex-row items-center justify-center gap-x-2 text-sm md:text-base"
           >
             <div>Save</div>
             <div class="hidden md:block">Changes</div>
