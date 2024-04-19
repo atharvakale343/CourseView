@@ -47,12 +47,8 @@ export class CourseHistory {
       const bSem = b.split(' ')[0];
 
       if (aYear === bYear) {
-        if (aSem === 'Fall' && bSem === 'Spring') {
-          return -1;
-        } else if (aSem === 'Spring' && bSem === 'Fall') {
-          return 1;
-        }
-        return 0;
+        const order = ['Fall', 'Summer', 'Spring', 'Winter'];
+        return order.indexOf(aSem) - order.indexOf(bSem);
       }
       return parseInt(bYear) - parseInt(aYear);
     });
@@ -162,7 +158,13 @@ export class CourseHistory {
 
   async render() {
     const elm = document.createElement('div');
-    elm.classList.add('p-8', 'flex', 'flex-col', 'space-y-4', 'fade-in-element');
+    elm.classList.add(
+      'p-8',
+      'flex',
+      'flex-col',
+      'space-y-4',
+      'fade-in-element'
+    );
     elm.id = 'course-history';
 
     this.#stateManager.subscribeToUserCourseChanges(() =>

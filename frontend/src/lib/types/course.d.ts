@@ -36,10 +36,21 @@ type Course = {
   hasRestrictions?: false | null;
 };
 
-type UserCourse = {
-  course: Course;
-  semester: string;
-  grade?: string | null;
-  professor?: string | null;
-  notes?: string | null;
-};
+type UserCourse =
+  | {
+      course: Course;
+      semester: string;
+      transferred: false;
+      grade?: string | null;
+      professor?: string | null;
+      notes?: string | null;
+    }
+  | {
+      course: Course;
+      semester: string;
+      transferred: true;
+      creditsAwarded?: string;
+      grade?: string | null;
+      professor?: string | null;
+      notes?: string | null;
+    };

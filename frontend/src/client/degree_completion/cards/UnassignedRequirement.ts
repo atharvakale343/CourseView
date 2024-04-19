@@ -243,7 +243,8 @@ export class UnassignedRequirement {
           userCourse: {
             // TODO: This is not correct, you should always pick a valid course
             course: fixedRequirement.course,
-            semester: 'Fall 2021'
+            semester: 'Fall 2021',
+            transferred: false
           }
         }
       });
@@ -256,7 +257,9 @@ export class UnassignedRequirement {
   ): UserCourse {
     return {
       semester: 'Completed',
-      course: createMarkedAsCompletedCourse(req)
+      course: createMarkedAsCompletedCourse(req),
+      transferred: true,
+      creditsAwarded: '0'
     };
   }
 

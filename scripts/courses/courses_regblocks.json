@@ -15268,6 +15268,24 @@
     "subjectId": "COMPSCI",
     "courses": [
       {
+        "id": "COMPSCI|121",
+        "subjectId": "COMPSCI",
+        "number": "121",
+        "title": "Intro to Programming",
+        "titleLong": "Intro to Programming",
+        "displayTitle": "121 Intro to Programming",
+        "credits": "4"
+      },
+      {
+        "id": "COMPSCI|187",
+        "subjectId": "COMPSCI",
+        "number": "187",
+        "title": "Data Structures",
+        "titleLong": "Data Structures",
+        "displayTitle": "187 Data Structures",
+        "credits": "4"
+      },
+      {
         "id": "COMPSCI|119",
         "subjectLong": "Computer Science",
         "subjectShort": "CompSci",

@@ -52,7 +52,8 @@ export const testingUserCourse: UserCourse = {
     description: 'This is a course description'
   },
   grade: 'A',
-  semester: 'Fall 2021'
+  semester: 'Fall 2021',
+  transferred: false
 };
 
 export function calculateCourseStatus(

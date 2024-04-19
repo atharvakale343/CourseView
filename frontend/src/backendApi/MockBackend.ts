@@ -1,3 +1,4 @@
+import { getAllCoursesDropdown } from '../client/add_course/CoursesConfig';
 import {
   AnonymousRequirement,
   DegreeRequirementAssignment,
@@ -171,73 +172,228 @@ export function getCourses(): Course[] {
 }
 
 export function getUserCourses(): UserCourse[] {
-  const courses = getCourses().reduce(
-    (acc, course) => ({ ...acc, [course.number]: course }),
-    {}
+  const courses = getAllCoursesDropdown()
+    .map((sub) => sub.courses)
+    .flat()
+    .reduce((acc, course) => ({ ...acc, [course.id]: course }), {});
+
+  // @ts-ignore
+  console.log(
+    'keys',
+    Object.keys(courses).filter((id) => id.startsWith('COMPSCI'))
   );
-  return [
+  const ucs = [
     {
       // @ts-ignore
-      course: courses['121'],
+      course: courses['COMPSCI|187'],
+      semester: 'Fall 2021',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['MATH|132'],
+      semester: 'Fall 2021',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|198C'],
+      semester: 'Fall 2021',
+      grade: 'P',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['ECON|103'],
+      semester: 'Fall 2021',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['ENGLWRIT|112'],
+      semester: 'Fall 2021',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|230'],
+      semester: 'Spring 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|250'],
+      semester: 'Spring 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['MATH|233'],
+      semester: 'Spring 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['MATH|235'],
+      semester: 'Spring 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['PUBHLTH|160'],
+      semester: 'Spring 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|220'],
+      semester: 'Fall 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|240'],
+      semester: 'Fall 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['MUSIC|150'],
+      semester: 'Fall 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['CICS|298A'],
+      semester: 'Fall 2022',
+      grade: 'P',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|311'],
       semester: 'Spring 2023',
-      grade: 'A'
+      grade: 'A',
+      transferred: false
     },
     {
       // @ts-ignore
-      course: courses['187'],
+      course: courses['STOCKSCH|171'],
+      semester: 'Spring 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['CICS|256'],
+      semester: 'Spring 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|390R'],
+      semester: 'Spring 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|365'],
       semester: 'Fall 2023',
-      grade: 'B+'
+      grade: 'A',
+      transferred: false
     },
     {
       // @ts-ignore
-      course: courses['220'],
+      course: courses['COMPSCI|453'],
+      semester: 'Fall 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|514'],
+      semester: 'Fall 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|578'],
+      semester: 'Fall 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['PHYSICS|151'],
+      semester: 'Fall 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['MARKETNG|301'],
+      semester: 'Fall 2023',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|345'],
+      semester: 'Winter 2024',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|326'],
       semester: 'Spring 2024',
-      notes: 'Some notes go here',
-      professor: 'Marius Minea'
+      transferred: false
     },
     {
       // @ts-ignore
-      course: courses['240'],
+      course: courses['COMPSCI|348'],
       semester: 'Spring 2024',
-      notes: 'Some notes go here'
+      transferred: false
     },
     {
       // @ts-ignore
-      course: courses['326'],
+      course: courses['MANAGMNT|301'],
       semester: 'Spring 2024',
-      notes: 'Some notes go here'
+      transferred: false
     },
     {
       // @ts-ignore
-      course: courses['150'],
-      semester: 'Fall 2023'
+      course: courses['COMPSCI|590AE'],
+      semester: 'Spring 2024',
+      transferred: false
     },
     {
       // @ts-ignore
-      course: courses['377'],
-      semester: 'Spring 2024'
-    },
-    {
-      // @ts-ignore
-      course: courses['383'],
-      semester: 'Spring 2024'
-    },
-    {
-      // @ts-ignore
-      course: courses['429'],
-      semester: 'Spring 2024'
-    },
-    {
-      // @ts-ignore
-      course: courses['445'],
-      semester: 'Spring 2024'
-    },
-    {
-      // @ts-ignore
-      course: courses['446'],
-      semester: 'Spring 2024'
+      course: courses['COMPSCI|391M'] || console.log('no course'),
+      semester: 'Spring 2024',
+      transferred: false
     }
   ];
+  console.log(
+    'ucs',
+    ucs.map((uc) => uc.course.number)
+  );
+  return ucs;
 }
 
 const taken = false;
@@ -286,60 +442,68 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
     {}
   );
 
-  delete userCourses['377']
-  delete userCourses['383']
-  delete userCourses['429']
-  delete userCourses['445']
-  delete userCourses['446']
-  return Object.entries(userCourses).map(([number, userCourse]) => {
-    const status =
-      userCourse.semester === 'Spring 2024' ? 'in-progress' : 'completed';
-    if (csIntroReqs[number]) {
-      return {
-        requirement: csIntroReqs[number],
-        status: status,
-        userCourse: userCourse,
-        id: guidGenerator()
-      };
-    }
-    if (csCoreReqs[number]) {
-      return {
-        requirement: csCoreReqs[number],
-        status: status,
-        userCourse: userCourse,
-        id: guidGenerator()
-      };
-    }
-    if (
-      csUpperReqs.length > 0 &&
-      (number.startsWith('3') || number.startsWith('4'))
-    ) {
-      const possibleRequirements = csUpperReqs.filter(
-        (req) =>
-          req.requirementType === 'prefix' &&
-          number.startsWith(req.prefix.charAt(0))
-      );
-      const takeOne = possibleRequirements[0];
-      csUpperReqs = csUpperReqs.filter((req) => req !== takeOne);
-      return {
-        requirement: takeOne,
-        status: status,
-        userCourse: userCourses[number],
-        id: guidGenerator()
-      };
-    }
-    if (genedReqs.length > 0) {
-      const requirement = genedReqs.find(
-        (req) =>
-          req.requirementType === 'anonymous' && req.requirementId === 'AL/AT'
-      );
-      return {
-        requirement: requirement as Requirement,
-        status: status,
-        userCourse: userCourses[number],
-        id: guidGenerator()
-      };
-    }
-    throw new Error('No requirement found for course ' + number);
-  });
+  return Object.entries(userCourses).reduce(
+    (formedAssignments, [number, userCourse]) => {
+      const status =
+        userCourse.semester === 'Spring 2024' ? 'in-progress' : 'completed';
+      if (csIntroReqs[number]) {
+        formedAssignments.push({
+          requirement: csIntroReqs[number],
+          status: status,
+          userCourse: userCourse,
+          id: guidGenerator()
+        });
+        return formedAssignments;
+      }
+      if (csCoreReqs[number]) {
+        formedAssignments.push({
+          requirement: csCoreReqs[number],
+          status: status,
+          userCourse: userCourse,
+          id: guidGenerator()
+        });
+        return formedAssignments;
+      }
+      if (
+        csUpperReqs.length > 0 &&
+        (number.startsWith('3') || number.startsWith('4'))
+      ) {
+        const possibleRequirements = csUpperReqs.filter(
+          (req) =>
+            req.requirementType === 'prefix' &&
+            number.startsWith(req.prefix.charAt(0))
+        );
+        const takeOne = possibleRequirements[0];
+
+        if (!takeOne) return formedAssignments;
+
+        csUpperReqs = csUpperReqs.filter((req) => req !== takeOne);
+        formedAssignments.push({
+          requirement: takeOne,
+          status: status,
+          userCourse: userCourses[number],
+          id: guidGenerator()
+        });
+        return formedAssignments;
+      }
+      if (genedReqs.length > 0) {
+        const requirement = genedReqs.find(
+          (req) =>
+            req.requirementType === 'anonymous' && req.requirementId === 'AL/AT'
+        );
+
+        if (!requirement) return formedAssignments;
+
+        formedAssignments.push({
+          requirement: requirement as Requirement,
+          status: status,
+          userCourse: userCourses[number],
+          id: guidGenerator()
+        });
+        return formedAssignments;
+      }
+      throw new Error('No requirement found for course ' + number);
+    },
+    [] as DegreeRequirementAssignment[]
+  );
 }

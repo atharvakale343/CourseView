@@ -1,4 +1,3 @@
-import fs from 'fs';
 import courses_regblocks from './courses_regblocks.json';
 import faculty from './faculty-staff.json';
 
@@ -8,7 +7,7 @@ export function getSubjects() {
 
 export function getAllCoursesDropdown() {
   const json = courses_regblocks as { subjectId: string; courses: Course[] }[];
-  return courses_regblocks;
+  return json;
 }
 
 export function getPastSemesterStrings() {

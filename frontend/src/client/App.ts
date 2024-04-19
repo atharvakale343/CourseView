@@ -20,7 +20,7 @@ import {
 } from '../backendApi/ArrConfig';
 
 type ViewElementMap = { [K in View]: HTMLElement };
-const REFRESH_EVERY_N_RELOADS = 5;
+const REFRESH_EVERY_N_RELOADS = 0;
 
 export class App {
   #events: Events = Events.events();
