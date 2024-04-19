@@ -170,7 +170,7 @@ export class LocalStore {
     destination: UserAssignmentsDocumentKey
   ) {
     return this.getUserAssignments(source).then((userAssignments) => {
-      return this.dumpUserAssignments(userAssignments, destination);
+      return this.dumpUserAssignments(userAssignments, destination)
     });
   }
 
@@ -204,7 +204,7 @@ export class LocalStore {
       const updatedAssignments = userAssignments.filter(
         (assignment) => assignment.id !== id
       );
-      return this.dumpUserAssignments(updatedAssignments, source);
+      return this.dumpUserAssignments(updatedAssignments, source)
     });
   }
 

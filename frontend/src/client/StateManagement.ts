@@ -36,7 +36,8 @@ export class StateManager {
   public async addUserAssignment(assignment: DegreeRequirementAssignment) {
     return this.#localStore
       .addUserAssignment(assignment, 'userAssignments')
-      .then(() => this.#events.publish('userAssignmentsChanged', null));
+      .then(() => this.#events.publish('userAssignmentsChanged', null))
+      .catch((e) => console.error(e));
   }
 
   public async hasUserAlreadyTakenCourse(course: Course) {
@@ -187,6 +188,6 @@ export class StateManager {
     return this.#localStore.dumpUserAssignments(
       await this.#localStore.getUserAssignments('userAssignmentsModified'),
       'userAssignments'
-    );
+    ).catch((e) => console.error(e));
   }
 }

@@ -177,11 +177,6 @@ export function getUserCourses(): UserCourse[] {
     .flat()
     .reduce((acc, course) => ({ ...acc, [course.id]: course }), {});
 
-  // @ts-ignore
-  console.log(
-    'keys',
-    Object.keys(courses).filter((id) => id.startsWith('COMPSCI'))
-  );
   const ucs = [
     {
       // @ts-ignore
@@ -389,14 +384,8 @@ export function getUserCourses(): UserCourse[] {
       transferred: false
     }
   ];
-  console.log(
-    'ucs',
-    ucs.map((uc) => uc.course.number)
-  );
   return ucs;
 }
-
-const taken = false;
 
 export function getRequirementAssignments(): DegreeRequirementAssignment[] {
   const fixedReqsReducer = (
@@ -434,76 +423,59 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
     [] as Requirement[]
   );
 
-  const userCourses: { [key: string]: UserCourse } = getUserCourses().reduce(
-    (acc, userCourse) => ({
-      ...acc,
-      [userCourse.course.number]: userCourse
-    }),
-    {}
-  );
+  const userCourses = getUserCourses();
 
-  return Object.entries(userCourses).reduce(
-    (formedAssignments, [number, userCourse]) => {
-      const status =
-        userCourse.semester === 'Spring 2024' ? 'in-progress' : 'completed';
-      if (csIntroReqs[number]) {
-        formedAssignments.push({
-          requirement: csIntroReqs[number],
-          status: status,
-          userCourse: userCourse,
-          id: guidGenerator()
-        });
-        return formedAssignments;
-      }
-      if (csCoreReqs[number]) {
-        formedAssignments.push({
-          requirement: csCoreReqs[number],
-          status: status,
-          userCourse: userCourse,
-          id: guidGenerator()
-        });
-        return formedAssignments;
-      }
-      if (
-        csUpperReqs.length > 0 &&
-        (number.startsWith('3') || number.startsWith('4'))
-      ) {
-        const possibleRequirements = csUpperReqs.filter(
-          (req) =>
-            req.requirementType === 'prefix' &&
-            number.startsWith(req.prefix.charAt(0))
-        );
-        const takeOne = possibleRequirements[0];
+  return userCourses.reduce((formedAssignments, userCourse) => {
+    const status =
+      userCourse.semester === 'Spring 2024' ? 'in-progress' : 'completed';
+    if (
+      userCourse.course.subjectId === 'COMPSCI' &&
+      csIntroReqs[userCourse.course.number]
+    ) {
+      formedAssignments.push({
+        requirement: csIntroReqs[userCourse.course.number],
+        status: status,
+        userCourse: userCourse,
+        id: guidGenerator()
+      });
+      return formedAssignments;
+    }
+    if (
+      userCourse.course.subjectId === 'COMPSCI' &&
+      csCoreReqs[userCourse.course.number]
+    ) {
+      formedAssignments.push({
+        requirement: csCoreReqs[userCourse.course.number],
+        status: status,
+        userCourse: userCourse,
+        id: guidGenerator()
+      });
+      return formedAssignments;
+    }
+    if (
+      userCourse.course.subjectId === 'COMPSCI' &&
+      csUpperReqs.length > 0 &&
+      (userCourse.course.number.startsWith('3') ||
+        userCourse.course.number.startsWith('4'))
+    ) {
+      const possibleRequirements = csUpperReqs.filter(
+        (req) =>
+          req.requirementType === 'prefix' &&
+          userCourse.course.number.startsWith(req.prefix.charAt(0))
+      );
+      const takeOne = possibleRequirements[0];
 
-        if (!takeOne) return formedAssignments;
+      if (!takeOne) return formedAssignments;
 
-        csUpperReqs = csUpperReqs.filter((req) => req !== takeOne);
-        formedAssignments.push({
-          requirement: takeOne,
-          status: status,
-          userCourse: userCourses[number],
-          id: guidGenerator()
-        });
-        return formedAssignments;
-      }
-      if (genedReqs.length > 0) {
-        const requirement = genedReqs.find(
-          (req) =>
-            req.requirementType === 'anonymous' && req.requirementId === 'AL/AT'
-        );
-
-        if (!requirement) return formedAssignments;
-
-        formedAssignments.push({
-          requirement: requirement as Requirement,
-          status: status,
-          userCourse: userCourses[number],
-          id: guidGenerator()
-        });
-        return formedAssignments;
-      }
-      throw new Error('No requirement found for course ' + number);
-    },
-    [] as DegreeRequirementAssignment[]
-  );
+      csUpperReqs = csUpperReqs.filter((req) => req !== takeOne);
+      formedAssignments.push({
+        requirement: takeOne,
+        status: status,
+        userCourse: userCourse,
+        id: guidGenerator()
+      });
+      return formedAssignments;
+    }
+    return formedAssignments;
+  }, [] as DegreeRequirementAssignment[]);
 }

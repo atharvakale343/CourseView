@@ -88,7 +88,7 @@ export class DegreeCompletion {
       } satisfies ModificationEvent);
     });
 
-    this.#stateManager.subscribeToUserCourseChanges(async () => {
+    const autoAssignHandler = async () => {
       const autoAssignments = autoAssignCourses(
         await this.#localStore.getUserCourses('userCourses'),
         getAllRequirementsFromSection(sections),
@@ -96,16 +96,18 @@ export class DegreeCompletion {
       );
 
       console.assert(
-        autoAssignments.length !== 0,
+        autoAssignments.length === 0,
         'Assignments should already include auto-assignable assignments'
       );
 
-      await Promise.all(
-        autoAssignments.map((assignment) =>
-          this.#stateManager.addUserAssignment(assignment)
-        )
-      );
-    });
+      for (const assignment of autoAssignments) {
+        await this.#stateManager.addUserAssignment(assignment);
+      }
+    };
+
+    await autoAssignHandler();
+
+    this.#stateManager.subscribeToUserCourseChanges(autoAssignHandler);
 
     const defaultMsgElement = elm.querySelector(
       '.default-msg'
@@ -153,7 +155,7 @@ export class DegreeCompletion {
     const progressRing = elm.querySelector('.progress-ring')! as HTMLDivElement;
     Promise.all([
       customElements.whenDefined('sl-dropdown'),
-      customElements.whenDefined('sl-menu'),
+      customElements.whenDefined('sl-menu')
     ]).then(() => {
       progressRing.classList.add('hidden');
       elm.querySelector('.degree-container')!.classList.remove('hidden');

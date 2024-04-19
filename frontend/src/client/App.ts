@@ -20,7 +20,7 @@ import {
 } from '../backendApi/ArrConfig';
 
 type ViewElementMap = { [K in View]: HTMLElement };
-const REFRESH_EVERY_N_RELOADS = 0;
+const REFRESH_EVERY_N_RELOADS = 5;
 
 export class App {
   #events: Events = Events.events();
@@ -51,7 +51,7 @@ export class App {
           this.#localStore.dumpUserAssignments(
             getRequirementAssignments(),
             'userAssignments'
-          )
+          ).catch((e) => console.error(e))
       ],
       [
         'allArrConfigs',
