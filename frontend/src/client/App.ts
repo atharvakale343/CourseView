@@ -17,7 +17,7 @@ import {
 } from '../backendApi/ArrConfig';
 
 type ViewElementMap = { [K in View]: Promise<HTMLElement> };
-const REFRESH_EVERY_N_RELOADS = 1;
+const REFRESH_EVERY_N_RELOADS = 4;
 
 export interface Component {
   render(): Promise<HTMLElement>;
@@ -134,7 +134,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'course-history' satisfies View);
+    this.#events.publish('navigateTo', 'degree-completion' satisfies View);
 
     return rootElement;
   }
