@@ -58,6 +58,7 @@ export class CourseHistory {
         <button
           class="
         grow rounded
+        text-xs sm:text-base
         bg-gradient-to-br from-blue-500 to-blue-500 px-4 py-2 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4
         "
           id="add-course-btn"
@@ -65,8 +66,6 @@ export class CourseHistory {
           Add a Course
         </button>
       </div>
-      <p class="text-gray-800 text-lg">You have completed the following courses:</p>
-
       <div
         class="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
