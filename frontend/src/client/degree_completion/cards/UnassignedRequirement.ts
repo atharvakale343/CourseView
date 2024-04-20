@@ -10,24 +10,27 @@ import {
 import { Events } from '../../Events';
 import {
   calculateCourseStatus,
-  createMarkedAsCompletedCourse,
-  getUnassignedCourses,
+  createCompletedCourse,
   guidGenerator,
   testingUserCourse
 } from '../../../lib/utils';
 import { CoursePicker } from '../CoursePicker';
 import { LocalStore } from '../../LocalStore';
+import { View } from '../../Navbar';
+import { StateManager } from '../../StateManagement';
 
 export class UnassignedRequirement {
   #requirement: Requirement;
   #eventId: string;
   #events: Events;
   #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor(requirement: Requirement, eventId: string) {
     this.#events = Events.events();
     this.#requirement = requirement;
     this.#eventId = eventId;
     this.#localStore = LocalStore.localStore();
+    this.#stateManager = StateManager.getManager();
   }
 
   private getAnonRequirementHTMLDiv(
@@ -234,20 +237,7 @@ export class UnassignedRequirement {
     assignBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       assignBtn.blur();
-      this.onAssign({
-        type: 'assignment',
-        assignment: {
-          id: guidGenerator(),
-          requirement: fixedRequirement,
-          status: calculateCourseStatus(testingUserCourse), // TODO: This should always redirect to Course Add page and be the newly added course (optional)
-          userCourse: {
-            // TODO: This is not correct, you should always pick a valid course
-            course: fixedRequirement.course,
-            semester: 'Fall 2021',
-            transferred: false
-          }
-        }
-      });
+      this.showCoursePicker();
     });
     return elm;
   }
@@ -257,7 +247,35 @@ export class UnassignedRequirement {
   ): UserCourse {
     return {
       semester: 'Completed',
-      course: createMarkedAsCompletedCourse(req),
+      course: createCompletedCourse(req),
+      transferred: true,
+      creditsAwarded: '0'
+    };
+  }
+
+  public createTransferredUserCourse(req: FixedRequirement): UserCourse {
+    return {
+      semester: 'Transferred',
+      course: {
+        ...req.course,
+        subjectId: '',
+        displayTitle: `+ Transferred (${req.course.credits} credits awarded)`,
+        id: 'TRANSFERRED'
+      },
+      transferred: true,
+      creditsAwarded: req.course.credits
+    };
+  }
+
+  public createCompletedUserCourseForFixed(req: FixedRequirement): UserCourse {
+    return {
+      semester: 'Completed',
+      course: {
+        ...req.course,
+        subjectId: '',
+        displayTitle: `+ Completed (0 credits awarded)`,
+        id: 'COMPLETED'
+      },
       transferred: true,
       creditsAwarded: '0'
     };
@@ -274,20 +292,60 @@ export class UnassignedRequirement {
   }
 
   private async showCoursePicker(): Promise<void> {
-    const userCourses = getUnassignedCourses(
-      await this.getUserCourses(),
-      await this.getUserAssignments()
-    );
+    let userCourses = await this.getUserCourses();
     if (this.#requirement.requirementType === 'anonymous') {
       userCourses.unshift(
         this.createMarkAsCompletedUserCourse(this.#requirement)
       );
     }
+
+    let addCourseShadowUserCourse: UserCourse = {
+      course: {
+        id: 'ADD_COURSE',
+        subjectId: '+ Add Course to Course History',
+        number: '',
+        title: '',
+        displayTitle: '',
+        credits: '0'
+      },
+      semester: 'Fall 2021',
+      transferred: false
+    };
+
+    if (this.#requirement.requirementType === 'fixed') {
+      userCourses = [
+        addCourseShadowUserCourse,
+        this.createTransferredUserCourse(this.#requirement),
+        this.createCompletedUserCourseForFixed(this.#requirement)
+      ];
+    }
     const coursePickerModal = new CoursePicker(userCourses);
     const waitForCourseSelection = coursePickerModal.show();
-    return waitForCourseSelection.then(() => {
+    return waitForCourseSelection.then(async () => {
       if (coursePickerModal.isConfirmed()) {
         const pickedUserCourse = coursePickerModal.getPickedCourse();
+
+        // Logic to which course gets added
+        if (pickedUserCourse.course.id === 'ADD_COURSE') {
+          this.#events.publish('navigateTo', 'add-course' satisfies View);
+          return;
+        }
+        if (pickedUserCourse.course.id === 'TRANSFERRED') {
+          console.assert(this.#requirement.requirementType === 'fixed');
+          pickedUserCourse.course = (
+            this.#requirement as FixedRequirement
+          ).course;
+          await this.#stateManager.addUserCourse(pickedUserCourse); // Will be auto-assigned
+          return;
+        }
+        if (pickedUserCourse.course.id === 'COMPLETED') {
+          console.assert(this.#requirement.requirementType === 'fixed');
+          pickedUserCourse.course = (
+            this.#requirement as FixedRequirement
+          ).course;
+          await this.#stateManager.addUserCourse(pickedUserCourse); // Will be auto-assigned
+          return;
+        }
         console.assert(
           pickedUserCourse !== undefined,
           'Picked course not found'
@@ -297,8 +355,8 @@ export class UnassignedRequirement {
           assignment: {
             id: guidGenerator(),
             requirement: this.#requirement,
-            userCourse: pickedUserCourse, // TODO: This should be the picked course
-            status: calculateCourseStatus(testingUserCourse) // TODO: This should be accurately set
+            userCourse: pickedUserCourse,
+            status: calculateCourseStatus(pickedUserCourse)
           }
         } satisfies Card);
       }

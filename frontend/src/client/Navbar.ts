@@ -192,19 +192,22 @@ export class Navbar {
         })
         .with('my-account', () => {
           this.showIcon('my-account');
-        });
+        })
+        .otherwise(() => {
+          this.clearIcons();
+        })
     });
 
     // Return the populated navigation bar element
     return elm;
   }
 
-  private showIcon(view: Icon) {
+  private clearIcons() {
     Object.values(this.#viewToViewIcon!).forEach((icon) => {
       const iconTextElement = icon!.querySelector('.icon-title-text')!;
       const iconFillElement = icon!.querySelector('.fill-change-req');
       const iconStrokeElement = icon!.querySelector('.stoke-change-req');
-
+  
       iconTextElement.classList.remove('text-rose-600');
       if (iconFillElement) {
         iconFillElement.classList.remove('fill-rose-600');
@@ -213,6 +216,9 @@ export class Navbar {
         iconStrokeElement.classList.remove('stroke-rose-600');
       }
     });
+  }
+
+  private showIcon(view: Icon) {
     const selectedElement = this.#viewToViewIcon![view];
     const iconTextElement = selectedElement!.querySelector('.icon-title-text')!;
     const iconFillElement = selectedElement!.querySelector('.fill-change-req');

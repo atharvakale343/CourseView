@@ -49,7 +49,7 @@ type UserCourse =
       course: Course;
       semester: string;
       transferred: true;
-      creditsAwarded?: string;
+      creditsAwarded: string;
       grade?: string | null;
       professor?: string | null;
       notes?: string | null;

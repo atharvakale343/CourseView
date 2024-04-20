@@ -1,6 +1,5 @@
 import { Card, Requirement, Subsection } from '../../lib/types/Degree';
 import {
-  autoAssignCourses,
   generateCardsForUser,
   guidGenerator
 } from '../../lib/utils';

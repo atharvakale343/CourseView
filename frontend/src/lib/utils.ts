@@ -2,6 +2,7 @@ import {
   AnonymousRequirement,
   Card,
   DegreeRequirementAssignment,
+  FixedRequirement,
   Requirement,
   Section,
   Subsection
@@ -27,7 +28,7 @@ export function guidGenerator() {
   );
 }
 
-export function createMarkedAsCompletedCourse(
+export function createCompletedCourse(
   req: AnonymousRequirement
 ): Course {
   return {
@@ -40,6 +41,7 @@ export function createMarkedAsCompletedCourse(
     description: req.description
   };
 }
+
 
 export const testingUserCourse: UserCourse = {
   course: {
@@ -160,6 +162,7 @@ export function compareUserCourses(
   return userCourse1.course.id === userCourse2.course.id;
 }
 
+// TODO: You should be able to assign the same user course to multiple requirements
 export function getUnassignedCourses(
   userCourses: UserCourse[],
   assignments: DegreeRequirementAssignment[]

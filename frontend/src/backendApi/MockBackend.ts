@@ -172,12 +172,19 @@ export function getCourses(): Course[] {
 }
 
 export function getUserCourses(): UserCourse[] {
-  const courses = getAllCoursesDropdown()
+  const courses: { [key: string]: Course } = getAllCoursesDropdown()
     .map((sub) => sub.courses)
     .flat()
     .reduce((acc, course) => ({ ...acc, [course.id]: course }), {});
 
-  const ucs = [
+  const ucs: {
+    course: Course;
+    semester: string;
+    transferred: false;
+    grade?: string | null;
+    professor?: string | null;
+    notes?: string | null;
+  }[] = [
     {
       // @ts-ignore
       course: courses['COMPSCI|187'],
@@ -211,6 +218,20 @@ export function getUserCourses(): UserCourse[] {
       course: courses['ENGLWRIT|112'],
       semester: 'Fall 2021',
       grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['CICS|191FY1'],
+      semester: 'Fall 2021',
+      grade: 'P',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['UNIVRSTY|191A'],
+      semester: 'Fall 2021',
+      grade: 'P',
       transferred: false
     },
     {
@@ -265,6 +286,13 @@ export function getUserCourses(): UserCourse[] {
     {
       // @ts-ignore
       course: courses['MUSIC|150'],
+      semester: 'Fall 2022',
+      grade: 'A',
+      transferred: false
+    },
+    {
+      // @ts-ignore
+      course: courses['COMPSCI|377'],
       semester: 'Fall 2022',
       grade: 'A',
       transferred: false

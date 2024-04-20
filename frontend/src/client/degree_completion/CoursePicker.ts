@@ -47,7 +47,6 @@ export class CoursePicker {
     formElement.addEventListener('submit', (e) => e.preventDefault());
 
     this.#textFieldDatalist = new DropdownTextField(
-      // TODO: This should only include courses that haven't been assigned yet
       this.#userCourses.map((uc) => this.userCourseToDisplayStr(uc)),
       'course-pick-text',
       'Pick a course to assign...',

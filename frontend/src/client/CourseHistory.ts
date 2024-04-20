@@ -15,7 +15,7 @@ export class CourseHistory {
 
   async refreshView(elm: HTMLDivElement) {
     // fetch user course history
-    const userCourses = await this.#localStore.getUserCourses('userCourses');
+    const userCourses = (await this.#localStore.getUserCourses('userCourses'));
 
     // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
     const distinct = (value: string, index: number, self: Array<string>) =>
@@ -53,13 +53,31 @@ export class CourseHistory {
       return parseInt(bYear) - parseInt(aYear);
     });
 
+    const totalCredits = userCourses.reduce((sum, uc) => {
+      return uc.transferred
+        ? sum + Number.parseInt(uc.creditsAwarded)
+        : sum + Number.parseInt(uc.course.credits);
+    }, 0);
+
     elm.innerHTML = /* HTML */ `
+      <div class="w-full rounded-full bg-gray-300 dark:bg-gray-700">
+        <div
+          class="rounded-full bg-red-500 p-0.5 text-center text-xs sm:text-sm font-medium leading-none text-slate-50"
+          style="width: ${Math.min(
+            Math.max(30, (totalCredits / 120) * 100),
+            100
+          )}%"
+        >
+          ${totalCredits}/120 Credits
+        </div>
+      </div>
+
       <div class="flex w-full flex-row gap-x-2 sm:w-80">
         <button
           class="
         grow rounded
-        text-xs sm:text-base
-        bg-gradient-to-br from-blue-500 to-blue-500 px-4 py-2 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4
+        bg-gradient-to-br from-blue-500
+        to-blue-500 px-4 py-2 text-xs font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4 sm:text-base
         "
           id="add-course-btn"
         >
@@ -74,7 +92,7 @@ export class CourseHistory {
             (semester) => /* HTML */ `
               <button
                 class="semester-table flex w-full cursor-pointer flex-col justify-between rounded-lg
-                border border-gray-500 shadow-md bg-gray-100 p-4 transition hover:-translate-y-1
+                border border-gray-500 bg-gray-100 p-4 shadow-md transition hover:-translate-y-1
                 "
               >
                 <div>

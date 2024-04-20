@@ -130,78 +130,84 @@ export class AddCourse {
       </div>
     `;
 
-    const form = elm.querySelector('.input-validation-required')! as HTMLFormElement;
-    const subjectDropdown = elm.querySelector('.subject-dropdown') as HTMLSelectElement;
-    const coursesDropdown = elm.querySelector('.courses-dropdown') as HTMLSelectElement;
+    const form = elm.querySelector(
+      '.input-validation-required'
+    )! as HTMLFormElement;
+    const subjectDropdown = elm.querySelector(
+      '.subject-dropdown'
+    ) as HTMLSelectElement;
+    const coursesDropdown = elm.querySelector(
+      '.courses-dropdown'
+    ) as HTMLSelectElement;
 
     function getCoursesOfSubject(subjectId: string) {
-        return getAllCoursesDropdown().filter(
-            (json) => json.subjectId === subjectId
-        )[0].courses;
+      return getAllCoursesDropdown().filter(
+        (json) => json.subjectId === subjectId
+      )[0].courses;
     }
 
     subjectDropdown.addEventListener('sl-change', () => {
-        if (!subjectDropdown.validity.valid) {
-            coursesDropdown.value = '';
-            coursesDropdown.setAttribute('disabled', '');
-            return;
-        }
-        const courses = getCoursesOfSubject(subjectDropdown.value);
-        coursesDropdown.innerHTML = `${courses
-            .map((course) => {
-            return /* HTML */ `<sl-option value="${course.id}"
-                >${course.displayTitle}</sl-option
-            >`;
-            })
-            .join('\n')}`;
-        coursesDropdown.removeAttribute('disabled');
+      if (!subjectDropdown.validity.valid) {
+        coursesDropdown.value = '';
+        coursesDropdown.setAttribute('disabled', '');
+        return;
+      }
+      const courses = getCoursesOfSubject(subjectDropdown.value);
+      coursesDropdown.innerHTML = `${courses
+        .map((course) => {
+          return /* HTML */ `<sl-option value="${course.id}"
+            >${course.displayTitle}</sl-option
+          >`;
+        })
+        .join('\n')}`;
+      coursesDropdown.removeAttribute('disabled');
     });
 
     const formSubmitHandler = async (form: HTMLFormElement) => {
-        // Has properties: notes, subject, course, semester, grade, professor
-        const formData = new FormData(form);
-        const course = getCoursesOfSubject(formData.get("subject") as string).filter(
-            (course) => course.id === formData.get("course")
-        )[0] as Course;
-        console.log(course);
+      // Has properties: notes, subject, course, semester, grade, professor
+      const formData = new FormData(form);
+      const course = getCoursesOfSubject(
+        formData.get('subject') as string
+      ).filter((course) => course.id === formData.get('course'))[0] as Course;
+      console.log(course);
 
-        // Check if course has already been added
-        if (await this.#stateManager.hasUserAlreadyTakenCourse(course)) {
-            alert('You have already added this course!');
-            return;
-        }
+      // Check if course has already been added
+      if (await this.#stateManager.hasUserAlreadyTakenCourse(course)) {
+        alert('You have already added this course!');
+        return;
+      }
 
-        // Save new course
-        this.#stateManager.saveUserCourse({
-            grade: formData.get("grade") as string,
-            notes: formData.get("notes") as string,
-            professor: formData.get("professor") as string,
-            semester: getPastSemesterStrings().filter(
-                (o) => o.value === formData.get("semester") as string
-            )[0].display,
-            transferred: false,
-            course: course
-        });
-        alert('Added Course Successfully!');
+      // Save new course
+      this.#stateManager.addUserCourse({
+        grade: formData.get('grade') as string,
+        notes: formData.get('notes') as string,
+        professor: formData.get('professor') as string,
+        semester: getPastSemesterStrings().filter(
+          (o) => o.value === (formData.get('semester') as string)
+        )[0].display,
+        transferred: false,
+        course: course
+      });
+      alert('Added Course Successfully!');
     };
 
     // Wait for controls to be defined before attaching form listeners
     Promise.allSettled([
-        customElements.whenDefined('sl-button'),
-        customElements.whenDefined('sl-input'),
-        customElements.whenDefined('sl-option'),
-        customElements.whenDefined('sl-select'),
-        customElements.whenDefined('sl-textarea')
+      customElements.whenDefined('sl-button'),
+      customElements.whenDefined('sl-input'),
+      customElements.whenDefined('sl-option'),
+      customElements.whenDefined('sl-select'),
+      customElements.whenDefined('sl-textarea')
     ])
-    .then(() => {
+      .then(() => {
         elm.querySelector('.form-div')!.classList.remove('hidden');
         elm.querySelector('.progress-ring')!.classList.add('hidden');
         form.addEventListener('submit', (event) => {
-        event.preventDefault();
-        formSubmitHandler(form);
+          event.preventDefault();
+          formSubmitHandler(form);
         });
-    })
-    .catch(console.error);
+      })
+      .catch(console.error);
 
     return elm;
   }

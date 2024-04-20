@@ -36,7 +36,12 @@ export class StateManager {
   public async addUserAssignment(assignment: DegreeRequirementAssignment) {
     return this.#localStore
       .addUserAssignment(assignment, 'userAssignments')
-      .then(() => this.#events.publish('userAssignmentsChanged', null))
+      .then(() =>
+        this.#events.publish('userAssignmentsChanged', {
+          type: 'change',
+          changeRequired: true
+        } satisfies ModificationEvent)
+      )
       .catch((e) => console.error(e));
   }
 
@@ -57,23 +62,25 @@ export class StateManager {
     const assignmentsToDelete = userAssignments.filter((assignment) =>
       compareUserCourses(assignment.userCourse, deletedUserCourse)
     );
-    if (assignmentsToDelete.length > 1) {
-      console.error('More than one assignment found for the same course');
-      throw new Error('More than one assignment found for the same course');
-    }
     if (assignmentsToDelete.length === 0) {
       console.log('No assignment found for the course');
       return;
     }
-    const deleteAssign = assignmentsToDelete[0];
-    return this.#localStore
-      .deleteUserAssignmentById(deleteAssign.id, 'userAssignments')
-      .then(() =>
-        this.#events.publish('userAssignmentsChanged', {
-          type: 'change',
-          changeRequired: true
-        } satisfies ModificationEvent)
+    if (assignmentsToDelete.length > 1) {
+      console.warn('More than one assignment found for the course');
+      console.warn(`Deleting ${assignmentsToDelete.length} assignments`);
+      console.warn('assignmentsToDelete', assignmentsToDelete);
+    }
+    for (const deleteAssign of assignmentsToDelete) {
+      await this.#localStore.deleteUserAssignmentById(
+        deleteAssign.id,
+        'userAssignments'
       );
+    }
+    return this.#events.publish('userAssignmentsChanged', {
+      type: 'change',
+      changeRequired: true
+    } satisfies ModificationEvent);
   }
 
   /**
@@ -81,7 +88,7 @@ export class StateManager {
    * @param user_course - The user course to be saved.
    * @returns A promise that resolves when the user course is successfully saved.
    */
-  public async saveUserCourse(user_course: UserCourse) {
+  public async addUserCourse(user_course: UserCourse) {
     return this.#localStore
       .addUserCourse(user_course, 'userCourses')
       .then(() => this.#events.publish('userCoursesChanged', null));
@@ -185,9 +192,11 @@ export class StateManager {
    * @returns A promise that resolves when the user assignments are successfully replicated to the local store.
    */
   async replicateUserAssignmentsToLocalStore() {
-    return this.#localStore.dumpUserAssignments(
-      await this.#localStore.getUserAssignments('userAssignmentsModified'),
-      'userAssignments'
-    ).catch((e) => console.error(e));
+    return this.#localStore
+      .dumpUserAssignments(
+        await this.#localStore.getUserAssignments('userAssignmentsModified'),
+        'userAssignments'
+      )
+      .catch((e) => console.error(e));
   }
 }
