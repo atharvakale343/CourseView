@@ -118,7 +118,7 @@ export class CourseHistory {
                           (userCourse: UserCourse) => `
                         <tr>
                           <td class="px-4 py-2 ">${userCourse.course.subjectId} ${userCourse.course.number}</td>
-                          <td class="px-4 py-2 border-t border-gray-500">${userCourse.course.credits}</td>
+                          <td class="px-4 py-2 border-t border-gray-500">${userCourse.transferred ? userCourse.creditsAwarded : userCourse.course.credits}</td>
                         </tr>
                       `
                         )
@@ -135,7 +135,7 @@ export class CourseHistory {
                     >
                       ${coursesBySemester[semester].reduce(
                         (total, userCourse) =>
-                          total + parseInt(userCourse.course.credits),
+                          total + parseInt(userCourse.transferred ? userCourse.creditsAwarded : userCourse.course.credits),
                         0
                       )}
                     </td>

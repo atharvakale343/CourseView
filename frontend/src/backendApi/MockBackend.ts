@@ -482,6 +482,7 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
     }
     if (
       userCourse.course.subjectId === 'COMPSCI' &&
+      userCourse.course.number !== '311' &&
       csUpperReqs.length > 0 &&
       (userCourse.course.number.startsWith('3') ||
         userCourse.course.number.startsWith('4'))

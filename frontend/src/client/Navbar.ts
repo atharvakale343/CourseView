@@ -219,6 +219,7 @@ export class Navbar {
   }
 
   private showIcon(view: Icon) {
+    this.clearIcons();
     const selectedElement = this.#viewToViewIcon![view];
     const iconTextElement = selectedElement!.querySelector('.icon-title-text')!;
     const iconFillElement = selectedElement!.querySelector('.fill-change-req');
