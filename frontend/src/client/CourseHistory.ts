@@ -54,17 +54,18 @@ export class CourseHistory {
     });
 
     elm.innerHTML = /* HTML */ `
-      <h1 class="text-2xl font-bold text-black">Course History</h1>
-      <button
-        class="
-        mt-2 rounded
-        bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700
+      <div class="flex w-full flex-row gap-x-2 sm:w-80">
+        <button
+          class="
+        grow rounded
+        bg-gradient-to-br from-blue-500 to-blue-500 px-4 py-2 font-bold text-white hover:overflow-y-visible hover:from-blue-500 hover:to-blue-400 focus:ring-4
         "
-        id="add-course-btn"
-      >
-        Add a Course
-      </button>
-      <p class="text-black">You have completed the following courses:</p>
+          id="add-course-btn"
+        >
+          Add a Course
+        </button>
+      </div>
+      <p class="text-gray-800 text-lg">You have completed the following courses:</p>
 
       <div
         class="relative grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
@@ -159,7 +160,7 @@ export class CourseHistory {
   async render() {
     const elm = document.createElement('div');
     elm.classList.add(
-      'p-8',
+      'p-4',
       'flex',
       'flex-col',
       'space-y-4',

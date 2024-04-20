@@ -5,11 +5,7 @@ import { CourseHistory } from './CourseHistory';
 import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
 import { MyAccount } from './MyAccount';
-import {
-  LocalStore,
-  UserAssignmentsDocumentKey,
-  UserCoursesDocumentKey
-} from './LocalStore';
+import { LocalStore } from './LocalStore';
 import {
   getRequirementAssignments,
   getUserCourses
@@ -19,8 +15,12 @@ import {
   getGenedARRConfig
 } from '../backendApi/ArrConfig';
 
-type ViewElementMap = { [K in View]: HTMLElement };
-const REFRESH_EVERY_N_RELOADS = 5;
+type ViewElementMap = { [K in View]: Promise<HTMLElement> };
+const REFRESH_EVERY_N_RELOADS = 0;
+
+export interface Component {
+  render(): Promise<HTMLElement>;
+}
 
 export class App {
   #events: Events = Events.events();
@@ -48,10 +48,9 @@ export class App {
       [
         'userAssignments',
         () =>
-          this.#localStore.dumpUserAssignments(
-            getRequirementAssignments(),
-            'userAssignments'
-          ).catch((e) => console.error(e))
+          this.#localStore
+            .dumpUserAssignments(getRequirementAssignments(), 'userAssignments')
+            .catch((e) => console.error(e))
       ],
       [
         'allArrConfigs',
@@ -115,10 +114,10 @@ export class App {
     rootElement.appendChild(navbarElement);
 
     this.#viewToViewElementMap = {
-      'add-course': await new AddCourse().render(),
-      'course-history': await new CourseHistory().render(),
-      'degree-completion': await new DegreeCompletion().render(),
-      'my-account': await new MyAccount().render()
+      'add-course': new AddCourse().render(),
+      'course-history': new CourseHistory().render(),
+      'degree-completion': new DegreeCompletion().render(),
+      'my-account': new MyAccount().render()
     };
 
     this.#mainViewElement = document.createElement('div')!;
@@ -130,7 +129,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'degree-completion' satisfies View);
+    this.#events.publish('navigateTo', 'course-history' satisfies View);
 
     return rootElement;
   }
@@ -139,24 +138,24 @@ export class App {
     this.#mainViewElement.innerHTML = '';
 
     match(view)
-      .with('add-course', () => {
+      .with('add-course', async () => {
         this.#mainViewElement.appendChild(
-          this.#viewToViewElementMap!['add-course']
+          await this.#viewToViewElementMap!['add-course']
         );
       })
-      .with('course-history', () => {
+      .with('course-history', async () => {
         this.#mainViewElement.appendChild(
-          this.#viewToViewElementMap!['course-history']
+          await this.#viewToViewElementMap!['course-history']
         );
       })
-      .with('degree-completion', () => {
+      .with('degree-completion', async () => {
         this.#mainViewElement.appendChild(
-          this.#viewToViewElementMap!['degree-completion']
+          await this.#viewToViewElementMap!['degree-completion']
         );
       })
-      .with('my-account', () => {
+      .with('my-account', async () => {
         this.#mainViewElement.appendChild(
-          this.#viewToViewElementMap!['my-account']
+          await this.#viewToViewElementMap!['my-account']
         );
       })
       .exhaustive();

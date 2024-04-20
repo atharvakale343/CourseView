@@ -31,11 +31,6 @@
     @apply h-full w-full font-mono;
   }
 
-  body.ready {
-    opacity: 1;
-    transition: 0.25s opacity;
-  }
-
   /* body {
     @apply bg-primary text-color-light;
   } */

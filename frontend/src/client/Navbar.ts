@@ -43,7 +43,7 @@ export class Navbar {
             id="course-history-icon"
             href="#course-history"
             class="
-          px-4 hover:bg-slate-100 focus:bg-slate-300
+          px-4 hover:bg-slate-100 focus:bg-red-400
         "
           >
             <div
