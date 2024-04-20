@@ -10,8 +10,7 @@ export function getGenedARRConfig(): Section {
   return {
     id: 'gened-arr-config',
     title: 'General Education Requirements',
-    description:
-      'Effective Fall 2018',
+    description: 'Effective Fall 2018',
     subsections: [
       {
         title: 'Writing',
@@ -246,6 +245,404 @@ export function getCSMajorARRConfig(): Section {
         title: 'Four CS Core Courses',
         description:
           'Students are strongly advised not to take 220 and 230, or 240 and 250 together in the same semester.',
+        requirements: [
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'COMPSCI|220',
+              subjectLong: 'Computer Science',
+              subjectShort: 'CompSci',
+              subjectId: 'COMPSCI',
+              number: '220',
+              topic: null,
+              displayTitle: '220 Programming Methodology',
+              title: 'Programming Methodology',
+              titleLong: 'Computer Science 220 - Programming Methodology',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'COMPSCI|230',
+              subjectLong: 'Computer Science',
+              subjectShort: 'CompSci',
+              subjectId: 'COMPSCI',
+              number: '230',
+              topic: null,
+              displayTitle: '230 Computer Systems Principles',
+              title: 'Computer Systems Principles',
+              titleLong: 'Computer Science 230 - Computer Systems Principles',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'COMPSCI|240',
+              subjectLong: 'Computer Science',
+              subjectShort: 'CompSci',
+              subjectId: 'COMPSCI',
+              number: '240',
+              topic: null,
+              displayTitle: '240 Reasoning Under Uncertainty',
+              title: 'Reasoning Under Uncertainty',
+              titleLong: 'Computer Science 240 - Reasoning Under Uncertainty',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'COMPSCI|250',
+              subjectLong: 'Computer Science',
+              subjectShort: 'CompSci',
+              subjectId: 'COMPSCI',
+              number: '250',
+              topic: null,
+              displayTitle: '250 Introduction To Computation',
+              title: 'Introduction To Computation',
+              titleLong: 'Computer Science 250 - Introduction To Computation',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          }
+        ]
+      },
+      {
+        title: 'Eight Upper-Level Courses',
+        description: '',
+        requirements: [
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'COMPSCI|311',
+              subjectLong: 'Computer Science',
+              subjectShort: 'CompSci',
+              subjectId: 'COMPSCI',
+              number: '311',
+              topic: null,
+              displayTitle: '311 Introduction to Algorithms',
+              title: 'Introduction to Algorithms',
+              titleLong: 'Computer Science 311 - Introduction to Algorithms',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-300-1',
+            subjectId: 'COMPSCI',
+            prefix: '300+',
+            description: ''
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-300-2',
+            subjectId: 'COMPSCI',
+            prefix: '300+',
+            description: ''
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-300-3',
+            subjectId: 'COMPSCI',
+            prefix: '300+',
+            description: ''
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-300-4',
+            subjectId: 'COMPSCI',
+            prefix: '300+',
+            description: ''
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-400-1',
+            subjectId: 'COMPSCI',
+            prefix: '400+',
+            description: ''
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-400-2',
+            subjectId: 'COMPSCI',
+            prefix: '400+',
+            description: ''
+          },
+          {
+            requirementType: 'prefix',
+            requirementId: 'CS-400-3',
+            subjectId: 'COMPSCI',
+            prefix: '400+',
+            description: ''
+          }
+        ]
+      },
+      {
+        title: 'Integrative Experience / JrYr Writing',
+        description:
+          'Univ requires IE and JYW courses be taken at UMass Amherst. Secondary CS Majors should satisfy IE and JYW Reqs in primary major.',
+        requirements: [
+          {
+            requirementType: 'anonymous',
+            requirementId: 'IE-Integrative Experience-CS',
+            designation: 'IE CS320/326',
+            description: 'Integrative Experience (IE)'
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'CICS|305',
+              subjectLong: 'College of Inform & Comp Sci',
+              subjectShort: 'InfoCompSc',
+              subjectId: 'CICS',
+              number: '305',
+              topic: null,
+              displayTitle: '305 Social Issues in Computing',
+              title: 'Social Issues in Computing',
+              titleLong:
+                'College of Inform & Comp Sci 305 - Social Issues in Computing',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '3'
+            }
+          }
+        ]
+      },
+      {
+        title: 'CNS Lab Science Courses',
+        description:
+          'Please see the section on Lab Science Courses at: https://www.cics.umass.edu/ugrad-education/ details-bs-requirements',
+        requirements: [
+          {
+            requirementType: 'anonymous',
+            requirementId: 'CS-Lab Science-1',
+            designation: 'Lab Science',
+            description: 'An approved Lab Science course'
+          },
+          {
+            requirementType: 'anonymous',
+            requirementId: 'CS-Lab Science-2',
+            designation: 'Lab Science',
+            description: 'An approved Lab Science course'
+          }
+        ]
+      }
+    ]
+  };
+}
+export function getCSMajor2022ARRConfig(): Section {
+  return {
+    id: 'cs-major-arr-config-2022',
+    title: 'Computer Science Major Requirements',
+    description: 'Effective Spring 2023',
+    subsections: [
+      {
+        title: 'Three Introductory CS Courses',
+        description: '',
+        requirements: [
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'CICS|110',
+              subjectLong: 'College of Inform & Comp Sci',
+              subjectShort: 'InfoCompSc',
+              subjectId: 'CICS',
+              number: '110',
+              topic: null,
+              displayTitle: '110 Foundations of Programming',
+              title: 'Foundations of Programming',
+              titleLong:
+                'College of Inform & Comp Sci 110 - Foundations of Programming',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'CICS|160',
+              subjectLong: 'College of Inform & Comp Sci',
+              subjectShort: 'InfoCompSc',
+              subjectId: 'CICS',
+              number: '160',
+              topic: null,
+              displayTitle: '160 Object-Oriented Programming',
+              title: 'Object-Oriented Programming',
+              titleLong:
+                'College of Inform & Comp Sci 160 - Object-Oriented Programming',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'CICS|210',
+              subjectLong: 'College of Inform & Comp Sci',
+              subjectShort: 'InfoCompSc',
+              subjectId: 'CICS',
+              number: '210',
+              topic: null,
+              displayTitle: '210 Data Structures',
+              title: 'Data Structures',
+              titleLong: 'College of Inform & Comp Sci 210 - Data Structures',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'COMPSCI|198C',
+              subjectLong: 'Computer Science',
+              subjectShort: 'CompSci',
+              subjectId: 'COMPSCI',
+              number: '198C',
+              topic: null,
+              displayTitle: '198C P-Intro/C Programming Language',
+              title: 'P-Intro/C Programming Language',
+              titleLong:
+                'Computer Science 198C - P-Intro/C Programming Language',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '1'
+            }
+          }
+        ]
+      },
+      {
+        title: 'Four Math Courses',
+        description: '',
+        requirements: [
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'MATH|131',
+              subjectLong: 'Mathematics',
+              subjectShort: 'Mathematic',
+              subjectId: 'MATH',
+              number: '131',
+              topic: null,
+              displayTitle: '131 Calculus I',
+              title: 'Calculus I',
+              titleLong: 'Mathematics 131 - Calculus I',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'MATH|132',
+              subjectLong: 'Mathematics',
+              subjectShort: 'Mathematic',
+              subjectId: 'MATH',
+              number: '132',
+              topic: null,
+              displayTitle: '132 Calculus II',
+              title: 'Calculus II',
+              titleLong: 'Mathematics 132 - Calculus II',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'MATH|233',
+              subjectLong: 'Mathematics',
+              subjectShort: 'Mathematic',
+              subjectId: 'MATH',
+              number: '233',
+              topic: null,
+              displayTitle: '233 Multivariate Calculus',
+              title: 'Multivariate Calculus',
+              titleLong: 'Mathematics 233 - Multivariate Calculus',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '4'
+            }
+          },
+          {
+            requirementType: 'fixed',
+            course: {
+              id: 'MATH|235',
+              subjectLong: 'Mathematics',
+              subjectShort: 'Mathematic',
+              subjectId: 'MATH',
+              number: '235',
+              topic: null,
+              displayTitle: '235 Intro Linear Algebra',
+              title: 'Intro Linear Algebra',
+              titleLong: 'Mathematics 235 - Intro Linear Algebra',
+              description: null,
+              hasTopics: false,
+              corequisites: null,
+              prerequisites: null,
+              hasRestrictions: false,
+              credits: '3'
+            }
+          }
+        ]
+      },
+      {
+        title: 'Four CS Core Courses',
+        description: '',
         requirements: [
           {
             requirementType: 'fixed',

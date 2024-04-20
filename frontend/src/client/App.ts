@@ -11,6 +11,7 @@ import {
   getUserCourses
 } from '../backendApi/MockBackend';
 import {
+  getCSMajor2022ARRConfig,
   getCSMajorARRConfig,
   getGenedARRConfig
 } from '../backendApi/ArrConfig';
@@ -56,7 +57,11 @@ export class App {
         'allArrConfigs',
         () =>
           this.#localStore.dumpAllArrConfigs(
-            [getCSMajorARRConfig(), getGenedARRConfig()],
+            [
+              getCSMajorARRConfig(),
+              getCSMajor2022ARRConfig(),
+              getGenedARRConfig()
+            ],
             'allArrConfigs'
           )
       ],

@@ -446,11 +446,6 @@ export function getRequirementAssignments(): DegreeRequirementAssignment[] {
   // Upper level subsection
   let csUpperReqs = csArr.subsections[3].requirements;
 
-  const genedReqs: Requirement[] = getGenedARRConfig().subsections.reduce(
-    (reqs, subsection) => [...reqs, ...subsection.requirements],
-    [] as Requirement[]
-  );
-
   const userCourses = getUserCourses();
 
   return userCourses.reduce((formedAssignments, userCourse) => {

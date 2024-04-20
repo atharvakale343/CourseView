@@ -32,7 +32,9 @@ export class Toolbar {
         <sl-button slot="trigger" caret>
           <div class="flex h-full flex-row items-center gap-x-3">
             <i class="fa fa-cog" aria-hidden="true"></i>
-            <span class="font-mono text-xs font-semibold md:text-base text-black">
+            <span
+              class="font-mono text-xs font-semibold text-black md:text-base"
+            >
               Preferences
             </span>
           </div>
@@ -64,10 +66,10 @@ export class Toolbar {
         <button
           class="reset-btn focus:shadow-outline flex w-full grow flex-row items-center
         justify-center gap-x-2 rounded-md bg-gradient-to-br from-red-600 to-red-500
-        px-4 py-2 md:py-1 font-bold text-white hover:overflow-y-visible hover:from-red-500
-        hover:to-red-400 focus:ring-4
-        disabled:pointer-events-none disabled:cursor-not-allowed
-        disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
+        px-4 py-2 font-bold text-white hover:overflow-y-visible hover:from-red-500 hover:to-red-400
+        focus:ring-4 disabled:pointer-events-none
+        disabled:cursor-not-allowed disabled:from-slate-600
+        disabled:to-slate-500 disabled:opacity-50 md:py-1"
           disabled
         >
           <svg
@@ -91,10 +93,10 @@ export class Toolbar {
         <button
           class="save-changes-btn focus:shadow-outline flex w-full grow flex-row items-center
                 justify-center gap-x-4 rounded-md bg-gradient-to-br from-emerald-600 to-emerald-500
-                px-4 py-2 md:py-1 font-bold text-white hover:overflow-y-visible hover:from-emerald-500
-                hover:to-emerald-400 focus:ring-4
-                disabled:pointer-events-none disabled:cursor-not-allowed
-              disabled:from-slate-600 disabled:to-slate-500 disabled:opacity-50"
+                px-4 py-2 font-bold text-white hover:overflow-y-visible hover:from-emerald-500 hover:to-emerald-400
+                focus:ring-4 disabled:pointer-events-none
+                disabled:cursor-not-allowed disabled:from-slate-600
+              disabled:to-slate-500 disabled:opacity-50 md:py-1"
           disabled
         >
           <i class="fa fa-check"></i>
@@ -120,11 +122,13 @@ export class Toolbar {
       }
     );
 
-    resetButton.addEventListener('click', async () => {
+    const resetHandler = async () => {
       resetButton.setAttribute('disabled', '');
       saveChangesButton.setAttribute('disabled', '');
       await this.#stateManager.deleteUserAssignmentsModifiedStore();
-    });
+    };
+
+    resetButton.addEventListener('click', resetHandler);
 
     saveChangesButton.addEventListener('click', async () => {
       resetButton.setAttribute('disabled', '');
@@ -143,8 +147,10 @@ export class Toolbar {
 
         if (item.checked) {
           await this.#stateManager.addUserSelectedArrConfig(id);
+          await resetHandler();
         } else {
           await this.#stateManager.removeUserSelectedArrConfig(id);
+          await resetHandler();
         }
       }
     );
