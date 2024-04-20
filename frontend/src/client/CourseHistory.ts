@@ -15,7 +15,7 @@ export class CourseHistory {
 
   async refreshView(elm: HTMLDivElement) {
     // fetch user course history
-    const userCourses = (await this.#localStore.getUserCourses('userCourses'));
+    const userCourses = await this.#localStore.getUserCourses('userCourses');
 
     // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
     const distinct = (value: string, index: number, self: Array<string>) =>
@@ -62,7 +62,7 @@ export class CourseHistory {
     elm.innerHTML = /* HTML */ `
       <div class="w-full rounded-full bg-gray-300 dark:bg-gray-700">
         <div
-          class="rounded-full bg-red-500 p-0.5 text-center text-xs sm:text-sm font-medium leading-none text-slate-50"
+          class="credits-progress rounded-full bg-red-500 p-0.5 text-center text-xs font-medium leading-none text-slate-50 sm:text-sm"
           style="width: ${Math.min(
             Math.max(30, (totalCredits / 120) * 100),
             100
@@ -135,7 +135,12 @@ export class CourseHistory {
                     >
                       ${coursesBySemester[semester].reduce(
                         (total, userCourse) =>
-                          total + parseInt(userCourse.transferred ? userCourse.creditsAwarded : userCourse.course.credits),
+                          total +
+                          parseInt(
+                            userCourse.transferred
+                              ? userCourse.creditsAwarded
+                              : userCourse.course.credits
+                          ),
                         0
                       )}
                     </td>

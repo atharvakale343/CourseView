@@ -24,7 +24,6 @@
   visibility: hidden;
 }
 
-
 @layer base {
   html,
   body {
@@ -76,5 +75,17 @@ sl-select::part(listbox) {
 }
 
 sl-select::part(display-input) {
-  @apply cursor-text
+  @apply cursor-text;
 }
+
+@keyframes progressBarAnimation {
+  from {
+    width: 30%;
+  }
+}
+
+.credits-progress {
+  animation: progressBarAnimation 1s ease-in-out; /* Adjust duration and timing function as needed */
+}
+
+
