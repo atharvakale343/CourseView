@@ -75,7 +75,7 @@ export class CourseHistory {
             (semester) => /* HTML */ `
               <button
                 class="semester-table flex w-full cursor-pointer flex-col justify-between rounded-lg
-                border border-black bg-gray-100 p-4 transition hover:-translate-y-1
+                border border-gray-500 shadow-md bg-gray-100 p-4 transition hover:-translate-y-1
                 "
               >
                 <div>

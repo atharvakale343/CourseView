@@ -44,7 +44,7 @@ export class Navbar {
             class="group rounded-md border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 px-4 shadow-md"
           >
             <div
-              class="flex h-full w-12 flex-col items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col gap-y-1 sm:gap-y-0 items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
             >
               <svg
                 class="size-8 sm:size-12"
@@ -61,7 +61,7 @@ export class Navbar {
                 />
               </svg>
               <p
-                class="icon-title-text text-center text-xs transition group-hover:text-rose-600 sm:text-sm"
+                class="icon-title-text text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
               >
                 Course History
               </p>
@@ -73,7 +73,7 @@ export class Navbar {
             class="group rounded-md border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 px-4 shadow-md"
           >
             <div
-              class="flex h-full w-12 flex-col items-center justify-center p-2 sm:w-36 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col gap-y-1 sm:gap-y-0 items-center justify-center p-2 sm:w-36 sm:flex-row sm:space-x-2"
             >
               <svg
                 class="fill-change-req size-8 transition group-hover:fill-rose-600 sm:size-12"
@@ -100,7 +100,7 @@ export class Navbar {
                 />
               </svg>
               <p
-                class="icon-title-text text-center text-xs transition group-hover:text-rose-600 sm:text-sm"
+                class="icon-title-text text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
               >
                 Degree Completion
               </p>
@@ -112,7 +112,7 @@ export class Navbar {
             class="group rounded-md border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 px-4 shadow-md"
           >
             <div
-              class="flex h-full w-12 flex-col items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col gap-y-1 sm:gap-y-0 items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
             >
               <svg
                 class="fill-change-req size-8 transition group-hover:fill-rose-600 sm:size-12"
@@ -131,7 +131,7 @@ export class Navbar {
                 </g>
               </svg>
               <p
-                class="icon-title-text text-center text-xs transition group-hover:text-rose-600 sm:text-sm"
+                class="icon-title-text text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
               >
                 Your Account
               </p>
