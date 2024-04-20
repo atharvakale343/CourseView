@@ -16,7 +16,7 @@ import {
 } from '../backendApi/ArrConfig';
 
 type ViewElementMap = { [K in View]: Promise<HTMLElement> };
-const REFRESH_EVERY_N_RELOADS = 0;
+const REFRESH_EVERY_N_RELOADS = 5;
 
 export interface Component {
   render(): Promise<HTMLElement>;
