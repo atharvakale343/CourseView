@@ -9,6 +9,38 @@ import {
 import { guidGenerator } from '../lib/utils';
 import { getCSMajorARRConfig, getGenedARRConfig } from './ArrConfig';
 
+export function getAccount(id: string): Account {
+  //check id in db
+  return {
+    id: "01",
+    username: "jwhite",
+    email: "test@example.com",
+    gradSem: "Spring 2024",
+    majorCon: "Computer Science",
+    secondDegree: null,
+    minorCon: null
+  };
+}
+let testPassword = "test"
+export function getPassword(id: string): string {
+  if(id === "01"){
+    return testPassword
+  }
+  return "";
+}
+export function comparePassword(Account: Account, Password: string): Boolean {
+  // real function would grab the password hash, properly hash the given password with the salt, and then compare the two hashes
+  if(getPassword(Account.id) === Password){
+    return true;
+  }
+  return false;
+}
+export function changePassword(Account: Account, oldPass: string, newPass: string ){
+  if(comparePassword(Account, oldPass)){
+    throw new Error('Old Password is incorrect! Please check spelling and try again.');
+  }
+}
+
 export function getCourses(): Course[] {
   return [
     {
