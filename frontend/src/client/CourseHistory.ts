@@ -68,7 +68,7 @@ export class CourseHistory {
             100
           )}%"
         >
-          ${totalCredits}/120 Credits
+          <h1>${totalCredits}/120 Credits</h1>
         </div>
       </div>
 

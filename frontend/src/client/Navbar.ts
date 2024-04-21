@@ -155,6 +155,8 @@ export class Navbar {
           ?.getAttribute('href')
           ?.replace('#', '');
 
+        if (view === this.#currentView) return;
+
         // Call the navigateTo function with the view name
         await this.#events.publish('navigateTo', view);
       });
@@ -181,7 +183,7 @@ export class Navbar {
 
     // Changes the h1 element and nav icons
     this.#events.subscribe('navigateTo', (view: View) => {
-      this.changeNavBarLabel(elm, view);
+      this.changeCurrentView(elm, view);
 
       match(view)
         .with('course-history', () => {
@@ -234,7 +236,8 @@ export class Navbar {
     }
   }
 
-  private changeNavBarLabel(elm: HTMLDivElement, view: View) {
+  private changeCurrentView(elm: HTMLDivElement, view: View) {
+    this.#currentView = view;
     const h1 = elm.querySelector('h1')!;
     h1.textContent = viewToViewLabel[view];
   }
