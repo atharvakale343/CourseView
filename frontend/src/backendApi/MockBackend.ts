@@ -1,42 +1,42 @@
 import { getAllCoursesDropdown } from '../client/add_course/CoursesConfig';
-import {
-  AnonymousRequirement,
-  DegreeRequirementAssignment,
-  Requirement,
-  Section,
-  Subsection
-} from '../lib/types/Degree';
+import { DegreeRequirementAssignment, Requirement } from '../lib/types/Degree';
 import { guidGenerator } from '../lib/utils';
-import { getCSMajorARRConfig, getGenedARRConfig } from './ArrConfig';
+import { getCSMajorARRConfig } from './ArrConfig';
 
 export function getAccount(id: string): Account {
   //check id in db
   return {
-    id: "01",
-    email: "test@example.com",
-    gradSem: "spring-2024",
-    majorCon: "computer-science-bs",
+    id: '01',
+    email: 'bgreen@umass.com',
+    gradSem: 'spring-2024',
+    majorCon: 'computer-science-bs',
     secondDegree: null,
     minorCon: null
   };
 }
-let testPassword = "test"
+let testPassword = 'test';
 export function getPassword(id: string): string {
-  if(id === "01"){
-    return testPassword
+  if (id === '01') {
+    return testPassword;
   }
-  return "";
+  return '';
 }
 export function comparePassword(Account: Account, Password: string): Boolean {
   // real function would grab the password hash, properly hash the given password with the salt, and then compare the two hashes
-  if(getPassword(Account.id) === Password){
+  if (getPassword(Account.id) === Password) {
     return true;
   }
   return false;
 }
-export function changePassword(Account: Account, oldPass: string, newPass: string ){
-  if(comparePassword(Account, oldPass)){
-    throw new Error('Old Password is incorrect! Please check spelling and try again.');
+export function changePassword(
+  Account: Account,
+  oldPass: string,
+  newPass: string
+) {
+  if (comparePassword(Account, oldPass)) {
+    throw new Error(
+      'Old Password is incorrect! Please check spelling and try again.'
+    );
   }
 }
 
