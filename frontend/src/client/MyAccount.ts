@@ -57,7 +57,11 @@ export class MyAccount {
           <h1 class="text-2xl font-bold text-black">My Account</h1>
         </div>
         <div class="flex items-center justify-center">
-          <img src=${profile} class="h-24 w-24 object-scale-down" />
+          <img
+            class="mb-3 size-48 rounded-full shadow-lg"
+            src="/profile.jpg"
+            alt="Bonnie image"
+          />
         </div>
         <div class="flex flex-col space-y-4">
           <h1 class="text-2xl font-bold text-black">Email:</h1>

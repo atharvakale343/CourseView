@@ -7,7 +7,7 @@ export function getAccount(id: string): Account {
   //check id in db
   return {
     id: '01',
-    email: 'bgreen@umass.com',
+    email: 'bgreen@umass.edu',
     gradSem: 'spring-2024',
     majorCon: 'computer-science-bs',
     secondDegree: null,
