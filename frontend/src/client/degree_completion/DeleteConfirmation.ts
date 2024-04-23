@@ -40,19 +40,24 @@ export class DeleteConfirmation {
       </div>
     `;
 
-    this.#deleteModal
-      .querySelector('.delete-btn')!
-      .addEventListener('click', (e) => {
-        this.onDelete();
-        e.stopPropagation();
-      });
+    const deleteBtn = this.#deleteModal.querySelector(
+      '.delete-btn'
+    )! as HTMLButtonElement;
+    deleteBtn.addEventListener('click', (e) => {
+      this.onDelete();
+      e.stopPropagation();
+    });
 
-    this.#deleteModal
-      .querySelector('.cancel-btn')!
-      .addEventListener('click', (e) => {
-        this.onCancel();
-        e.stopPropagation();
-      });
+    const cancelBtn = this.#deleteModal.querySelector(
+      '.cancel-btn'
+    )! as HTMLButtonElement;
+
+    cancelBtn.addEventListener('click', (e) => {
+      this.onCancel();
+      e.stopPropagation();
+    });
+
+    cancelBtn.focus();
 
     this.#deleteModal
       .querySelector('.modal-bg')!
