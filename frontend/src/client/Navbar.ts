@@ -17,7 +17,7 @@ type Icon = Exclude<View, 'add-course'>;
 export class Navbar {
   #events: Events;
   #currentView: View;
-  #viewToViewIcon: { [K in Icon]: HTMLButtonElement | null } | null = null;
+  #viewToViewIcon: { [K in Icon]: HTMLAnchorElement | null } | null = null;
 
   constructor() {
     this.#events = Events.events();
@@ -38,13 +38,15 @@ export class Navbar {
           ${viewToViewLabel[this.#currentView]}
         </h1>
         <div class="ml-1 flex flex-row gap-x-1">
-          <button
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
             id="course-history-icon"
             href="#course-history"
             class="group rounded-md border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 px-4 shadow-md"
           >
             <div
-              class="flex h-full w-12 flex-col gap-y-1 sm:gap-y-0 items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col items-center justify-center gap-y-1 p-2 sm:w-32 sm:flex-row sm:gap-y-0 sm:space-x-2"
             >
               <svg
                 class="size-8 sm:size-12"
@@ -66,14 +68,16 @@ export class Navbar {
                 Course History
               </p>
             </div>
-          </button>
-          <button
+          </a>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
             id="degree-completion-icon"
             href="#degree-completion"
             class="group rounded-md border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 px-4 shadow-md"
           >
             <div
-              class="flex h-full w-12 flex-col gap-y-1 sm:gap-y-0 items-center justify-center p-2 sm:w-36 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col items-center justify-center gap-y-1 p-2 sm:w-36 sm:flex-row sm:gap-y-0 sm:space-x-2"
             >
               <svg
                 class="fill-change-req size-8 transition group-hover:fill-rose-600 sm:size-12"
@@ -105,14 +109,16 @@ export class Navbar {
                 Degree Completion
               </p>
             </div>
-          </button>
-          <button
+          </a>
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
             id="my-account-icon"
             href="#my-account"
             class="group rounded-md border border-slate-300 bg-gradient-to-br from-slate-100 to-slate-50 px-4 shadow-md"
           >
             <div
-              class="flex h-full w-12 flex-col gap-y-1 sm:gap-y-0 items-center justify-center p-2 sm:w-32 sm:flex-row sm:space-x-2"
+              class="flex h-full w-12 flex-col items-center justify-center gap-y-1 p-2 sm:w-32 sm:flex-row sm:gap-y-0 sm:space-x-2"
             >
               <svg
                 class="fill-change-req size-8 transition group-hover:fill-rose-600 sm:size-12"
@@ -136,13 +142,13 @@ export class Navbar {
                 Your Account
               </p>
             </div>
-          </button>
+          </a>
         </div>
       </div>
     `;
 
     // Get all the anchor tags within the <div> element
-    const links = elm.querySelectorAll('button');
+    const links = elm.querySelectorAll('a');
 
     // Add event listeners to each anchor tag
     links.forEach((link) => {
@@ -165,15 +171,15 @@ export class Navbar {
     // Get all the icon elements and store them
     const courseHistoryIcon = elm.querySelector(
       '#course-history-icon'
-    )! as HTMLButtonElement;
+    )! as HTMLAnchorElement;
 
     const degreeCompletionIcon = elm.querySelector(
       '#degree-completion-icon'
-    )! as HTMLButtonElement;
+    )! as HTMLAnchorElement;
 
     const myAccountIcon = elm.querySelector(
       '#my-account-icon'
-    )! as HTMLButtonElement;
+    )! as HTMLAnchorElement;
 
     this.#viewToViewIcon = {
       'course-history': courseHistoryIcon,
@@ -197,7 +203,7 @@ export class Navbar {
         })
         .otherwise(() => {
           this.clearIcons();
-        })
+        });
     });
 
     // Return the populated navigation bar element
@@ -209,7 +215,7 @@ export class Navbar {
       const iconTextElement = icon!.querySelector('.icon-title-text')!;
       const iconFillElement = icon!.querySelector('.fill-change-req');
       const iconStrokeElement = icon!.querySelector('.stoke-change-req');
-  
+
       iconTextElement.classList.remove('text-rose-600');
       if (iconFillElement) {
         iconFillElement.classList.remove('fill-rose-600');
@@ -225,7 +231,8 @@ export class Navbar {
     const selectedElement = this.#viewToViewIcon![view];
     const iconTextElement = selectedElement!.querySelector('.icon-title-text')!;
     const iconFillElement = selectedElement!.querySelector('.fill-change-req');
-    const iconStrokeElement = selectedElement!.querySelector('.stoke-change-req');
+    const iconStrokeElement =
+      selectedElement!.querySelector('.stoke-change-req');
 
     iconTextElement.classList.add('text-rose-600');
     if (iconFillElement) {

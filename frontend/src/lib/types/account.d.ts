@@ -12,7 +12,6 @@
 
 type Account = {
     id: string;
-    username: string;
     email: string;
     gradSem: string; 
     majorCon: string | null;

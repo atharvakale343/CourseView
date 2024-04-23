@@ -134,7 +134,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'course-history' satisfies View);
+    this.#events.publish('navigateTo', 'my-account' satisfies View);
 
     return rootElement;
   }

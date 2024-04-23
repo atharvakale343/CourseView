@@ -16,9 +16,11 @@ export class AddCourse {
   async render() {
     const elm = document.createElement('div');
     elm.id = 'add-course';
-    elm.classList.add('h-full', 'my-4', 'mx-2');
+    elm.classList.add('h-full', 'my-4', 'mx-2', 'fade-in-element');
     elm.innerHTML = /* HTML */ `
-      <div class="progress-ring flex h-svh items-center justify-center">
+      <div
+        class="progress-ring flex h-svh items-center justify-center bg-white"
+      >
         <div class="mb-60">
           <svg
             aria-hidden="true"
@@ -40,7 +42,7 @@ export class AddCourse {
         </div>
       </div>
       <div
-        class="form-div mx-auto max-w-2xl rounded-lg bg-white p-8 shadow-lg dark:bg-gray-900"
+        class="form-div mx-auto hidden max-w-2xl rounded-lg bg-slate-50 p-8 shadow-lg dark:bg-gray-900"
       >
         <h1 class="mb-4 text-2xl font-bold text-black dark:text-white">
           Course Details

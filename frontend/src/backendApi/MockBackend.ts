@@ -13,10 +13,9 @@ export function getAccount(id: string): Account {
   //check id in db
   return {
     id: "01",
-    username: "jwhite",
     email: "test@example.com",
-    gradSem: "Spring 2024",
-    majorCon: "Computer Science",
+    gradSem: "spring-2024",
+    majorCon: "computer-science-bs",
     secondDegree: null,
     minorCon: null
   };
