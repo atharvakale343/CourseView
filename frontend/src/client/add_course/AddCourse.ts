@@ -16,7 +16,7 @@ export class AddCourse {
   async render() {
     const elm = document.createElement('div');
     elm.id = 'add-course';
-    elm.classList.add('h-full', 'my-4');
+    elm.classList.add('h-full', 'my-4', 'mx-2');
     elm.innerHTML = /* HTML */ `
         <div class="progress-ring flex h-svh items-center justify-center">
             <div class="mb-60">
