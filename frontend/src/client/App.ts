@@ -37,7 +37,7 @@ export class App {
    * Sets up the application by performing various initialization tasks.
    * This method initializes the local store, creates necessary documents,
    * and performs data dumping operations.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the setup is complete.
    */
   public async setupApp() {
@@ -88,12 +88,13 @@ export class App {
         await this.#localStore.db
           .get(doc_key)
           .then(async (doc) => {
+            console.log('doc', doc)
             if (
               // @ts-ignore
-              doc.doc_key === '[]' ||
+              doc[doc_key] === '[]' ||
               // @ts-ignore
               (await this.#localStore.db.get('refreshed')).number ===
-                REFRESH_EVERY_N_RELOADS
+              REFRESH_EVERY_N_RELOADS
             ) {
               return callback();
             }
