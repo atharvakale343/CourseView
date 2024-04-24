@@ -14,6 +14,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   rootElement.appendChild(await app.render());
 });
 
+/**
+ * Creates and returns a progress bar element to be added to the document.
+ * @returns {HTMLDivElement} The progress bar element.
+ */
 function addProgressBarToDocument(): HTMLDivElement {
   // add a progress bar to the root element
   const progressBar = document.createElement('div');

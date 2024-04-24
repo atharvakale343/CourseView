@@ -6,6 +6,7 @@ export class DeleteConfirmation {
   #confirmed: boolean = false;
   #eventId: string = guidGenerator();
   #events: Events;
+
   constructor() {
     this.#events = Events.events();
     const root = document.getElementById('root')!;
@@ -68,11 +69,17 @@ export class DeleteConfirmation {
       });
   }
 
+  /**
+   * Freezes the body of the document by setting the position to 'fixed' and adjusting the top position to maintain the scroll position.
+   */
   private freezeBody() {
     document.body.style.top = `-${window.scrollY}px`;
     document.body.style.position = 'fixed';
   }
 
+  /**
+   * Unfreezes the body element and restores the scroll position.
+   */
   private unfreezeBody() {
     const scrollY = document.body.style.top;
     document.body.style.position = '';
@@ -80,6 +87,10 @@ export class DeleteConfirmation {
     window.scrollTo(0, parseInt(scrollY || '0') * -1);
   }
 
+  /**
+   * Displays the delete confirmation dialog.
+   * @returns A promise that resolves when the delete confirmation is shown.
+   */
   async show() {
     return new Promise<void>((resolve) => {
       this.freezeBody();
@@ -89,17 +100,37 @@ export class DeleteConfirmation {
       });
     });
   }
+  
+  /**
+   * Checks if the deletion has been confirmed.
+   * 
+   * @returns {boolean} True if the deletion has been confirmed, false otherwise.
+   */
   isConfirmed(): boolean {
     return this.#confirmed;
   }
+  
+  
+  /**
+   * Marks the confirmation as confirmed and closes the modal.
+   */
   onDelete(): void {
     this.#confirmed = true;
     this.onModalClose();
   }
+  
+  /**
+   * Handles the cancel action for the delete confirmation.
+   * Sets the `confirmed` flag to false and closes the modal.
+   */
   onCancel(): void {
     this.#confirmed = false;
     this.onModalClose();
   }
+  
+  /**
+   * Closes the modal and performs necessary cleanup actions.
+   */
   onModalClose(): void {
     this.unfreezeBody();
     this.#events.publish(this.#eventId, null);

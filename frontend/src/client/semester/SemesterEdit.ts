@@ -1,20 +1,21 @@
 import { guidGenerator } from '../../lib/utils';
 import { Events } from '../Events';
-import { LocalStore } from '../LocalStore';
 import { StateManager } from '../StateManagement';
 
+/**
+ * Represents a class that handles the editing of a semester.
+ */
 export class SemesterEdit {
   #semesterEditModal: HTMLDivElement;
   #events: Events;
   #eventId: string = guidGenerator();
   #userCourses: UserCourse[];
-  #localStore: LocalStore;
   #stateManager: StateManager;
+
   constructor(semesterString: string, userCourses: UserCourse[]) {
     this.#events = Events.events();
     this.#stateManager = StateManager.getManager();
     this.#userCourses = userCourses;
-    this.#localStore = LocalStore.localStore();
     const root = document.getElementById('root')!;
     this.#semesterEditModal = document.createElement('div');
     this.#semesterEditModal.id = 'semester-edit';
@@ -117,11 +118,17 @@ export class SemesterEdit {
       });
   }
 
+  /**
+   * Freezes the body of the document by setting the position to 'fixed' and adjusting the top position to maintain scroll position.
+   */
   private freezeBody() {
     document.body.style.top = `-${window.scrollY}px`;
     document.body.style.position = 'fixed';
   }
 
+  /**
+   * Unfreezes the body of the document by resetting the position and scroll position.
+   */
   private unfreezeBody() {
     const scrollY = document.body.style.top;
     document.body.style.position = '';
@@ -129,6 +136,10 @@ export class SemesterEdit {
     window.scrollTo(0, parseInt(scrollY || '0') * -1);
   }
 
+  /**
+   * Displays the semester edit view.
+   * @returns A promise that resolves when the view is shown.
+   */
   async show() {
     return new Promise<void>((resolve) => {
       this.freezeBody();
@@ -138,6 +149,9 @@ export class SemesterEdit {
       });
     });
   }
+  /**
+   * Closes the modal and performs necessary cleanup actions.
+   */
   onModalClose(): void {
     this.unfreezeBody();
     this.#events.publish(this.#eventId, null);

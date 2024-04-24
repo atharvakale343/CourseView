@@ -23,6 +23,7 @@ export class Navbar {
     this.#events = Events.events();
     this.#currentView = 'course-history';
   }
+
   async render(): Promise<HTMLElement> {
     // Create a <div> element to hold the navigation bar
     const elm = document.createElement('div');
@@ -210,6 +211,9 @@ export class Navbar {
     return elm;
   }
 
+  /**
+   * Clears the icons by removing specific CSS classes from the icon elements.
+   */
   private clearIcons() {
     Object.values(this.#viewToViewIcon!).forEach((icon) => {
       const iconTextElement = icon!.querySelector('.icon-title-text')!;
@@ -226,6 +230,10 @@ export class Navbar {
     });
   }
 
+  /**
+   * Sets the specified icon as the active icon and applies the corresponding styles.
+   * @param view - The icon to be shown.
+   */
   private showIcon(view: Icon) {
     this.clearIcons();
     const selectedElement = this.#viewToViewIcon![view];
@@ -243,6 +251,11 @@ export class Navbar {
     }
   }
 
+  /**
+   * Changes the current view and updates the text content of the provided HTML element.
+   * @param elm - The HTML element whose text content needs to be updated.
+   * @param view - The new view to set as the current view.
+   */
   private changeCurrentView(elm: HTMLDivElement, view: View) {
     this.#currentView = view;
     const h1 = elm.querySelector('h1')!;

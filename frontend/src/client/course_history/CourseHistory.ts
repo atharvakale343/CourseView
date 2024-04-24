@@ -1,5 +1,4 @@
 import { Events } from '../Events';
-import { SemesterEdit } from '../semester/SemesterEdit';
 import { LocalStore } from '../LocalStore';
 import { StateManager } from '../StateManagement';
 import { SemesterTable } from './SemesterTable';

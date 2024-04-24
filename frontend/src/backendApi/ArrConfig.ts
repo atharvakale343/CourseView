@@ -1,11 +1,11 @@
 import {
-  Card,
-  DegreeRequirementAssignment,
-  Requirement,
   Section,
-  Subsection
 } from '../lib/types/Degree';
 
+/**
+ * Retrieves the configuration for the General Education Requirements.
+ * @returns The configuration object for the General Education Requirements.
+ */
 export function getGenedARRConfig(): Section {
   return {
     id: 'gened-arr-config',
@@ -119,6 +119,10 @@ export function getGenedARRConfig(): Section {
   };
 }
 
+/**
+ * Retrieves the ARR (Academic Requirements Report) configuration for the Computer Science major.
+ * @returns The ARR configuration for the Computer Science major.
+ */
 export function getCSMajorARRConfig(): Section {
   return {
     id: 'cs-major-arr-config-2016',
@@ -459,6 +463,10 @@ export function getCSMajorARRConfig(): Section {
     ]
   };
 }
+/**
+ * Retrieves the ARR (Academic Requirements Report) configuration for the Computer Science Major in 2022.
+ * @returns The ARR configuration object for the Computer Science Major in 2022.
+ */
 export function getCSMajor2022ARRConfig(): Section {
   return {
     id: 'cs-major-arr-config-2022',

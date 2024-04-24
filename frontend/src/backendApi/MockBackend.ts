@@ -3,6 +3,11 @@ import { DegreeRequirementAssignment, Requirement } from '../lib/types/Degree';
 import { guidGenerator } from '../lib/utils';
 import { getCSMajorARRConfig } from './ArrConfig';
 
+/**
+ * Retrieves an account object based on the provided ID.
+ * @param id - The ID of the account to retrieve.
+ * @returns The account object with the specified ID.
+ */
 export function getAccount(id: string): Account {
   //check id in db
   return {
@@ -40,6 +45,10 @@ export function changePassword(
   }
 }
 
+/**
+ * Retrieves a list of courses.
+ * @returns An array of Course objects.
+ */
 export function getCourses(): Course[] {
   return [
     {
@@ -202,6 +211,10 @@ export function getCourses(): Course[] {
   ];
 }
 
+/**
+ * Retrieves the user's courses.
+ * @returns An array of user courses.
+ */
 export function getUserCourses(): UserCourse[] {
   const courses: { [key: string]: Course } = getAllCoursesDropdown()
     .map((sub) => sub.courses)
@@ -446,6 +459,10 @@ export function getUserCourses(): UserCourse[] {
   return ucs;
 }
 
+/**
+ * Retrieves the mock degree requirement assignments based on the user's courses.
+ * @returns An array of DegreeRequirementAssignment objects representing the user's degree requirement assignments.
+ */
 export function getRequirementAssignments(): DegreeRequirementAssignment[] {
   const fixedReqsReducer = (
     acc: { [key: string]: Requirement },
