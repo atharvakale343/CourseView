@@ -17,8 +17,6 @@ This repository is organized into two main directories.
 └── frontend
 ```
 
-In the first part of this project, we will focus primary on the frontend.
-
 # Cloning the Repo
 
 ```bash
@@ -34,7 +32,11 @@ In your terminal, navigate to the `frontend` directory and run the following com
 ```bash
 cd frontend
 npm install
-npm run milestone-01
+npm run dev
 ```
 
 Read more about the frontend in the [frontend README](frontend/README.md).
+
+# Backend
+
+Coming soon.

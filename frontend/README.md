@@ -2,22 +2,23 @@
 
 ```bash
 npm install
-npm run milestone-1
+npm run milestone-02
 ```
 
-# Milestone 1
+# Milestone 2
 
 The following files are files of concern for Milestone 1:
 
 ```
 .
+├── index.html
 ├── src
-│   ├── docs
-│   │   ├── milestone-1
-│   │   │   ├── index.html
-│   │   │   ├── index.ts
-│   │   │   ├── styles.css
+│   ├── client
+│   │   ├── App.ts
+│   │   ├── index.ts
 ```
+
+The `index.ts` file is the entry point of the application. It is responsible for creating the `App` instance and calling the `render` method.
 
 # TailwindCSS
 
@@ -25,19 +26,15 @@ Documentation: https://tailwindcss.com/docs/grid-template-columns
 Playground: https://play.tailwindcss.com/
 Short Tutorial: https://www.youtube.com/playlist?list=PL5f_mz_zU5eXWYDXHUDOLBE0scnuJofO0
 
-More documentation about the frontend can be found in [frontend/README.md](./frontend/README.md)
-
 # Color Scheme
 
 - Primary: amber-100
 - Secondary: red-500
-- Tertiary: indigo-500
 
 # Icon Libraries
 
 https://fontawesome.com/v4/icon/exclamation-triangle
 https://www.svgrepo.com/svg/376180/retry
-
 
 # Notes
 
