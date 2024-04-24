@@ -4,6 +4,9 @@ import { LocalStore } from '../LocalStore';
 import { StateManager } from '../StateManagement';
 import { SemesterTable } from './SemesterTable';
 
+/**
+ * Represents a course history module.
+ */
 export class CourseHistory {
   #events: Events;
   #localStore: LocalStore;
@@ -14,6 +17,11 @@ export class CourseHistory {
     this.#stateManager = StateManager.getManager();
   }
 
+  /**
+   * Calculates the total credits earned by the user from a list of user courses.
+   * @param {UserCourse[]} userCourses - The list of user courses.
+   * @returns {number} The total credits earned.
+   */
   getTotalCredits(userCourses: UserCourse[]) {
     return userCourses.reduce((sum, uc) => {
       return uc.transferred
@@ -22,6 +30,11 @@ export class CourseHistory {
     }, 0);
   }
 
+  /**
+   * Refreshes the view of the course history.
+   * @param {UserCourse[]} userCourses - The list of user courses.
+   * @returns {Promise<HTMLDivElement>} A promise that resolves to the refreshed view element.
+   */
   async refreshView(userCourses: UserCourse[]) {
     const elm = document.createElement('div');
     // fetch user course history
@@ -46,9 +59,9 @@ export class CourseHistory {
       {} as { [key: string]: UserCourse[] }
     );
 
-    // sort the semesters in descending order by comparing the string in semester attribute
-    // compare the last part of the string to sort the semesters based on year
-    // if the years are same, compare the first part of the string to sort the semesters based on spring or fall - fall comes first in descending order
+    // sorting the semesters in descending order by comparing the string in semester attribute
+    // comparing the last part of the string to sort the semesters based on year
+    // if the years are same, comparing the first part of the string to sort the semesters based on spring or fall - fall comes first in descending order
     const sortedSemesters = Object.keys(coursesBySemester).sort((a, b) => {
       const aYear = a.split(' ')[1];
       const bYear = b.split(' ')[1];
@@ -86,6 +99,10 @@ export class CourseHistory {
     return elm.firstElementChild as HTMLDivElement;
   }
 
+  /**
+   * Renders the course history module.
+   * @returns {Promise<HTMLDivElement>} A promise that resolves to the rendered element.
+   */
   async render() {
     const elm = document.createElement('div');
     elm.classList.add(
@@ -159,4 +176,4 @@ export class CourseHistory {
   }
 }
 
-// how to ensure that our page is loading the course history component every time we come back to the page or open it or refresh it?
+

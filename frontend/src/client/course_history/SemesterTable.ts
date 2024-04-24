@@ -1,5 +1,8 @@
 import { SemesterEdit } from '../semester/SemesterEdit';
 
+/**
+ * Represents a semester table for displaying courses grouped by semester.
+ */
 export class SemesterTable {
   #userCoursesForSemester: UserCourse[];
   #semester: string;
@@ -8,6 +11,10 @@ export class SemesterTable {
     this.#semester = semester;
     this.#userCoursesForSemester = userCoursesForSemester;
   }
+  /**
+   * Renders the semester table.
+   * @returns {Promise<HTMLButtonElement>} A promise that resolves to the rendered semester table element.
+   */
   async render() {
     const elm = document.createElement('div');
 
@@ -71,7 +78,7 @@ export class SemesterTable {
 
     const semesterTables = elm.querySelectorAll('.semester-table');
 
-    // add event listener to each semester table
+    // adding event listener to each semester table
     semesterTables.forEach((semesterTable) => {
       semesterTable.addEventListener('click', async (e) => {
         const target = e.currentTarget as HTMLButtonElement;
@@ -93,6 +100,13 @@ export class SemesterTable {
     return elm.firstElementChild as HTMLButtonElement;
   }
 
+  /**
+   * Shows the semester edit modal for editing courses in the semester.
+   * @param {string} semesterString - The semester string.
+   * @param {UserCourse[]} userCourses - The list of user courses for the semester.
+   * @returns {Promise<void>} A promise that resolves when the modal is closed.
+   * @private
+   */
   private async showSemesterEdit(
     semesterString: string,
     userCourses: UserCourse[]
