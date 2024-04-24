@@ -93,3 +93,7 @@ sl-select::part(display-input) {
   opacity: 0; /* Set initial opacity to 0 */
   animation: fadeIn 0.125s ease-in 0.8s forwards;
 }
+
+.credits-progress {
+  transition: width 0.5s ease-in-out;
+}

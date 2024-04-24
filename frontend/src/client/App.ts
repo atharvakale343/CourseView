@@ -1,7 +1,7 @@
 import { match } from 'ts-pattern';
 import { Navbar, View } from './Navbar';
 import { AddCourse } from './add_course/AddCourse';
-import { CourseHistory } from './CourseHistory';
+import { CourseHistory } from './course_history/CourseHistory';
 import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
 import { MyAccount } from './MyAccount';
@@ -134,7 +134,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'my-account' satisfies View);
+    this.#events.publish('navigateTo', 'course-history' satisfies View);
 
     return rootElement;
   }
