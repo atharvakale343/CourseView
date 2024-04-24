@@ -26,7 +26,7 @@ export class MyAccount {
     const UserAccount = getAccount('01');
 
     const elm = document.createElement('div');
-    elm.classList.add('h-full', 'my-4', 'mx-2', 'fade-in-element');
+    elm.classList.add('h-full', 'my-4', 'mx-4', 'fade-in-element');
     elm.id = 'my-account';
     elm.innerHTML = /* HTML */ `
       <div class="progress-ring flex h-svh items-center justify-center">
@@ -51,20 +51,17 @@ export class MyAccount {
         </div>
       </div>
       <form
-        class="account-form mx-auto flex max-w-2xl flex-col gap-y-8 rounded-lg bg-slate-50 p-8 shadow-md"
+        class="account-form mx-auto flex max-w-2xl flex-col gap-y-4 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"
       >
-        <div class="flex flex-row justify-between space-y-4">
-          <h1 class="text-2xl font-bold text-black">My Account</h1>
-        </div>
         <div class="flex items-center justify-center">
           <img
-            class="mb-3 size-48 rounded-full shadow-lg"
+            class="mb-3 size-32 rounded-full shadow-lg md:size-48"
             src="/profile.jpg"
             alt="Bonnie image"
           />
         </div>
         <div class="flex flex-col space-y-4">
-          <h1 class="text-2xl font-bold text-black">Email:</h1>
+          <h1 class="text-xl font-bold text-black md:text-2xl">Email:</h1>
           <sl-input
             class="justify-left col-span-2 w-full text-xl text-black"
             value=${UserAccount.email}
@@ -75,7 +72,7 @@ export class MyAccount {
           </sl-input>
         </div>
         <div class="flex flex-col space-y-4">
-          <h1 class="text-2xl font-bold text-black">Major:</h1>
+          <h1 class="text-xl font-bold text-black md:text-2xl">Major:</h1>
           <sl-select
             value="${UserAccount.majorCon}"
             class="justify-left col-span-2 w-full text-xl text-black"
@@ -94,7 +91,7 @@ export class MyAccount {
           </sl-select>
         </div>
         <div class="flex flex-col space-y-4">
-          <h2 class="text-2xl font-bold text-black">Expected Graduation:</h2>
+          <h2 class="text-xl md:text-2xl font-bold text-black">Expected Graduation:</h2>
           <sl-select
             class="justify-left col-span-2 w-full text-xl text-black"
             name="semester"

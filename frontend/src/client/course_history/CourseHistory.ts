@@ -83,11 +83,6 @@ export class CourseHistory {
       });
     });
 
-    const addCourseBtn = elm.querySelector('#add-course-btn');
-    addCourseBtn?.addEventListener('click', async () => {
-      await this.#events.publish('navigateTo', 'add-course');
-    });
-
     return elm.firstElementChild as HTMLDivElement;
   }
 
@@ -127,6 +122,13 @@ export class CourseHistory {
 
       <div class="container-course-history"></div>
     `;
+
+    const addCourseBtn = elm.querySelector(
+      '#add-course-btn'
+    )! as HTMLButtonElement;
+    addCourseBtn.addEventListener('click', async () => {
+      await this.#events.publish('navigateTo', 'add-course');
+    });
 
     const containerCourseHistory = elm.querySelector(
       '.container-course-history'
