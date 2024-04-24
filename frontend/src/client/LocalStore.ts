@@ -227,7 +227,14 @@ export class LocalStore {
     });
   }
 
-  public dumpAllArrConfigs(
+  /**
+   * Dumps all array configurations to the specified destination in the database.
+   * 
+   * @param sections - An array of Section objects to be dumped.
+   * @param destination - The key of the document where the array configurations will be dumped.
+   * @returns A promise that resolves when the array configurations are successfully dumped.
+   */
+  public async dumpAllArrConfigs(
     sections: Section[],
     destination: AllArrConfigsDocumentKey
   ) {
@@ -240,7 +247,13 @@ export class LocalStore {
     );
   }
 
-  public getAllArrConfigs(
+  /**
+   * Retrieves all array configurations from the specified document key in the database.
+   * 
+   * @param source - The document key to retrieve the array configurations from.
+   * @returns A promise that resolves to an array of Section objects.
+   */
+  public async getAllArrConfigs(
     source: AllArrConfigsDocumentKey
   ): Promise<Section[]> {
     return this.db.get(source).then((doc) => {
@@ -249,20 +262,30 @@ export class LocalStore {
     }) as Promise<Section[]>;
   }
 
-  public dumpUserSelectedArrConfigIds(
+  /**
+   * Dumps the user-selected array configuration IDs into the specified destination document key.
+   * @param ids - An array of string IDs representing the user-selected array configuration IDs.
+   * @param destination - The document key where the user-selected array configuration IDs will be stored.
+   * @returns A promise that resolves when the operation is complete.
+   */
+  public async dumpUserSelectedArrConfigIds(
     ids: string[],
     destination: UserSelectedArrConfigIdsDocumentKey
   ) {
-    return this.db.get(destination).then((doc) =>
-      this.db.put({
-        _id: destination,
-        _rev: doc._rev,
-        [destination]: JSON.stringify(ids)
-      })
-    );
+    const doc = await this.db.get(destination);
+    return await this.db.put({
+      _id: destination,
+      _rev: doc._rev,
+      [destination]: JSON.stringify(ids)
+    });
   }
 
-  public getUserSelectedArrConfigIds(
+  /**
+   * Retrieves the user-selected array configuration IDs from the specified document key.
+   * @param destination The document key to retrieve the user-selected array configuration IDs from.
+   * @returns A promise that resolves to an array of string values representing the user-selected array configuration IDs.
+   */
+  public async getUserSelectedArrConfigIds(
     destination: UserSelectedArrConfigIdsDocumentKey
   ): Promise<string[]> {
     return this.db.get(destination).then((doc) => {

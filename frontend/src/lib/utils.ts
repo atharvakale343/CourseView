@@ -2,7 +2,6 @@ import {
   AnonymousRequirement,
   Card,
   DegreeRequirementAssignment,
-  FixedRequirement,
   Requirement,
   Section,
   Subsection

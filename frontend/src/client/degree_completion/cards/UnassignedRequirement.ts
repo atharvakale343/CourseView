@@ -11,8 +11,7 @@ import { Events } from '../../Events';
 import {
   calculateCourseStatus,
   createCompletedCourse,
-  guidGenerator,
-  testingUserCourse
+  guidGenerator
 } from '../../../lib/utils';
 import { CoursePicker } from '../CoursePicker';
 import { LocalStore } from '../../LocalStore';
@@ -283,12 +282,6 @@ export class UnassignedRequirement {
 
   private async getUserCourses(): Promise<UserCourse[]> {
     return this.#localStore.getUserCourses('userCourses');
-  }
-
-  private async getUserAssignments(): Promise<DegreeRequirementAssignment[]> {
-    return this.#localStore
-      .getUserAssignments('userAssignmentsModified')
-      .catch(() => this.#localStore.getUserAssignments('userAssignments'));
   }
 
   private async showCoursePicker(): Promise<void> {

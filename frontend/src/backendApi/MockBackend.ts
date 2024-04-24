@@ -14,9 +14,8 @@ export function getAccount(id: string): Account {
     id: '01',
     email: 'bgreen@umass.edu',
     gradSem: 'spring-2024',
-    majorCon: 'computer-science-bs',
-    secondDegree: null,
-    minorCon: null
+    majors: ['computer-science-bs'],
+    minors: []
   };
 }
 let testPassword = 'test';

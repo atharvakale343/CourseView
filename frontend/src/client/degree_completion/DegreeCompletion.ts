@@ -68,6 +68,12 @@ export class DegreeCompletion {
     )! as HTMLDivElement;
 
     let sections: Section[];
+    
+    /**
+     * Reloads the sections by fetching allArrConfigs from local storage,
+     * filtering them based on userSelectedArrConfigIds, and updating the sections array.
+     * @returns {Promise<void>} A promise that resolves once the sections are reloaded.
+     */
     const reloadSections = async () => {
       sections = await this.#localStore.getAllArrConfigs('allArrConfigs');
       const userSelectedSectionIds =

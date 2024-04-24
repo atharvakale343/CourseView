@@ -139,7 +139,6 @@ export class Toolbar {
     const slMenuElement = elm.querySelector('sl-menu')!;
     slMenuElement.addEventListener(
       'sl-select',
-      // @ts-ignore
       async (e: CustomEvent) => {
         const item = e.detail.item as SlMenuItem;
         item.classList.toggle('checked');

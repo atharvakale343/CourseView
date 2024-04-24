@@ -62,6 +62,10 @@ export class SubsectionCompletion {
     return elm;
   }
 
+  /**
+   * Handles the card changed event.
+   * @param event - The card changed event.
+   */
   private async cardChanged(event: CardChangedEvent) {
     if (!event.changed) return;
     const deleteAssignmentID =
@@ -102,6 +106,11 @@ export class SubsectionCompletion {
     }
   }
 
+  /**
+   * Creates a local store copy if it does not already exist.
+   * 
+   * @returns A promise that resolves when the local store copy is created.
+   */
   private async createIfNotExistsLocalStoreCopy() {
     const id: UserAssignmentsDocumentKey = 'userAssignmentsModified';
     return this.#localStore.db.get(id).catch(() => {
@@ -113,6 +122,12 @@ export class SubsectionCompletion {
     });
   }
 
+  /**
+   * Generates cards based on the given requirements and user assignments.
+   * 
+   * @param reqs - The requirements to generate cards for.
+   * @returns A promise that resolves to an array of generated cards.
+   */
   private async generateCards(reqs: Requirement[]): Promise<Card[]> {
     const userAssignments =
       await this.#localStore.getUserAssignments('userAssignments');

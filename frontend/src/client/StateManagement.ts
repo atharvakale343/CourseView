@@ -45,6 +45,11 @@ export class StateManager {
       .catch((e) => console.error(e));
   }
 
+  /**
+   * Checks if the user has already taken a specific course.
+   * @param course - The course to check.
+   * @returns A boolean indicating whether the user has taken the course.
+   */
   public async hasUserAlreadyTakenCourse(course: Course) {
     const userCourses = await this.#localStore.getUserCourses('userCourses');
     return userCourses.some((userCourse) => userCourse.course.id === course.id);
@@ -108,6 +113,12 @@ export class StateManager {
       .then(() => this.deleteAssignmentIfNeeded(user_course));
   }
 
+  /**
+   * Adds a configuration ID to the user's selected array configurations.
+   * 
+   * @param config_id - The ID of the configuration to be added.
+   * @returns A promise that resolves when the configuration ID is successfully added.
+   */
   public async addUserSelectedArrConfig(config_id: string) {
     return this.#localStore
       .getUserSelectedArrConfigIds('userSelectedArrConfigIds')
@@ -122,6 +133,11 @@ export class StateManager {
       );
   }
 
+  /**
+   * Removes a user-selected array configuration by its ID.
+   * @param config_id - The ID of the configuration to be removed.
+   * @returns A promise that resolves when the configuration is successfully removed.
+   */
   public async removeUserSelectedArrConfig(config_id: string) {
     return this.#localStore
       .getUserSelectedArrConfigIds('userSelectedArrConfigIds')

@@ -33,6 +33,13 @@ export class App {
     this.#localStore = LocalStore.localStore();
   }
 
+  /**
+   * Sets up the application by performing various initialization tasks.
+   * This method initializes the local store, creates necessary documents,
+   * and performs data dumping operations.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the setup is complete.
+   */
   public async setupApp() {
     await this.#localStore.setup();
 

@@ -4,7 +4,6 @@ import { Events } from './Events';
 import { LocalStore } from './LocalStore';
 import { StateManager } from './StateManagement';
 import { getPastSemesterStrings } from './add_course/CoursesConfig';
-const profile = require('../styles/img/profile.svg');
 /**
  * Represents the user's account information.
  */
@@ -74,7 +73,7 @@ export class MyAccount {
         <div class="flex flex-col space-y-4">
           <h1 class="text-xl font-bold text-black md:text-2xl">Major:</h1>
           <sl-select
-            value="${UserAccount.majorCon}"
+            value="${UserAccount.majors.join(' ')}"
             class="justify-left col-span-2 w-full text-xl text-black"
             name="major"
             multiple
@@ -91,7 +90,9 @@ export class MyAccount {
           </sl-select>
         </div>
         <div class="flex flex-col space-y-4">
-          <h2 class="text-xl md:text-2xl font-bold text-black">Expected Graduation:</h2>
+          <h2 class="text-xl font-bold text-black md:text-2xl">
+            Expected Graduation:
+          </h2>
           <sl-select
             class="justify-left col-span-2 w-full text-xl text-black"
             name="semester"
