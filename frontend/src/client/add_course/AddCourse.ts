@@ -181,6 +181,7 @@ export class AddCourse {
       // Check if course has already been added
       if (await this.#stateManager.hasUserAlreadyTakenCourse(course)) {
         alert('You have already added this course!');
+        form.reset();
         return;
       }
 
@@ -196,6 +197,7 @@ export class AddCourse {
         course: course
       });
       alert('Added Course Successfully!');
+      form.reset();
     };
 
     // Wait for controls to be defined before attaching form listeners
