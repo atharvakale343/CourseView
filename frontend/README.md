@@ -7,7 +7,7 @@ npm run milestone-02
 
 # Milestone 2
 
-The following files are files of concern for Milestone 1:
+The following files are files of concern for Milestone 2:
 
 ```
 .
