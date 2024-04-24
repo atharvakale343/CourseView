@@ -10,8 +10,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const progressIndicator = addProgressBarToDocument();
   rootElement.appendChild(progressIndicator);
   await app.setupApp();
-  progressIndicator.remove();
   rootElement.appendChild(await app.render());
+  progressIndicator.remove();
 });
 
 /**
