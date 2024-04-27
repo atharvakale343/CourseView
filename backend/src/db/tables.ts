@@ -1,6 +1,14 @@
+import { mkdirp } from "mkdirp";
 import sqlite3 from "sqlite3";
+import dotenv from "dotenv";
 
-export const db = new sqlite3.Database("./var/db/users.db");
+dotenv.config();
+
+export const DATABASE_BASE_DIR = process.env.DATABASE_BASE_DIR || "./var/db";
+
+mkdirp.sync(DATABASE_BASE_DIR);
+
+export const db = new sqlite3.Database(`${DATABASE_BASE_DIR}/users.db`);
 
 db.serialize(function () {
     db.run(

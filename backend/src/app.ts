@@ -2,6 +2,7 @@ import express from "express";
 import logger from "morgan";
 import * as path from "path";
 import db from "./db/tables";
+import { DATABASE_BASE_DIR } from "./db/tables";
 import dotenv from "dotenv";
 import * as createError from "http-errors";
 import cors, { CorsOptions } from "cors";
@@ -67,7 +68,7 @@ app.use(
         saveUninitialized: false,
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        store: new SQLiteStore({ db: "sessions.db", dir: "./var/db" }),
+        store: new SQLiteStore({ db: "sessions.db", dir: DATABASE_BASE_DIR }),
     }),
 );
 app.use(passport.authenticate("session"));
