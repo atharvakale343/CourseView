@@ -40,7 +40,13 @@ jobs:
         run: npm run validate-prettiness
       - name: Install .env file
         working-directory: ./backend
-        run: echo "GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}\nGOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}\nSERVER_PORT=${{ env.SERVER_PORT }}" > .env
+        run: |
+          touch .env
+          echo GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }} >> .env
+          echo GOOGLE_CLIENT_ID2=$GOOGLE_CLIENT_ID >> .env
+          echo GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} >> .env
+          echo SERVER_PORT=${{ env.SERVER_PORT }} >> .env
+          cat .env
       - name: Deploy
         working-directory: ./backend
         run: pm2 restart backendserver
