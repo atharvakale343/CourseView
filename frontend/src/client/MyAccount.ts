@@ -4,7 +4,7 @@ import { Events } from './Events';
 import { LocalStore } from './LocalStore';
 import { StateManager } from './StateManagement';
 import { getPastSemesterStrings } from './add_course/CoursesConfig';
-import { BACKEND_CONFIG } from './BackendConfig';
+import { BACKEND_CONFIG, fetchBackendRoute } from './BackendConfig';
 /**
  * Represents the user's account information.
  */
@@ -203,7 +203,9 @@ export class MyAccount {
           Sign in with Google
         </h1>
         <div class="flex-col items-center justify-center">
-          <div class="google-sign-in-button transition-all h-11 w-[350px]"></div>
+          <div
+            class="google-sign-in-button h-11 w-[350px] transition-all"
+          ></div>
         </div>
       </div>
     `;
@@ -232,7 +234,7 @@ export class MyAccount {
     }) => {
       decodeJwtResponse(response.credential);
 
-      return fetch(BACKEND_CONFIG.SERVER_URL, {
+      return fetchBackendRoute('/auth/one-tap/callback', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
