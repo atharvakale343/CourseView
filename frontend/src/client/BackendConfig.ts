@@ -4,7 +4,7 @@ const DEV_BACKEND_CONFIG = {
 };
 
 const PROD_BACKEND_CONFIG = {
-  SERVER_URL: 'TODO: Add production server URL',
+  SERVER_URL: 'http://44.207.108.191:3000',
   GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID
 };
 
