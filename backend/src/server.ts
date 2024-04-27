@@ -2,7 +2,7 @@ import { app } from "./app";
 
 const port = app.get("port");
 
-const server = app.listen(port, "127.0.0.1", onListening);
+const server = app.listen(port, onListening);
 
 server.on("error", onError);
 
