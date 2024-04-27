@@ -12,6 +12,9 @@ import connect from "connect-sqlite3";
 
 import { errorHandler, errorNotFoundHandler } from "./middlewares/errorHandler";
 
+// Load ENV
+dotenv.config();
+
 // Route Imports
 import { index } from "./routes/index";
 import { userCourses } from "./routes/UserCourses";
