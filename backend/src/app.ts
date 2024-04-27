@@ -36,6 +36,8 @@ const whitelist = [
     "http://localhost:2000",
     "https://localhost:2000",
     "https://localhost:3000",
+    "https://courseview-git-dev-atharva-kales-projects.vercel.app",
+    "https://courseview-cs326-team-4.vercel.app",
 ];
 const corsOptions: CorsOptions = {
     credentials: true,
