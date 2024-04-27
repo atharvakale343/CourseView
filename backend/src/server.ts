@@ -2,7 +2,8 @@ import { app } from "./app";
 
 const port = app.get("port");
 
-const server = app.listen(port, onListening);
+const server = app.listen(port, "127.0.0.1", onListening);
+
 server.on("error", onError);
 
 function onError(error: NodeJS.ErrnoException) {
@@ -33,7 +34,9 @@ function onListening() {
         throw new Error("Server address is null");
     }
     const bind =
-        typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
+        typeof addr === "string"
+            ? `pipe ${addr}`
+            : `${addr.address}:${addr.port}`;
     console.log(`Listening on ${bind}`);
 }
 
