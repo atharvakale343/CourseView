@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const DATABASE_BASE_DIR = process.env.DATABASE_BASE_DIR || "./var/db";
+export const DATABASE_BASE_DIR = process.env.DATABASE_DIR || "./var/db";
 
 mkdirp.sync(DATABASE_BASE_DIR);
 
