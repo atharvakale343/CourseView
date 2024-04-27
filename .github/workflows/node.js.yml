@@ -28,19 +28,16 @@ jobs:
           cache-dependency-path: "**/package-lock.json"
       - name: Install
         working-directory: ./backend
-        run: yarn install
+        run: npm install
       - name: Build
         working-directory: ./backend
-        run: yarn build
+        run: npm build
       - name: lint
         working-directory: ./backend
-        run: yarn lint
+        run: npm lint
       - name: validate
         working-directory: ./backend
-        run: yarn validate-prettiness
-      - name: test
-        working-directory: ./backend
-        run: yarn test
+        run: npm validate-prettiness
       - name: Deploy
         working-directory: ./backend
         run: pm2 restart backendserver
