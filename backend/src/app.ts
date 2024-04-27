@@ -25,7 +25,7 @@ import { authRouter } from "./routes/Auth";
 export const app = express();
 
 // Express configuration
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.SERVER_PORT || 3000);
 
 // SQLite
 const SQLiteStore = connect(session);

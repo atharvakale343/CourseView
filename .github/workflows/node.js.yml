@@ -38,6 +38,9 @@ jobs:
       - name: validate
         working-directory: ./backend
         run: npm run validate-prettiness
+      - name: Install .env file
+        working-directory: ./backend
+        run: echo "GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}\nGOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}\nSERVER_PORT=${{ env.SERVER_PORT }}" > .env
       - name: Deploy
         working-directory: ./backend
         run: pm2 restart backendserver
