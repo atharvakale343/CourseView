@@ -197,15 +197,13 @@ export class MyAccount {
     elm.classList.add('my-4', 'mx-4', 'fade-in-element', 'relative');
     elm.innerHTML = /* HTML */ `
       <div
-        class="account-form m-auto flex h-40 max-w-2xl items-center gap-y-4 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"
+        class="account-form m-auto h-40 max-w-2xl flex flex-col items-center gap-y-8 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"
       >
-        <h1 class="mb-4 text-2xl font-bold text-black dark:text-white">
-          Sign in with Google
+        <h1 class="text-2xl font-bold text-black dark:text-white">
+          Sign in to CourseView
         </h1>
         <div class="flex-col items-center justify-center">
-          <div
-            class="google-sign-in-button h-11 w-[350px] transition-all"
-          ></div>
+          <div class="google-sign-in-button h-11 w-[300px]"></div>
         </div>
       </div>
     `;
@@ -262,7 +260,7 @@ export class MyAccount {
       theme: 'filled_blue',
       size: 'large',
       shape: 'rectangular',
-      width: 350,
+      width: 300,
       logo_alignment: 'left'
     });
 
