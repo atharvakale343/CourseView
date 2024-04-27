@@ -203,7 +203,7 @@ export class MyAccount {
           Sign in with Google
         </h1>
         <div class="flex-col items-center justify-center">
-          <div class="google-sign-in-button transition-all h-11"></div>
+          <div class="google-sign-in-button transition-all h-11 w-[350px]"></div>
         </div>
       </div>
     `;
