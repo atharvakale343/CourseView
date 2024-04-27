@@ -232,7 +232,7 @@ export class MyAccount {
     }) => {
       decodeJwtResponse(response.credential);
 
-      return fetch('http://localhost:3000/auth/one-tap/callback', {
+      return fetch(BACKEND_CONFIG.SERVER_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
