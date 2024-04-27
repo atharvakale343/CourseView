@@ -4,7 +4,7 @@ const DEV_BACKEND_CONFIG = {
 };
 
 const PROD_BACKEND_CONFIG = {
-  SERVER_URL: 'http://44.207.108.191:3000',
+  SERVER_URL: 'https://www.courseview.us',
   GOOGLE_CLIENT_ID: import.meta.env.VITE_GOOGLE_CLIENT_ID
 };
 
