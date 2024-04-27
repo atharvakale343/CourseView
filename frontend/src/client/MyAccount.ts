@@ -4,6 +4,7 @@ import { Events } from './Events';
 import { LocalStore } from './LocalStore';
 import { StateManager } from './StateManagement';
 import { getPastSemesterStrings } from './add_course/CoursesConfig';
+import { BACKEND_CONFIG } from './BackendConfig';
 /**
  * Represents the user's account information.
  */
@@ -21,11 +22,9 @@ export class MyAccount {
    * Renders the MyAccount component.
    * @returns The rendered HTML element.
    */
-  async render() {
-    const UserAccount = getAccount('01');
-
+  async renderLoggedIn(userAccount: Account) {
     const elm = document.createElement('div');
-    elm.classList.add('h-full', 'my-4', 'mx-4', 'fade-in-element');
+    elm.classList.add('my-4', 'mx-4', 'fade-in-element', 'grow');
     elm.id = 'my-account';
     elm.innerHTML = /* HTML */ `
       <div class="progress-ring flex h-svh items-center justify-center">
@@ -63,7 +62,7 @@ export class MyAccount {
           <h1 class="text-xl font-bold text-black md:text-2xl">Email:</h1>
           <sl-input
             class="justify-left col-span-2 w-full text-xl text-black"
-            value=${UserAccount.email}
+            value=${userAccount.email}
             name="email"
             type="email"
             required
@@ -73,7 +72,7 @@ export class MyAccount {
         <div class="flex flex-col space-y-4">
           <h1 class="text-xl font-bold text-black md:text-2xl">Major:</h1>
           <sl-select
-            value="${UserAccount.majors.join(' ')}"
+            value="${userAccount.majors.join(' ')}"
             class="justify-left col-span-2 w-full text-xl text-black"
             name="major"
             multiple
@@ -96,7 +95,7 @@ export class MyAccount {
           <sl-select
             class="justify-left col-span-2 w-full text-xl text-black"
             name="semester"
-            value="${UserAccount.gradSem}"
+            value="${userAccount.gradSem}"
             clearable
           >
             ${getPastSemesterStrings()
@@ -108,13 +107,24 @@ export class MyAccount {
               .join('\n')}
           </sl-select>
         </div>
-        <div class="flex flex-row justify-center space-x-8">
-          <sl-button type="submit" variant="primary" class="submit-btn" disabled
-            >Save Changes</sl-button
-          >
-          <sl-button type="reset" variant="danger" class="clear-btn" disabled
-            >Clear Changes</sl-button
-          >
+        <div class="flex flex-col justify-center space-y-4">
+          <div class="flex flex-row justify-center space-x-8">
+            <sl-button
+              type="submit"
+              variant="primary"
+              class="submit-btn"
+              disabled
+              >Save Changes</sl-button
+            >
+            <sl-button type="reset" variant="danger" class="clear-btn" disabled
+              >Clear Changes</sl-button
+            >
+          </div>
+          <div class="flex flex-row justify-center space-x-8">
+            <sl-button type="reset" variant="neutral" class="logout-btn"
+              >Logout</sl-button
+            >
+          </div>
         </div>
       </form>
     `;
@@ -126,6 +136,11 @@ export class MyAccount {
     const form = elm.querySelector('.account-form')! as HTMLFormElement;
     const resetButton = elm.querySelector('.clear-btn')! as HTMLButtonElement;
     const submitButton = elm.querySelector('.submit-btn')! as HTMLButtonElement;
+    const logoutBtn = elm.querySelector('.logout-btn')! as HTMLButtonElement;
+
+    logoutBtn.addEventListener('click', async () => {
+      this.#stateManager.logoutAccount();
+    });
 
     resetButton.addEventListener('click', (event) => {
       disableFormSubmitAndResetButton();
@@ -174,6 +189,113 @@ export class MyAccount {
         formSubmitHandler(form);
       });
     });
+    return elm;
+  }
+
+  async renderLoggedOut() {
+    const elm = document.createElement('div');
+    elm.classList.add('my-4', 'mx-4', 'fade-in-element', 'relative');
+    elm.innerHTML = /* HTML */ `
+      <div
+        class="account-form m-auto flex h-40 max-w-2xl items-center gap-y-4 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"
+      >
+        <h1 class="mb-4 text-2xl font-bold text-black dark:text-white">
+          Sign in with Google
+        </h1>
+        <div class="flex-col items-center justify-center">
+          <div class="google-sign-in-button"></div>
+        </div>
+      </div>
+    `;
+
+    function parseJwt(token: string) {
+      var base64Url = token.split('.')[1];
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      var jsonPayload = decodeURIComponent(
+        window
+          .atob(base64)
+          .split('')
+          .map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+          })
+          .join('')
+      );
+
+      return JSON.parse(jsonPayload);
+    }
+    function decodeJwtResponse(data: string) {
+      console.log(parseJwt(data));
+    }
+
+    const handleCredentialResponse = async (response: {
+      credential: string;
+    }) => {
+      decodeJwtResponse(response.credential);
+
+      return fetch('http://localhost:3000/auth/one-tap/callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          credential: response.credential
+        }),
+        credentials: 'include'
+      }).then(() => {
+        // TODO: actually save userAccount
+        return this.#stateManager.saveAccount(getAccount('1'));
+      });
+    };
+
+    google.accounts.id.initialize({
+      client_id: BACKEND_CONFIG.GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse
+    });
+
+    const signInBtn = elm.querySelector(
+      '.google-sign-in-button'
+    )! as HTMLDivElement;
+    google.accounts.id.renderButton(signInBtn, {
+      type: 'standard',
+      theme: 'filled_blue',
+      size: 'large',
+      shape: 'rectangular',
+      width: 350,
+      logo_alignment: 'left'
+    });
+
+    return elm;
+  }
+
+  async render() {
+    const elm = document.createElement('div');
+    elm.classList.add('h-full', 'flex', 'items-center', 'justify-center');
+
+    const userLoggedInEventHandler = async () => {
+      elm.innerHTML = '';
+      if (
+        await this.#stateManager
+          .checkLoggedIn()
+          .catch((e) => (console.error(e), false))
+      ) {
+        const userAccount = await this.#localStore
+          .getUserAccount('userAccount')
+          .catch(() => {
+            console.error('Error getting user account');
+            return this.#stateManager.saveAccount(getAccount('1'));
+          })
+          .then(() => this.#localStore.getUserAccount('userAccount'));
+        elm.appendChild(await this.renderLoggedIn(userAccount));
+      } else {
+        elm.appendChild(await this.renderLoggedOut());
+      }
+      return elm;
+    };
+
+    this.#stateManager.subscribeToUserLoggedInChanges(userLoggedInEventHandler);
+
+    userLoggedInEventHandler();
+
     return elm;
   }
 }

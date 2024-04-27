@@ -1,5 +1,6 @@
 import { DegreeRequirementAssignment } from '../lib/types/Degree';
 import { compareUserCourses } from '../lib/utils';
+import { fetchBackendRoute } from './BackendConfig';
 import { Events } from './Events';
 import { LocalStore, UserAssignmentsDocumentKey } from './LocalStore';
 
@@ -115,7 +116,7 @@ export class StateManager {
 
   /**
    * Adds a configuration ID to the user's selected array configurations.
-   * 
+   *
    * @param config_id - The ID of the configuration to be added.
    * @returns A promise that resolves when the configuration ID is successfully added.
    */
@@ -182,6 +183,10 @@ export class StateManager {
     this.#events.subscribe('userSelectedArrConfigIdsChanged', callback);
   }
 
+  public subscribeToUserLoggedInChanges(callback: Function) {
+    this.#events.subscribe('userLoggedInChanged', callback);
+  }
+
   /**
    * Deletes the user assignments modified store.
    * This method removes the user assignments modified document from the local store database,
@@ -214,5 +219,24 @@ export class StateManager {
         'userAssignments'
       )
       .catch((e) => console.error(e));
+  }
+
+  async saveAccount(account: Account) {
+    return this.#localStore.dumpUserAccount(account, 'userAccount').then(() => this.#events.publish('userLoggedInChanged', null));
+  }
+
+  async logoutAccount() {
+    return this.#localStore
+      .removeUserAccount('userAccount')
+      .then(() => fetchBackendRoute('/logout', { method: 'POST' }))
+      .then(() => this.#events.publish('userLoggedInChanged', null));
+  }
+
+  async checkLoggedIn() {
+    return fetchBackendRoute('/loggedIn')
+      .then((res: Response) =>
+        res.ok ? res.json() : Promise.reject(new Error('Server error'))
+      )
+      .then((data: any) => data.message === 'success');
   }
 }

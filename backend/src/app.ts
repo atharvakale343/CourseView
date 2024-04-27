@@ -1,21 +1,79 @@
 import express from "express";
 import logger from "morgan";
 import * as path from "path";
+import db from "./db/tables";
+import dotenv from "dotenv";
+import * as createError from "http-errors";
+import cors, { CorsOptions } from "cors";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import passport from "passport";
+import connect from "connect-sqlite3";
 
 import { errorHandler, errorNotFoundHandler } from "./middlewares/errorHandler";
 
-// Routes
+// Route Imports
 import { index } from "./routes/index";
+import { userCourses } from "./routes/UserCourses";
+import { accountRouter } from "./routes/Account";
+import { authRouter } from "./routes/Auth";
+
 // Create Express server
 export const app = express();
 
 // Express configuration
 app.set("port", process.env.PORT || 3000);
 
+// SQLite
+const SQLiteStore = connect(session);
+
+// Cors
+const whitelist = [
+    "http://localhost:3000",
+    "http://localhost:2000",
+    "https://localhost:2000",
+    "https://localhost:3000",
+];
+const corsOptions: CorsOptions = {
+    credentials: true,
+    origin(requestOrigin, callback) {
+        if (whitelist.indexOf(requestOrigin as string) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+};
+app.use(cors(corsOptions));
+
+// Logger
 app.use(logger("dev"));
 
+// Express middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// Authentication
+app.use(
+    session({
+        secret: "keyboard cat",
+        resave: false,
+        saveUninitialized: false,
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        store: new SQLiteStore({ db: "sessions.db", dir: "./var/db" }),
+    }),
+);
+app.use(passport.authenticate("session"));
+
+// Routes
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", index);
+app.use(userCourses);
+app.use(accountRouter);
+app.use(authRouter);
 
+// Error Handlers
 app.use(errorNotFoundHandler);
 app.use(errorHandler);

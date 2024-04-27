@@ -88,7 +88,6 @@ export class App {
         await this.#localStore.db
           .get(doc_key)
           .then(async (doc) => {
-            console.log('doc', doc)
             if (
               // @ts-ignore
               doc[doc_key] === '[]' ||
@@ -142,7 +141,7 @@ export class App {
       this.#navigateTo(view)
     );
 
-    this.#events.publish('navigateTo', 'course-history' satisfies View);
+    this.#events.publish('navigateTo', 'my-account' satisfies View);
 
     return rootElement;
   }
