@@ -242,7 +242,9 @@ export class MyAccount {
           credential: response.credential
         }),
         credentials: 'include'
-      }).then(() => {
+      }).then(response => response.json())
+      .then((res) => console.log('res', res))
+      .then(() => {
         // TODO: actually save userAccount
         return this.#stateManager.saveAccount(getAccount('1'));
       });

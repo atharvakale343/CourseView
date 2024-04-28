@@ -9,6 +9,7 @@ import cors, { CorsOptions } from "cors";
 import session, { SessionOptions } from "express-session";
 import passport from "passport";
 import connect from "connect-sqlite3";
+import swaggerUi from "swagger-ui-express";
 
 import { errorHandler, errorNotFoundHandler } from "./middlewares/errorHandler";
 
@@ -50,7 +51,7 @@ const corsOptions: CorsOptions = {
         }
     },
 };
-app.use(cors(corsOptions));
+app.use(cors());
 
 // Logger
 app.use(logger("dev"));
@@ -88,6 +89,14 @@ if (app.get("env") === "production") {
 }
 app.use(session(sess));
 app.use(passport.authenticate("session"));
+
+// Swagger Docs
+import swaggerDocument from "./swagger.json";
+app.use("/api-docs", swaggerUi.serve);
+app.get("/api-docs", swaggerUi.setup(swaggerDocument));
+
+// Setup cors now after swagger routes
+app.use(cors(corsOptions));
 
 // Routes
 app.use(express.static(path.join(__dirname, "../public")));

@@ -2,7 +2,6 @@
     "name": "express-ts-template",
     "version": "1.2.0",
     "description": "Simple starter template for ExpressJs and TypeScript based on expressjs/generator and TypeScript-Node-Starter",
-    "main": "src/server.js",
     "license": "MIT",
     "author": "",
     "scripts": {
@@ -31,6 +30,7 @@
         "@types/cors": "^2.8.17",
         "@types/express-session": "^1.18.0",
         "@types/supertest": "^6.0.2",
+        "@types/swagger-ui-express": "^4.1.6",
         "connect-ensure-login": "^0.1.1",
         "connect-sqlite3": "^0.9.15",
         "cookie-parser": "~1.4.4",
@@ -47,7 +47,8 @@
         "pluralize": "^8.0.0",
         "pug": "^3.0.1",
         "sql-template-tag": "^5.2.1",
-        "sqlite3": "^5.0.2"
+        "sqlite3": "^5.0.2",
+        "swagger-ui-express": "^5.0.0"
     },
     "devDependencies": {
         "@types/jest": "26.0.24",
