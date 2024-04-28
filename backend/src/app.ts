@@ -66,6 +66,9 @@ app.use(
         secret: "keyboard cat",
         resave: false,
         saveUninitialized: false,
+        cookie: {
+            httpOnly: false,
+        },
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         store: new SQLiteStore({ db: "sessions.db", dir: DATABASE_BASE_DIR }),

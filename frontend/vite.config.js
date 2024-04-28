@@ -2,8 +2,6 @@ import path from 'node:path';
 
 import { partytownVite } from '@builder.io/partytown/utils';
 import legacy from '@vitejs/plugin-legacy';
-import { defineConfig } from 'vite';
-import mkcert from 'vite-plugin-mkcert';
 import vitePluginRequire from 'vite-plugin-require';
 
 import _config from './_config.js';
@@ -11,14 +9,12 @@ import _config from './_config.js';
 const HOST = _config.server.host;
 const PORT = _config.server.port;
 
-export default defineConfig({
+export default {
   server: {
     host: HOST,
-    port: PORT,
-    https: true
+    port: PORT
   },
   plugins: [
-    mkcert(),
     legacy(),
     partytownVite({
       dest: path.join(
@@ -29,4 +25,4 @@ export default defineConfig({
     }),
     vitePluginRequire.default()
   ]
-});
+};
