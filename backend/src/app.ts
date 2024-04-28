@@ -83,6 +83,8 @@ if (app.get("env") === "production") {
     // @ts-ignore
     sess.cookie = {
         ...sess.cookie,
+        partitioned: true,
+        sameSite: true,
     };
 }
 app.use(session(sess));
