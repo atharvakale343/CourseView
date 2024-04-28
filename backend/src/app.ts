@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 import * as createError from "http-errors";
 import cors, { CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
-import session from "express-session";
+import session, { SessionOptions } from "express-session";
 import passport from "passport";
 import connect from "connect-sqlite3";
 
@@ -61,19 +61,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Authentication
-app.use(
-    session({
-        secret: "keyboard cat",
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            httpOnly: false,
-        },
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        store: new SQLiteStore({ db: "sessions.db", dir: DATABASE_BASE_DIR }),
-    }),
-);
+const sess: SessionOptions = {
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: false,
+    },
+    proxy: true,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    store: new SQLiteStore({ db: "sessions.db", dir: DATABASE_BASE_DIR }),
+};
+
+console.log("ENV: ", app.get("env"));
+
+if (app.get("env") === "production") {
+    app.set("trust proxy", 1); // trust first proxy
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    sess.cookie.secure = true; // serve secure cookies
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    sess.cookie?.sameSite = "none";
+}
+app.use(session(sess));
 app.use(passport.authenticate("session"));
 
 // Routes
