@@ -63,9 +63,7 @@ const sess: SessionOptions = {
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: {
-        httpOnly: false,
-    },
+    cookie: {},
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     store: new SQLiteStore({ db: "sessions.db", dir: DATABASE_BASE_DIR }),
@@ -76,6 +74,9 @@ console.log("ENV: ", app.get("env"));
 if (app.get("env") === "production") {
     console.log("Setting production settings");
     app.enable("trust proxy");
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    sess.proxy = true;
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     sess.cookie = {
