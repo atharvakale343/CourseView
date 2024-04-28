@@ -131,7 +131,7 @@ export class MyAccount {
     `;
 
     const formSubmitHandler = async (form: HTMLFormElement) => {
-      // TODO
+      // TODO submit the form to change account details
     };
 
     const form = elm.querySelector('.account-form')! as HTMLFormElement;

@@ -39,4 +39,10 @@ Read more about the frontend in the [frontend README](frontend/README.md).
 
 # Backend
 
-Coming soon.
+```bash
+cd backend
+npm install
+npm run watch
+```
+
+Read more about the backend in the [backend README](backend/README.md).

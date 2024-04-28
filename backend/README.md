@@ -1,59 +1,63 @@
-# Express TypeScript template
+# Getting Started for Development
 
-# Pre-reqs
-
-- Install [Node.js](https://nodejs.org/en/)
-- Install [VS Code](https://code.visualstudio.com/)
-
-# Getting started
-
-- Clone the repository
-
-```
-git clone https://github.com/greenroach/express-ts-template.git
-```
-
-- Install dependencies
-
-```
-cd <project_name>
+```bash
+# First, make sure you are in the `backend` directory
 npm install
 ```
 
-- Build and run the project
+## Create a new .env file within the backend directory
 
-```
-npm run build
-npm start
-```
-
-Navigate to `http://localhost:3000`
-
-### Using the debugger in VS Code
-
-Debugging is one of the places where VS Code really shines over other editors.
-Node.js debugging in VS Code is easy to setup and even easier to use.
-This project comes pre-configured with everything you need to get started.
-
-When you hit `F5` in VS Code, it looks for a top level `.vscode` folder with a `launch.json` file.
-In this file, you can tell VS Code exactly what you want to do:
-
-```json
-{
-  "type": "node",
-  "request": "attach",
-  "name": "Attach by Process ID",
-  "processId": "${command:PickProcess}",
-  "protocol": "inspector"
-}
+```bash
+cp .env.example .env
 ```
 
-This is mostly identical to the "Node.js: Attach by Process ID" template with one minor change.
-We added `"protocol": "inspector"` which tells VS Code that we're using the latest version of Node which uses a new debug protocol.
+Add the secrets to the .env file. You may be provided a `.env` file externally.
 
-With this file in place, you can hit `F5` to attach a debugger.
-You will probably have multiple node processes running, so you need to find the one that shows `node dist/server.js`.
-Now just set your breakpoints and go!
+## Start the development server
+
+```bash
+npm run watch
+```
+
+This will start the server and watch for changes to the TypeScript files. The server will automatically restart when changes are detected.
+
+# Entrypoint
+
+The entrypoint for the server is [`src/app.ts`](src/app.ts). This file is responsible for setting up the server and routes.
+
+## Folder Structure
+
+The folder structure is as follows:
+
+```
+.
+├── src
+│   ├── controllers
+│   ├── db
+│   ├── middleware
+│   ├── routes
+│   ├── services
+│   ├── test
+│   ├── utils
+│   ├── app.ts
+├── var
+│   ├── db
+│       ├── sessions.db
+        ├── users.db
+├── .env
+```
+
+## What do these folders do?
+
+![Diagram](./docs/backend.png)
+
+-   **app.ts:** The entrypoint for the server. This file sets up the server and routes. `app.ts` "uses" routes defined in the `routes` folder.
+-   **routes:** This folder contains all the routes for the server (such as the endpoint "/endpoint" and whether it is a GET or POST request). The files in this folder "use" controllers defined in the `controllers` folder.
+-   **controllers:** This folder contains the logic for the routes. The files in this folder "use" services defined in the `services` folder.
+-   **services:** This folder contains the logic for the controllers. The files in this folder "use" the database defined in the `db` folder.
+-   **db:** This folder contains the database logic.
+-   **utils:** This folder contains utility functions used across the server.
+-   **middleware:** (Not important) This folder contains middleware functions used across the server.
 
 ---
 
