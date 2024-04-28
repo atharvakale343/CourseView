@@ -77,13 +77,16 @@ const sess: SessionOptions = {
 console.log("ENV: ", app.get("env"));
 
 if (app.get("env") === "production") {
-    app.set("trust proxy", 1); // trust first proxy
+    console.log("Setting production settings");
+    app.set("trust proxy", true); // http://expressjs.com/en/api.html#trust.proxy.options.table
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    sess.cookie.secure = true; // serve secure cookies
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    sess.cookie.sameSite = "none";
+    sess.cookie = {
+        ...sess.cookie,
+        secure: true,
+        sameSite: "none",
+        partitioned: true,
+    };
 }
 app.use(session(sess));
 app.use(passport.authenticate("session"));
