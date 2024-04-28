@@ -20,5 +20,8 @@ export const fetchBackendRoute = async (
   route: string,
   options: RequestInit = {}
 ): Promise<Response> => {
-  return fetch(backendRoute(route), { ...options, credentials: 'include' });
+  return fetch(backendRoute(route), {
+    ...options,
+    credentials: 'include'
+  });
 };

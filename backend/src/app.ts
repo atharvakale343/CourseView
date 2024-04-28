@@ -6,7 +6,6 @@ import { DATABASE_BASE_DIR } from "./db/tables";
 import dotenv from "dotenv";
 import * as createError from "http-errors";
 import cors, { CorsOptions } from "cors";
-import cookieParser from "cookie-parser";
 import session, { SessionOptions } from "express-session";
 import passport from "passport";
 import connect from "connect-sqlite3";
@@ -58,7 +57,6 @@ app.use(logger("dev"));
 // Express middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 
 // Authentication
 const sess: SessionOptions = {
@@ -82,8 +80,6 @@ if (app.get("env") === "production") {
     // @ts-ignore
     sess.cookie = {
         ...sess.cookie,
-        partitioned: true,
-        sameSite: "none",
         secure: true,
     };
 }
