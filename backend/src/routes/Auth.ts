@@ -14,6 +14,7 @@ authRouter.post(
         console.log("req.hostname", req.hostname);
         console.log("req.ip", req.ip);
         console.log("req.ips", req.ips);
+        console.log("req.secure", req.secure);
         res.json({ user: req.user });
     },
 );
