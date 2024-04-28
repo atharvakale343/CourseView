@@ -78,7 +78,7 @@ console.log("ENV: ", app.get("env"));
 
 if (app.get("env") === "production") {
     console.log("Setting production settings");
-    app.set("trust proxy", true); // http://expressjs.com/en/api.html#trust.proxy.options.table
+    app.set("trust proxy", 1); // http://expressjs.com/en/api.html#trust.proxy.options.table
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     sess.cookie = {
