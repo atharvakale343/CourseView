@@ -83,7 +83,7 @@ if (app.get("env") === "production") {
     sess.cookie.secure = true; // serve secure cookies
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    sess.cookie?.sameSite = "none";
+    sess.cookie.sameSite = "none";
 }
 app.use(session(sess));
 app.use(passport.authenticate("session"));
