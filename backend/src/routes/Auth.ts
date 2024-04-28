@@ -10,6 +10,7 @@ authRouter.post(
     function (req, res) {
         console.log("req.cookie", req.cookies);
         console.log("callback req", req.isAuthenticated());
+        console.log("req.protocol", req.protocol);
         res.json({ user: req.user });
     },
 );
