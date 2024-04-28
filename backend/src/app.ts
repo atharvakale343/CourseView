@@ -84,6 +84,7 @@ if (app.get("env") === "production") {
     sess.cookie = {
         ...sess.cookie,
         partitioned: true,
+        secure: true,
     };
 }
 app.use(session(sess));
