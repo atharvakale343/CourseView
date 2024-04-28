@@ -84,7 +84,7 @@ if (app.get("env") === "production") {
         httpOnly: false,
         sameSite: "none",
         secure: true,
-        domain: "courseview.us",
+        domain: "www.courseview.us",
     };
 }
 app.use(session(sess));
