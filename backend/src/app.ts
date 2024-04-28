@@ -38,6 +38,7 @@ const whitelist = [
     "https://localhost:3000",
     "https://courseview-git-dev-atharva-kales-projects.vercel.app",
     "https://courseview-cs326-team-4.vercel.app",
+    "https://app.courseview.us",
 ];
 const corsOptions: CorsOptions = {
     credentials: true,
@@ -82,9 +83,7 @@ if (app.get("env") === "production") {
     sess.cookie = {
         ...sess.cookie,
         httpOnly: false,
-        sameSite: "none",
         secure: true,
-        domain: "www.courseview.us",
     };
 }
 app.use(session(sess));
