@@ -51,7 +51,6 @@ const corsOptions: CorsOptions = {
         }
     },
 };
-app.use(cors());
 
 // Logger
 app.use(logger("dev"));
