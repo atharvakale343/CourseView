@@ -24,6 +24,8 @@ import { userCourses } from "./routes/UserCourses";
 import { accountRouter } from "./routes/Account";
 import { authRouter } from "./routes/Auth";
 import { spireRouter } from "./routes/Spire";
+import { userAssignments } from "./routes/UserAssignments";
+import { userSelectedArr } from "./routes/UserSelectedArr";
 
 // Create Express server
 export const app = express();
@@ -104,10 +106,12 @@ app.use(cors(corsOptions));
 // Routes
 app.use(express.static(path.join(__dirname, "../public")));
 app.use("/", index);
-app.use(userCourses);
 app.use(accountRouter);
 app.use(authRouter);
 app.use(spireRouter);
+app.use(userAssignments);
+app.use(userCourses);
+app.use(userSelectedArr);
 
 // Error Handlers
 app.use(errorNotFoundHandler);

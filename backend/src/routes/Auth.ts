@@ -7,7 +7,7 @@ export const authRouter = Router();
 authRouter.post(
     "/auth/one-tap/callback",
     passport.authenticate("google-one-tap"),
-    function (req, res) {
+    function (req, res, next) {
         res.json({ user: req.user });
     },
 );

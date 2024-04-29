@@ -27,7 +27,7 @@ export const createFailureMessage = (message: string, error: string) => {
                 items:
                   $ref: "#/components/schemas/Section"
 */
-spireRouter.get("/arrConfigs", (req, res) => {
+spireRouter.get("/arrConfigs", (req, res, next) => {
     res.json(spire.getArrConfigs());
 });
 
@@ -49,7 +49,7 @@ spireRouter.get("/arrConfigs", (req, res) => {
                 items:
                   $ref: "#/components/schemas/Subject"
  */
-spireRouter.get("/subjects", (req, res) => {
+spireRouter.get("/subjects", (req, res, next) => {
     res.json(spire.getSubjects());
 });
 
@@ -83,7 +83,7 @@ get:
           schema:
             $ref: "#/components/schemas/FailureMessage"
 */
-spireRouter.get("/courses", (req, res) => {
+spireRouter.get("/courses", (req, res, next) => {
     const subjectId = req.query.subjectId as string;
     if (!subjectId) {
         res.status(400).json(
@@ -124,7 +124,7 @@ spireRouter.get("/courses", (req, res) => {
                       type: string
                       example: "spring-2022"
 */
-spireRouter.get("/semesterStrings", (req, res) => {
+spireRouter.get("/semesterStrings", (req, res, next) => {
     res.json(spire.getPastSemesterStrings());
 });
 
@@ -150,6 +150,6 @@ spireRouter.get("/semesterStrings", (req, res) => {
                     - B
                     - B+
  */
-spireRouter.get("/gradeOptions", (req, res) => {
+spireRouter.get("/gradeOptions", (req, res, next) => {
     res.json(spire.getGradeOptions());
 });
