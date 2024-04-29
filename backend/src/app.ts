@@ -10,6 +10,8 @@ import session, { SessionOptions } from "express-session";
 import passport from "passport";
 import connect from "connect-sqlite3";
 import swaggerUi from "swagger-ui-express";
+import fs from "fs";
+import YAML from "yaml";
 
 import { errorHandler, errorNotFoundHandler } from "./middlewares/errorHandler";
 
@@ -21,6 +23,7 @@ import { index } from "./routes/index";
 import { userCourses } from "./routes/UserCourses";
 import { accountRouter } from "./routes/Account";
 import { authRouter } from "./routes/Auth";
+import { spireRouter } from "./routes/Spire";
 
 // Create Express server
 export const app = express();
@@ -90,7 +93,8 @@ app.use(session(sess));
 app.use(passport.authenticate("session"));
 
 // Swagger Docs
-import swaggerDocument from "./swagger.json";
+const file = fs.readFileSync("./src/swagger.yaml", "utf8");
+const swaggerDocument = YAML.parse(file);
 app.use("/api-docs", swaggerUi.serve);
 app.get("/api-docs", swaggerUi.setup(swaggerDocument));
 
@@ -103,6 +107,7 @@ app.use("/", index);
 app.use(userCourses);
 app.use(accountRouter);
 app.use(authRouter);
+app.use(spireRouter);
 
 // Error Handlers
 app.use(errorNotFoundHandler);

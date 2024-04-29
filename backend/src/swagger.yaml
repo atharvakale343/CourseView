@@ -1,0 +1,601 @@
+openapi: 3.0.3
+info:
+  title: CourseView Backend - OpenAPI 3.0
+  version: "1.0"
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: https://courseview.us/
+tags:
+  - name: auth
+    description: Endpoints related to authentication
+  - name: account
+    description: Manage account related information
+  - name: spire
+    description: Serves static details related to which courses are offered, degree ARRs configs to populate dropdowns
+  - name: user
+    description: Manages saving, and loading courses related to a specific user. Also serves courses to degree requirements.
+
+paths:
+  /loggedIn:
+    get:
+      tags:
+        - auth
+      summary: Check if the user is logged in by checking if the connect.sid cookie is present and valid
+      responses:
+        200:
+          description: Returns an object with a message as "sucesss" or "fail"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/AuthSuccess"
+                  - $ref: "#/components/schemas/AuthFailure"
+  /logout:
+    post:
+      tags:
+        - auth
+      summary: Log the user session out
+      responses:
+        200:
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "success"
+  /auth/one-tap/callback:
+    post:
+      tags:
+        - auth
+      summary: A callback endpoint for Google OAuth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                credentials:
+                  type: string
+                  example: eyJhbGciPSA...
+      responses:
+        200:
+          description: The session ID is returned in a cookie named `connect.sid`. You need to include this cookie in subsequent requests.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: connect.sid=s%3A1owZK_nYFmB3qVNk2Otzc7EQ0XBsg1wD.GKfB3LDDdg3ZVocCxZGQUowQlpa6Fc49AMx82%2FedkBU
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAuth"
+  /getAccountDetails:
+    get:
+      security:
+        - cookieAuth: []
+      tags:
+        - account
+      summary: Gets the user related information to show in My Account
+      responses:
+        200:
+          description: Account info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+  /saveAccountDetails:
+    post:
+      security:
+        - cookieAuth: []
+      tags:
+        - account
+      summary: Save the user related information shown in My Account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Account"
+      responses:
+        200:
+          description: Saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+  /arrConfigs:
+    get:
+      tags:
+        - spire
+      summary: Returns an of all available ARR configs
+      responses:
+        200:
+          description: An array of all available ARR configs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Section"
+  /subjects:
+    get:
+      tags:
+        - spire
+      summary: Returns an array of all subjects
+      responses:
+        200:
+          description: array of all subjects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subject"
+  /courses:
+    get:
+      tags:
+        - spire
+      parameters:
+        - name: subjectId
+          in: query
+          description: The subject id to get courses for
+          required: true
+          schema:
+            type: string
+      summary: Returns an array of all courses for `subjectId`
+      responses:
+        200:
+          description: Returns an array of all courses for `subjectId`
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+
+  /semesterStrings:
+    get:
+      tags:
+        - spire
+      summary: Returns an array of all semester strings objects
+      responses:
+        200:
+          description: an array of all semester strings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    display:
+                      type: string
+                      example: "Spring 2022"
+                    value:
+                      type: string
+                      example: "spring-2022"
+  /gradeOptions:
+    get:
+      tags:
+        - spire
+      summary: Returns an array of all grade options
+      responses:
+        200:
+          description: an array of grade options
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  example:
+                    - A
+                    - A-
+                    - B
+                    - B+
+  /userCourse:
+    get:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Returns an array of user courses
+      responses:
+        200:
+          description: an array of user courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserCourse"
+    post:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Add a user course
+      requestBody:
+        description: the user course
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserCourse"
+      responses:
+        200:
+          description: Added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+    delete:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Delete a user course
+      parameters:
+        - name: courseId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: COMPSCI|187
+      responses:
+        200:
+          description: Deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+  /userAssignment:
+    get:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Returns an array of user course assignments
+      responses:
+        200:
+          description: an array of user course assignments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DegreeRequirementAssignment"
+    post:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Add a user course assignment
+      requestBody:
+        description: the user course assignment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DegreeRequirementAssignment"
+      responses:
+        200:
+          description: Added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+    delete:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Delete a user course assignment
+      parameters:
+        - name: assignmentId
+          in: query
+          required: true
+          schema:
+            type: string
+            example: a random sequence of bytes as saved in the db
+      responses:
+        200:
+          description: Deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+  /userSelectedArrConfig:
+    put:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Save the user selected ARR Configs
+      requestBody:
+        description: The user selected arr configs. These the same string as `id` in Section
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserSelectedArrConfigs"
+      responses:
+        200:
+          description: Added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+    get:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Get the user selected ARR Configs
+      responses:
+        200:
+          description: Array of user selected ARR Config ids
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserSelectedArrConfigs"
+
+components:
+  schemas:
+    UserSelectedArrConfigs:
+      type: array
+      items:
+        type: string
+        example:
+          - "gened-arr-config"
+          - "cs-major-arr-config-2016"
+          - "cs-major-arr-config-2022"
+    DegreeRequirementAssignment:
+      type: object
+      properties:
+        status:
+          type: string
+          example:
+            - "in-progress"
+            - "completed"
+        id:
+          type: string
+        requirement:
+          oneOf:
+            - $ref: "#/components/schemas/FixedRequirement"
+            - $ref: "#/components/schemas/PrefixRequirement"
+            - $ref: "#/components/schemas/AnonymousRequirement"
+        userCourse:
+          $ref: "#/components/schemas/UserCourse"
+    UserCourse:
+      type: object
+      properties:
+        course:
+          $ref: "#/components/schemas/Course"
+        semester:
+          type: string
+        transferred:
+          type: boolean
+        grade:
+          type: string
+        professor:
+          type: string
+        notes:
+          type: string
+        creditsAwarded:
+          type: string
+    Subject:
+      type: object
+      properties:
+        id:
+          type: string
+        short:
+          type: string
+        long:
+          type: string
+        title:
+          type: string
+    Section:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        subsections:
+          type: array
+          items:
+            $ref: "#/components/schemas/Subsection"
+    Subsection:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        requirements:
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/FixedRequirement"
+              - $ref: "#/components/schemas/PrefixRequirement"
+              - $ref: "#/components/schemas/AnonymousRequirement"
+    FixedRequirement:
+      type: object
+      properties:
+        requirementType:
+          type: string
+          example: fixed
+        course:
+          $ref: "#/components/schemas/Course"
+    PrefixRequirement:
+      type: object
+      properties:
+        requirementType:
+          type: string
+          example: prefix
+        requirementId:
+          type: string
+          example: random-id
+        subjectId:
+          type: string
+        prefix:
+          type: string
+        description:
+          type: string
+        credits:
+          type: string
+    AnonymousRequirement:
+      type: object
+      properties:
+        requirementType:
+          type: string
+          example: anonymous
+        designation:
+          type: string
+        description:
+          type: string
+        credits:
+          type: string
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+        subjectId:
+          type: string
+        number:
+          type: string
+        title:
+          type: string
+        displayTitle:
+          type: string
+        credits:
+          type: string
+        titleLong:
+          type: string
+        subjectLong:
+          type: string
+        subjectShort:
+          type: string
+        topic:
+          type: string
+        description:
+          type: string
+        hasTopics:
+          type: boolean
+        corequisites:
+          type: string
+        prerequisites:
+          type: string
+        hasRestrictions:
+          type: boolean
+
+    Account:
+      type: object
+      properties:
+        email:
+          type: string
+          example: jdoe@umass.edu
+        majors:
+          type: array
+          items:
+            type: string
+            example: compsci-bs-2016
+        expectedGrad:
+          type: string
+          example: fall-2024
+    SuccessMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: success
+    FailureMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: success
+        error:
+          type: string
+          example: reason for error
+    AuthSuccess:
+      type: object
+      properties:
+        message:
+          type: string
+          example: success
+        user:
+          $ref: "#/components/schemas/UserAuth"
+    AuthFailure:
+      type: object
+      properties:
+        message:
+          type: string
+          example: fail
+    UserAuth:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+        email:
+          type: string
+          example: jdoe@umass.edu
+        name:
+          type: string
+          example: John Doe
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: connect.sid # cookie name

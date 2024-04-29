@@ -1,10 +1,7 @@
-import {
-  getAllCoursesDropdown,
-  getGradeOptions,
-  getPastSemesterStrings,
-  getSubjects
-} from './CoursesConfig';
 import { StateManager } from '../StateManagement';
+import { Course } from '../../lib/types/course';
+import { fetchBackendRoute } from '../BackendConfig';
+import { Semester, Subject } from '../../lib/types/Degree';
 
 export class AddCourse {
   #stateManager: StateManager;
@@ -56,7 +53,11 @@ export class AddCourse {
             clearable
             required
           >
-            ${getSubjects()
+            ${(
+              await fetchBackendRoute('/subjects')
+                .then((res) => res.json())
+                .then((json) => json as Subject[])
+            )
               .map(
                 (subject) => /*html*/ `
                         <sl-option value="${subject.id}">${subject.title} (${subject.id})</sl-option>
@@ -83,7 +84,11 @@ export class AddCourse {
             clearable
             required
           >
-            ${getPastSemesterStrings()
+            ${(
+              await fetchBackendRoute('/semesterStrings')
+                .then((res) => res.json())
+                .then((json) => json as Semester[])
+            )
               .map(
                 (semester) => /*html*/ `
                     <sl-option value="${semester.value}">${semester.display}</sl-option>
@@ -111,7 +116,11 @@ export class AddCourse {
             name="grade"
             clearable
           >
-            ${getGradeOptions()
+            ${(
+              await fetchBackendRoute('/gradeOptions')
+                .then((res) => res.json())
+                .then((json) => json as string[])
+            )
               .map(
                 (grade) => /*html*/ `
                     <sl-option value="${grade}">${grade}</sl-option>
@@ -146,20 +155,22 @@ export class AddCourse {
     ) as HTMLSelectElement;
 
     // Get courses under user-given subject
-    function getCoursesOfSubject(subjectId: string) {
-      return getAllCoursesDropdown().filter(
-        (json) => json.subjectId === subjectId
-      )[0].courses;
+    async function getCoursesOfSubject(subjectId: string) {
+      return (
+        await fetchBackendRoute(`/courses?subjectId=${subjectId}`)
+          .then((res) => res.json())
+          .then((json) => json as Course[])
+      ).sort((a, b) => a.displayTitle.localeCompare(b.displayTitle));
     }
 
     // Allow user to fill out courses only after subject has been selected
-    subjectDropdown.addEventListener('sl-change', () => {
+    subjectDropdown.addEventListener('sl-change', async () => {
       if (!subjectDropdown.validity.valid) {
         coursesDropdown.value = '';
         coursesDropdown.setAttribute('disabled', '');
         return;
       }
-      const courses = getCoursesOfSubject(subjectDropdown.value);
+      const courses = await getCoursesOfSubject(subjectDropdown.value);
       coursesDropdown.innerHTML = `${courses
         .map((course) => {
           return /* HTML */ `<sl-option value="${course.id}"
@@ -173,8 +184,8 @@ export class AddCourse {
     const formSubmitHandler = async (form: HTMLFormElement) => {
       // Has properties: notes, subject, course, semester, grade, professor
       const formData = new FormData(form);
-      const course = getCoursesOfSubject(
-        formData.get('subject') as string
+      const course = (
+        await getCoursesOfSubject(formData.get('subject') as string)
       ).filter((course) => course.id === formData.get('course'))[0] as Course;
       console.log(course);
 
@@ -190,9 +201,12 @@ export class AddCourse {
         grade: formData.get('grade') as string,
         notes: formData.get('notes') as string,
         professor: formData.get('professor') as string,
-        semester: getPastSemesterStrings().filter(
-          (o) => o.value === (formData.get('semester') as string)
-        )[0].display,
+        semester: (
+          await fetchBackendRoute('/semesterStrings')
+            .then((res) => res.json())
+            .then((res) => res as Semester[])
+        ).filter((o) => o.value === (formData.get('semester') as string))[0]
+          .display,
         transferred: false,
         course: course
       });

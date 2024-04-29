@@ -6,6 +6,7 @@ import {
   Section,
   Subsection
 } from './types/Degree';
+import { Course, UserCourse } from './types/course';
 
 export function guidGenerator() {
   var S4 = function () {

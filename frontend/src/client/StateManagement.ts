@@ -1,4 +1,5 @@
 import { DegreeRequirementAssignment } from '../lib/types/Degree';
+import { Course, UserCourse } from '../lib/types/course';
 import { compareUserCourses } from '../lib/utils';
 import { fetchBackendRoute } from './BackendConfig';
 import { Events } from './Events';

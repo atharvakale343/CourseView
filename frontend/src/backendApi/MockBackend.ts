@@ -1,5 +1,6 @@
 import { getAllCoursesDropdown } from '../client/add_course/CoursesConfig';
 import { DegreeRequirementAssignment, Requirement } from '../lib/types/Degree';
+import { Course, UserCourse } from '../lib/types/course';
 import { guidGenerator } from '../lib/utils';
 import { getCSMajorARRConfig } from './ArrConfig';
 

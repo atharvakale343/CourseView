@@ -31,6 +31,7 @@
         "@types/express-session": "^1.18.0",
         "@types/supertest": "^6.0.2",
         "@types/swagger-ui-express": "^4.1.6",
+        "@types/yaml": "^1.9.7",
         "connect-ensure-login": "^0.1.1",
         "connect-sqlite3": "^0.9.15",
         "cookie-parser": "~1.4.4",
@@ -48,7 +49,9 @@
         "pug": "^3.0.1",
         "sql-template-tag": "^5.2.1",
         "sqlite3": "^5.0.2",
-        "swagger-ui-express": "^5.0.0"
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.0",
+        "yaml": "^2.4.2"
     },
     "devDependencies": {
         "@types/jest": "26.0.24",

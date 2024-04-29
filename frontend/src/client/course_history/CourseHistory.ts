@@ -1,3 +1,4 @@
+import { UserCourse } from '../../lib/types/course';
 import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
 import { StateManager } from '../StateManagement';
