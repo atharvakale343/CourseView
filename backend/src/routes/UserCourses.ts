@@ -1,9 +1,85 @@
 import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
 import createHttpError from "http-errors";
-import { userDB } from "../config/db";
+import { courseDB } from "../config/db";
+
+type User = { id: string; email: string; name: string };
+
+interface UserDocument {
+    _id: string;
+    courses: course[]; // Assuming courses are represented as strings
+    // Add other properties as needed
+}
+
+type course = {
+    course: {
+        id: "string";
+        subjectId: "string";
+        number: "string";
+        title: "string";
+        displayTitle: "string";
+        credits: "string";
+        titleLong: "string";
+        subjectLong: "string";
+        subjectShort: "string";
+        topic: "string";
+        description: "string";
+        hasTopics: true;
+        corequisites: "string";
+        prerequisites: "string";
+        hasRestrictions: true;
+    };
+    semester: "string";
+    transferred: true;
+    grade: "string";
+    professor: "string";
+    notes: "string";
+    creditsAwarded: "string";
+};
+
+// userDB has two fields : id which is the user email and courses which is an array of courses taken by the user
 
 export const userCourses = Router();
+
+// Function to create document in userDB that maps user email to courses taken by user
+
+userCourses.post(
+    "/registerUserCourse",
+    checkAuthorization,
+    (req, res, next) => {
+        const user = req.user as User;
+        const user_email = user.email;
+
+        // Check if the user is already registered
+        courseDB
+            .get(user_email)
+            .then(doc => {
+                // User is already registered
+                res.status(200).json({ message: "User is already registered" });
+            })
+            .catch(err => {
+                if (err.name === "not_found") {
+                    // User is not registered, register the user
+                    courseDB
+                        .put({
+                            _id: user_email,
+                            courses: [],
+                        })
+                        .then(response => {
+                            res.status(200).json({
+                                message: "User registered successfully",
+                            });
+                        })
+                        .catch(err => {
+                            next(createHttpError(500, "Internal Server Error"));
+                        });
+                } else {
+                    // Handle other errors
+                    next(createHttpError(500, "Internal Server Error"));
+                }
+            });
+    },
+);
 
 /**
 @openapi
@@ -31,10 +107,29 @@ export const userCourses = Router();
                 $ref: "#/components/schemas/FailureMessage"
  */
 userCourses.get("/userCourse", checkAuthorization, (req, res, next) => {
-    const user = req.user;
-    // TODO
+    const user = req.user as User;
+    const user_email = user.email;
 
-    next(createHttpError(501, "Not Implemented"));
+    courseDB
+        .get<UserDocument>(user_email)
+        .then(doc => {
+            // User document found, return courses
+            res.status(200).json(doc.courses);
+        })
+        .catch(err => {
+            if (err.name === "not_found") {
+                // User document not found, user is not registered
+                res.status(404).json({ message: "User is not registered" });
+            } else if (err.name === "unauthorized") {
+                // Unauthorized error, user is not authorized
+                res.status(401).json({
+                    message: "fail",
+                    error: "Unauthorized",
+                });
+            } else {
+                next(createHttpError(500, "Internal Server Error"));
+            }
+        });
 });
 
 /**
@@ -74,9 +169,47 @@ userCourses.get("/userCourse", checkAuthorization, (req, res, next) => {
                 $ref: "#/components/schemas/FailureMessage"
 */
 userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
-    const user = req.user;
-    // TODO
-    next(createHttpError(501, "Not Implemented"));
+    const user = req.user as User;
+    const course = req.body.course;
+    const user_email = user.email;
+
+    courseDB
+        .get<UserDocument>(user_email)
+        .then(doc => {
+            if (doc.courses.includes(course)) {
+                // Course already exists
+                res.status(400).json({
+                    message: "fail",
+                    error: "Course already exists",
+                });
+                return;
+            }
+            doc.courses.push(course);
+            return courseDB.put(doc);
+        })
+        .then(response => {
+            // Course added successfully
+            res.status(200).json({ message: "success" });
+        })
+        .catch(err => {
+            if (err.name === "not_found") {
+                // User document not found, user is not registered
+                res.status(404).json({
+                    message: "fail",
+                    error: "User is not registered",
+                });
+            } else if (err.name === "unauthorized") {
+                // Unauthorized error, user is not authorized
+                res.status(401).json({
+                    message: "fail",
+                    error: "Unauthorized",
+                });
+            } else {
+                // Other errors
+                console.error("Error adding course:", err);
+                next(createHttpError(500, "Internal Server Error"));
+            }
+        });
 });
 
 /**
@@ -115,8 +248,47 @@ userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
               schema:
                 $ref: "#/components/schemas/FailureMessage"
 */
+
 userCourses.delete("/userCourse", checkAuthorization, (req, res, next) => {
-    const user = req.user;
-    // TODO
-    next(createHttpError(501, "Not Implemented"));
+  const user = req.user as User;
+  const course_id = req.query.courseId as string;
+  const user_email = user.email;
+
+  courseDB
+      .get<UserDocument>(user_email)
+      .then(doc => {
+          // iterate through the courses and delete the course if the course_id matches
+          const courses = doc.courses;
+          let courseDeleted = false;
+          for (let i = 0; i < courses.length; i++) {
+              if (courses[i].course.id === course_id) {
+                  courses.splice(i, 1);
+                  courseDeleted = true;
+                  break;
+              }
+          }
+          if (!courseDeleted) {
+              // Course with the given ID not found
+              res.status(400).json({ message: "fail", error: "Course not found" });
+              return;
+          }
+          return courseDB.put(doc);
+      })
+      .then(response => {
+          // Course deleted successfully
+          res.status(200).json({ message: "success" });
+      })
+      .catch(err => {
+          if (err.name === "not_found") {
+              // User document not found, user is not registered
+              res.status(404).json({ message: "fail", error: "User is not registered" });
+          } else if (err.name === "unauthorized") {
+              // Unauthorized error, user is not authorized
+              res.status(401).json({ message: "fail", error: "Unauthorized" });
+          } else {
+              // Other errors
+              next(createHttpError(500, "Internal Server Error"));
+          }
+      });
 });
+
