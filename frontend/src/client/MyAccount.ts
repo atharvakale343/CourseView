@@ -5,6 +5,7 @@ import { LocalStore } from './LocalStore';
 import { StateManager } from './StateManagement';
 import { getPastSemesterStrings } from './add_course/CoursesConfig';
 import { BACKEND_CONFIG, fetchBackendRoute } from './BackendConfig';
+import { Account } from '../lib/types/account';
 /**
  * Represents the user's account information.
  */
