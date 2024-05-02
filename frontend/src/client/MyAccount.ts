@@ -231,6 +231,7 @@ export class MyAccount {
     const handleCredentialResponse = async (response: {
       credential: string;
     }) => {
+      console.log(response);
       decodeJwtResponse(response.credential);
 
       return fetchBackendRoute('/auth/one-tap/callback', {
@@ -242,12 +243,13 @@ export class MyAccount {
           credential: response.credential
         }),
         credentials: 'include'
-      }).then(response => response.json())
-      .then((res) => console.log('res', res))
-      .then(() => {
-        // TODO: actually save userAccount
-        return this.#stateManager.saveAccount(getAccount('1'));
-      });
+      })
+        .then((response) => response.json())
+        .then((res) => console.log('res', res))
+        .then(() => {
+          // TODO: actually save userAccount
+          return this.#stateManager.saveAccount(getAccount('1'));
+        });
     };
 
     google.accounts.id.initialize({
