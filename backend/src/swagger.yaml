@@ -59,7 +59,7 @@ paths:
             schema:
               type: object
               properties:
-                credentials:
+                credential:
                   type: string
                   example: eyJhbGciPSA...
       responses:
