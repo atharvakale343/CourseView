@@ -2,6 +2,7 @@ import express from "express";
 import logger from "morgan";
 import * as path from "path";
 import db from "./db/tables";
+import * as data from "./config/db";
 import { DATABASE_BASE_DIR } from "./db/tables";
 import dotenv from "dotenv";
 import * as createError from "http-errors";
@@ -35,6 +36,12 @@ app.set("port", process.env.SERVER_PORT || 3000);
 
 // SQLite
 const SQLiteStore = connect(session);
+
+data.courseDB.info((err,info) => {
+    if(!err){
+         console.log(info);
+    }
+   });
 
 // Cors
 const whitelist = [
