@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
 import createHttpError from "http-errors";
+import { userDB } from "../config/db";
 
 export const userCourses = Router();
 
@@ -32,6 +33,7 @@ export const userCourses = Router();
 userCourses.get("/userCourse", checkAuthorization, (req, res, next) => {
     const user = req.user;
     // TODO
+
     next(createHttpError(501, "Not Implemented"));
 });
 
