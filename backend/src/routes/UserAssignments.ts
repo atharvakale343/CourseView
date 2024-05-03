@@ -32,7 +32,7 @@ export const userAssignments = Router();
 userAssignments.get("/userAssignment", checkAuthorization, (req, res, next) => {
     const user = req.user;
     // TODO
-next(createHttpError(501, "Not Implemented"));
+    next(createHttpError(501, "Not Implemented"));
 });
 
 /**
@@ -71,11 +71,15 @@ next(createHttpError(501, "Not Implemented"));
                 schema:
                     $ref: "#/components/schemas/FailureMessage"
  */
-userAssignments.post("/userAssignment", checkAuthorization, (req, res, next) => {
-    // TODO
-next(createHttpError(501, "Not Implemented"));
-    const user = req.user;
-});
+userAssignments.post(
+    "/userAssignment",
+    checkAuthorization,
+    (req, res, next) => {
+        // TODO
+        next(createHttpError(501, "Not Implemented"));
+        const user = req.user;
+    },
+);
 
 /**
 @openapi
@@ -113,8 +117,12 @@ next(createHttpError(501, "Not Implemented"));
               schema:
                 $ref: "#/components/schemas/FailureMessage"
     */
-userAssignments.delete("/userAssignment", checkAuthorization, (req, res, next) => {
-    const user = req.user;
-    // TODO
-next(createHttpError(501, "Not Implemented"));
-});
+userAssignments.delete(
+    "/userAssignment",
+    checkAuthorization,
+    (req, res, next) => {
+        const user = req.user;
+        // TODO
+        next(createHttpError(501, "Not Implemented"));
+    },
+);

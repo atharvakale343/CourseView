@@ -2,40 +2,13 @@ import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
 import createHttpError from "http-errors";
 import { courseDB } from "../config/db";
-
-type User = { id: string; email: string; name: string };
+import { UserCourse } from "@client/lib/types/course";
 
 interface UserDocument {
     _id: string;
-    courses: course[]; // Assuming courses are represented as strings
+    courses: UserCourse[]; // Assuming courses are represented as strings
     // Add other properties as needed
 }
-
-type course = {
-    course: {
-        id: "string";
-        subjectId: "string";
-        number: "string";
-        title: "string";
-        displayTitle: "string";
-        credits: "string";
-        titleLong: "string";
-        subjectLong: "string";
-        subjectShort: "string";
-        topic: "string";
-        description: "string";
-        hasTopics: true;
-        corequisites: "string";
-        prerequisites: "string";
-        hasRestrictions: true;
-    };
-    semester: "string";
-    transferred: true;
-    grade: "string";
-    professor: "string";
-    notes: "string";
-    creditsAwarded: "string";
-};
 
 // userDB has two fields : id which is the user email and courses which is an array of courses taken by the user
 
@@ -47,7 +20,7 @@ userCourses.post(
     "/registerUserCourse",
     checkAuthorization,
     (req, res, next) => {
-        const user = req.user as User;
+        const user = req.user;
         const user_email = user.email;
 
         // Check if the user is already registered
@@ -107,7 +80,7 @@ userCourses.post(
                 $ref: "#/components/schemas/FailureMessage"
  */
 userCourses.get("/userCourse", checkAuthorization, (req, res, next) => {
-    const user = req.user as User;
+    const user = req.user;
     const user_email = user.email;
 
     courseDB
@@ -169,22 +142,22 @@ userCourses.get("/userCourse", checkAuthorization, (req, res, next) => {
                 $ref: "#/components/schemas/FailureMessage"
 */
 userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
-    const user = req.user as User;
-    const course = req.body.course;
+    const user = req.user;
+    const userCourse = req.body as UserCourse;
     const user_email = user.email;
 
     courseDB
         .get<UserDocument>(user_email)
         .then(doc => {
-            if (doc.courses.includes(course)) {
+            if (
+                doc.courses
+                    .map(uc => uc.course.id)
+                    .includes(userCourse.course.id)
+            ) {
                 // Course already exists
-                res.status(400).json({
-                    message: "fail",
-                    error: "Course already exists",
-                });
-                return;
+                throw new Error("Course already exists");
             }
-            doc.courses.push(course);
+            doc.courses.push(userCourse);
             return courseDB.put(doc);
         })
         .then(response => {
@@ -198,16 +171,9 @@ userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
                     message: "fail",
                     error: "User is not registered",
                 });
-            } else if (err.name === "unauthorized") {
-                // Unauthorized error, user is not authorized
-                res.status(401).json({
-                    message: "fail",
-                    error: "Unauthorized",
-                });
             } else {
                 // Other errors
-                console.error("Error adding course:", err);
-                next(createHttpError(500, "Internal Server Error"));
+                res.status(400).json({ message: "fail", error: err.message });
             }
         });
 });
@@ -250,45 +216,55 @@ userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
 */
 
 userCourses.delete("/userCourse", checkAuthorization, (req, res, next) => {
-  const user = req.user as User;
-  const course_id = req.query.courseId as string;
-  const user_email = user.email;
+    const user = req.user;
+    const course_id = req.query.courseId as string;
+    const user_email = user.email;
 
-  courseDB
-      .get<UserDocument>(user_email)
-      .then(doc => {
-          // iterate through the courses and delete the course if the course_id matches
-          const courses = doc.courses;
-          let courseDeleted = false;
-          for (let i = 0; i < courses.length; i++) {
-              if (courses[i].course.id === course_id) {
-                  courses.splice(i, 1);
-                  courseDeleted = true;
-                  break;
-              }
-          }
-          if (!courseDeleted) {
-              // Course with the given ID not found
-              res.status(400).json({ message: "fail", error: "Course not found" });
-              return;
-          }
-          return courseDB.put(doc);
-      })
-      .then(response => {
-          // Course deleted successfully
-          res.status(200).json({ message: "success" });
-      })
-      .catch(err => {
-          if (err.name === "not_found") {
-              // User document not found, user is not registered
-              res.status(404).json({ message: "fail", error: "User is not registered" });
-          } else if (err.name === "unauthorized") {
-              // Unauthorized error, user is not authorized
-              res.status(401).json({ message: "fail", error: "Unauthorized" });
-          } else {
-              // Other errors
-              next(createHttpError(500, "Internal Server Error"));
-          }
-      });
+    courseDB
+        .get<UserDocument>(user_email)
+        .then(doc => {
+            // iterate through the courses and delete the course if the course_id matches
+            const courses = doc.courses;
+            let courseDeleted = false;
+            console.log(courses);
+            for (let i = 0; i < courses.length; i++) {
+                if (courses[i].course.id === course_id) {
+                    courses.splice(i, 1);
+                    courseDeleted = true;
+                    break;
+                }
+            }
+
+            if (!courseDeleted) {
+                // Course with the given ID not found
+                res.status(400).json({
+                    message: "fail",
+                    error: "Course not found",
+                });
+                return;
+            }
+            return courseDB.put(doc);
+        })
+        .then(response => {
+            // Course deleted successfully
+            res.status(200).json({ message: "success", detail: response });
+        })
+        .catch(err => {
+            if (err.name === "not_found") {
+                // User document not found, user is not registered
+                res.status(404).json({
+                    message: "fail",
+                    error: "User is not registered",
+                });
+            } else if (err.name === "unauthorized") {
+                // Unauthorized error, user is not authorized
+                res.status(401).json({
+                    message: "fail",
+                    error: "Unauthorized",
+                });
+            } else {
+                // Other errors
+                res.status(500).json({ message: "fail", error: err });
+            }
+        });
 });
-

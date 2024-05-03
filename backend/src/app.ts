@@ -37,11 +37,11 @@ app.set("port", process.env.SERVER_PORT || 3000);
 // SQLite
 const SQLiteStore = connect(session);
 
-data.courseDB.info((err,info) => {
-    if(!err){
-         console.log(info);
+data.courseDB.info((err, info) => {
+    if (!err) {
+        console.log(info);
     }
-   });
+});
 
 // Cors
 const whitelist = [

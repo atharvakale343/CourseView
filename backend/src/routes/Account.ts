@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
 import createHttpError from "http-errors";
+import { getAccount, saveAccount } from "../db/dbCRUD";
+import morgan from "morgan";
+import { Account } from "@client/lib/types/account";
+import { Spire } from "../services/spire/Spire";
 
 export const accountRouter = Router();
 
@@ -32,8 +36,13 @@ accountRouter.get(
     checkAuthorization,
     (req, res, next) => {
         const user = req.user;
-        // TODO
-        next(createHttpError(501, "Not Implemented"));
+        getAccount(user.email)
+            .then(account => {
+                res.json(account);
+            })
+            .catch(err => {
+                res.status(500).json({ message: "fail", error: err });
+            });
     },
 );
 
@@ -75,8 +84,29 @@ accountRouter.post(
     "/saveAccountDetails",
     checkAuthorization,
     (req, res, next) => {
+        const body = req.body as Account;
         const user = req.user;
-        // TODO
-        next(createHttpError(501, "Not Implemented"));
+        if (user.email !== body.email) {
+            res.status(400).json({
+                message: "fail",
+                error: "Email mismatch",
+            });
+            return;
+        }
+        const validSemesters = new Spire()
+            .getPastSemesterStrings()
+            .map(sem => sem.value);
+        if (validSemesters.indexOf(body.gradSem) === -1) {
+            res.status(400).json({
+                message: "fail",
+                error: "Invalid semester",
+            });
+            return;
+        }
+        saveAccount(req.body)
+            .then(msg => res.json(msg))
+            .catch(err => {
+                res.status(500).json({ message: "fail", error: err });
+            });
     },
 );

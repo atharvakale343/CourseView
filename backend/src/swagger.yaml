@@ -610,7 +610,7 @@ components:
           items:
             type: string
             example: compsci-bs-2016
-        expectedGrad:
+        gradSem:
           type: string
           example: fall-2024
     SuccessMessage:

@@ -1,3 +1,4 @@
+import { Course } from '../../lib/types/course';
 import courses_regblocks from './courses_regblocks.json';
 import faculty from './faculty-staff.json';
 
@@ -13,7 +14,7 @@ export function getAllCoursesDropdown() {
 export function getPastSemesterStrings() {
   const semesters: { display: string; value: string }[] = [];
   for (let i = 0; i < 6; i++) {
-    const year = new Date().getFullYear() - i;
+    const year = new Date().getFullYear() + 4 - i;
     semesters.push({ display: `Fall ${year}`, value: `fall-${year}` });
     semesters.push({ display: `Summer ${year}`, value: `summer-${year}` });
     semesters.push({ display: `Spring ${year}`, value: `spring-${year}` });
