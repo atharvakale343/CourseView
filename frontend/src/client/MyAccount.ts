@@ -6,6 +6,7 @@ import { StateManager } from './StateManagement';
 import { getPastSemesterStrings } from './add_course/CoursesConfig';
 import { BACKEND_CONFIG, fetchBackendRoute } from './BackendConfig';
 import { Account } from '../lib/types/account';
+
 /**
  * Represents the user's account information.
  */
@@ -281,7 +282,8 @@ export class MyAccount {
           return getAccount().then((account) =>
             this.#stateManager.saveAccount(account)
           );
-        });
+        })
+        .then(() => this.#stateManager.getAllUserData());
     };
 
     // Google One Tap
@@ -327,7 +329,8 @@ export class MyAccount {
           return getAccount().then((account) =>
             this.#stateManager.saveAccount(account)
           );
-        });
+        })
+        .then(() => this.#stateManager.getAllUserData());
     });
 
     return elm;

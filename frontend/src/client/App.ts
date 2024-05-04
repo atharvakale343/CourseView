@@ -16,6 +16,7 @@ import {
   getCSMajorARRConfig,
   getGenedARRConfig
 } from '../backendApi/ArrConfig';
+import { StateManager } from './StateManagement';
 
 type ViewElementMap = { [K in View]: Promise<HTMLElement> };
 const REFRESH_EVERY_N_RELOADS = 4;
@@ -29,9 +30,11 @@ export class App {
   #mainViewElement: HTMLDivElement;
   #viewToViewElementMap: ViewElementMap | null = null;
   #localStore: LocalStore;
+  #stateManager: StateManager;
   constructor() {
     this.#mainViewElement = document.createElement('div');
     this.#localStore = LocalStore.localStore();
+    this.#stateManager = StateManager.getManager();
   }
 
   /**
@@ -44,48 +47,7 @@ export class App {
   public async setupApp() {
     await this.#localStore.setup();
 
-    const docsToSetUpAndCallbacks: [string, Function][] = [
-      [
-        'userCourses',
-        async () =>
-          this.#localStore.dumpUserCourses(
-            await getUserCourses(),
-            'userCourses'
-          )
-      ],
-      [
-        'userAssignments',
-        async () =>
-          this.#localStore
-            .dumpUserAssignments(
-              await getRequirementAssignments(),
-              'userAssignments'
-            )
-            .catch((e) => console.error(e))
-      ],
-      [
-        'allArrConfigs',
-        async () =>
-          this.#localStore.dumpAllArrConfigs(
-            await getAllArrConfigs(),
-            'allArrConfigs'
-          )
-      ],
-      [
-        'userSelectedArrConfigIds',
-        () =>
-          this.#localStore.dumpUserSelectedArrConfigIds(
-            ['gened-arr-config', 'cs-major-arr-config-2016'],
-            'userSelectedArrConfigIds'
-          )
-      ]
-    ];
-
-    await Promise.all(
-      docsToSetUpAndCallbacks.map(async ([_, callback]) => {
-        await callback().catch((e: Error) => console.error(e));
-      })
-    );
+    await this.#stateManager.getAllUserData();
   }
 
   async render(): Promise<HTMLElement> {

@@ -1,3 +1,8 @@
+import {
+  getAllArrConfigs,
+  getRequirementAssignments,
+  getUserCourses
+} from '../backendApi/MockBackend';
 import { DegreeRequirementAssignment } from '../lib/types/Degree';
 import { Account } from '../lib/types/account';
 import { Course, UserCourse } from '../lib/types/course';
@@ -29,6 +34,57 @@ export class StateManager {
   constructor() {
     this.#localStore = LocalStore.localStore();
     this.#events = Events.events();
+  }
+
+  async getAllUserData() {
+    const docsToSetUpAndCallbacks: [string, Function][] = [
+      [
+        'userCourses',
+        async () =>
+          this.#localStore
+            .dumpUserCourses(await getUserCourses(), 'userCourses')
+            .then(() => this.#events.publish('userCoursesChanged', null))
+      ],
+      [
+        'userAssignments',
+        async () =>
+          this.#localStore
+            .dumpUserAssignments(
+              await getRequirementAssignments(),
+              'userAssignments'
+            )
+            .then(() =>
+              this.#events.publish('userAssignmentsChanged', {
+                type: 'change',
+                changeRequired: true
+              } satisfies ModificationEvent)
+            )
+            .catch((e) => console.error(e))
+      ],
+      [
+        'allArrConfigs',
+        async () =>
+          this.#localStore
+            .dumpAllArrConfigs(await getAllArrConfigs(), 'allArrConfigs')
+            .then(() =>
+              this.#events.publish('userSelectedArrConfigIdsChanged', null)
+            )
+      ],
+      [
+        'userSelectedArrConfigIds',
+        () =>
+          this.#localStore.dumpUserSelectedArrConfigIds(
+            ['gened-arr-config', 'cs-major-arr-config-2016'],
+            'userSelectedArrConfigIds'
+          )
+      ]
+    ];
+
+    await Promise.all(
+      docsToSetUpAndCallbacks.map(async ([_, callback]) => {
+        await callback().catch((e: Error) => console.error(e));
+      })
+    );
   }
 
   /**
