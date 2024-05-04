@@ -1,4 +1,6 @@
+import { Semester } from '../../lib/types/Degree';
 import { Course } from '../../lib/types/course';
+import { fetchBackendRoute } from '../BackendConfig';
 import courses_regblocks from './courses_regblocks.json';
 import faculty from './faculty-staff.json';
 
@@ -11,16 +13,13 @@ export function getAllCoursesDropdown() {
   return json;
 }
 
-export function getPastSemesterStrings() {
-  const semesters: { display: string; value: string }[] = [];
-  for (let i = 0; i < 6; i++) {
-    const year = new Date().getFullYear() + 4 - i;
-    semesters.push({ display: `Fall ${year}`, value: `fall-${year}` });
-    semesters.push({ display: `Summer ${year}`, value: `summer-${year}` });
-    semesters.push({ display: `Spring ${year}`, value: `spring-${year}` });
-    semesters.push({ display: `Winter ${year}`, value: `winter-${year}` });
-  }
-  return semesters;
+export async function getPastSemesterStrings() {
+  return fetchBackendRoute('/semesterStrings').then((response) => {
+    if (!response.ok) {
+      throw new Error('Failed to fetch semester strings');
+    }
+    return response.json() as Promise<Semester[]>;
+  });
 }
 
 export function getProfStrings(): string[] {

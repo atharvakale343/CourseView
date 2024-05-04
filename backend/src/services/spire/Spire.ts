@@ -32,8 +32,8 @@ export class Spire {
 
     getPastSemesterStrings(): Semester[] {
         const semesters: { display: string; value: string }[] = [];
-        for (let i = 0; i < 10; i++) {
-            const year = new Date().getFullYear() + 4 - i;
+        for (let i = -1; i < 6; i++) {
+            const year = new Date().getFullYear() + i;
             semesters.push({ display: `Fall ${year}`, value: `fall-${year}` });
             semesters.push({
                 display: `Summer ${year}`,

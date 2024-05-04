@@ -10,7 +10,6 @@
 */
 
 export type Account = {
-    id: string;
     email: string;
     gradSem: string; 
     majors: string[];

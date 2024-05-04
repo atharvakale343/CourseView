@@ -47,8 +47,10 @@ export class DegreeCompletion {
         >
           <div class="toolbar sticky top-4 z-10 flex w-full"></div>
           <div class="default-msg flex grow items-center justify-center">
-            <h1 class="text-center text-gray-700">
-              Select your preferences to view your degree completion progress.
+            <h1
+              class="rounded-md border border-slate-300 bg-slate-50 p-4 text-center font-semibold text-black md:text-lg"
+            >
+              Select your preferences to view degree completion.
             </h1>
           </div>
           <div class="degree-completion flex w-full flex-col gap-y-8"></div>
@@ -68,7 +70,7 @@ export class DegreeCompletion {
     )! as HTMLDivElement;
 
     let sections: Section[];
-    
+
     /**
      * Reloads the sections by fetching allArrConfigs from local storage,
      * filtering them based on userSelectedArrConfigIds, and updating the sections array.

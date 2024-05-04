@@ -37,6 +37,20 @@ accountRouter.get(
     (req, res, next) => {
         const user = req.user;
         getAccount(user.email)
+            .catch(err => {
+                if (err.name === "not_found") {
+                    return saveAccount({
+                        email: user.email,
+                        gradSem: "",
+                        majors: [],
+                        minors: [],
+                    }).then(() => {
+                        return getAccount(user.email);
+                    });
+                } else {
+                    return Promise.reject(err);
+                }
+            })
             .then(account => {
                 res.json(account);
             })
@@ -90,12 +104,13 @@ accountRouter.post(
             res.status(400).json({
                 message: "fail",
                 error: "Email mismatch",
+                reason: `User email: ${user.email}, body email: ${body.email}`,
             });
             return;
         }
         const validSemesters = new Spire()
             .getPastSemesterStrings()
-            .map(sem => sem.value);
+            .map(sem => sem.value).concat([""]);
         if (validSemesters.indexOf(body.gradSem) === -1) {
             res.status(400).json({
                 message: "fail",

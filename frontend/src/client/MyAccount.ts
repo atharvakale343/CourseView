@@ -96,11 +96,11 @@ export class MyAccount {
           </h2>
           <sl-select
             class="justify-left col-span-2 w-full text-xl text-black"
-            name="semester"
+            name="gradSem"
             value="${userAccount.gradSem}"
             clearable
           >
-            ${getPastSemesterStrings()
+            ${(await getPastSemesterStrings())
               .map(
                 (semester) => /*html*/ `
                     <sl-option value="${semester.value}">${semester.display}</sl-option>
@@ -133,6 +133,32 @@ export class MyAccount {
 
     const formSubmitHandler = async (form: HTMLFormElement) => {
       // TODO submit the form to change account details
+      const formData = serialize(form);
+      console.log(formData);
+
+      const postBody = {
+        email: userAccount.email,
+        majors:
+          typeof formData.major === 'string'
+            ? [formData.major]
+            : formData.major,
+        gradSem: formData.gradSem
+      };
+
+      fetchBackendRoute('/saveAccountDetails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(postBody)
+      })
+        .then((response) => response.json())
+        .then((res) => {
+          console.log('res', res);
+          return getAccount().then((account) =>
+            this.#stateManager.saveAccount(account)
+          );
+        });
     };
 
     const form = elm.querySelector('.account-form')! as HTMLFormElement;
@@ -248,8 +274,9 @@ export class MyAccount {
         .then((response) => response.json())
         .then((res) => console.log('res', res))
         .then(() => {
-          // TODO: actually save userAccount
-          return this.#stateManager.saveAccount(getAccount('1'));
+          return getAccount().then((account) =>
+            this.#stateManager.saveAccount(account)
+          );
         });
     };
 
@@ -310,7 +337,9 @@ export class MyAccount {
           .getUserAccount('userAccount')
           .catch(() => {
             console.error('Error getting user account');
-            return this.#stateManager.saveAccount(getAccount('1'));
+            return getAccount().then((account) =>
+              this.#stateManager.saveAccount(account)
+            );
           })
           .then(() => this.#localStore.getUserAccount('userAccount'));
         elm.appendChild(await this.renderLoggedIn(userAccount));

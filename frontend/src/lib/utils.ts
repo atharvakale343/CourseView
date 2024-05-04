@@ -162,19 +162,6 @@ export function compareUserCourses(
   return userCourse1.course.id === userCourse2.course.id;
 }
 
-// TODO: You should be able to assign the same user course to multiple requirements
-export function getUnassignedCourses(
-  userCourses: UserCourse[],
-  assignments: DegreeRequirementAssignment[]
-): UserCourse[] {
-  return userCourses.filter(
-    (userCourse) =>
-      !assignments.find((assignment) =>
-        compareUserCourses(assignment.userCourse, userCourse)
-      )
-  );
-}
-
 export function getAllRequirementsFromSubsections(
   subsections: Subsection[]
 ): Requirement[] {

@@ -125,7 +125,7 @@ export class Toolbar {
     const resetHandler = async () => {
       resetButton.setAttribute('disabled', '');
       saveChangesButton.setAttribute('disabled', '');
-      await this.#stateManager.deleteUserAssignmentsModifiedStore();
+      return this.#stateManager.deleteUserAssignmentsModifiedStore();
     };
 
     resetButton.addEventListener('click', resetHandler);
@@ -146,10 +146,10 @@ export class Toolbar {
 
         if (item.checked) {
           await this.#stateManager.addUserSelectedArrConfig(id);
-          await resetHandler();
+          await resetHandler().catch((_) => Promise.resolve());
         } else {
           await this.#stateManager.removeUserSelectedArrConfig(id);
-          await resetHandler();
+          await resetHandler().catch((_) => Promise.resolve());
         }
       }
     );

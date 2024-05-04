@@ -1,5 +1,6 @@
 const PouchDB = require('pouchdb-browser');
 import { DegreeRequirementAssignment, Section } from '../lib/types/Degree';
+import { Account } from '../lib/types/account';
 import { UserCourse } from '../lib/types/course';
 
 export type UserCoursesDocumentKey = 'userCourses';

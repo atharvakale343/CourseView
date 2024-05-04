@@ -8,7 +8,6 @@ import {
 } from "../db/userPouchCRUD";
 import { DegreeRequirementAssignment } from "@client/lib/types/Degree";
 import { assignmentDB } from "../db/pouchdbSetup";
-import { logger } from "../utils/logger";
 
 export const userAssignments = Router();
 

@@ -7,6 +7,7 @@ import { Events } from './Events';
 import { MyAccount } from './MyAccount';
 import { LocalStore } from './LocalStore';
 import {
+  getAllArrConfigs,
   getRequirementAssignments,
   getUserCourses
 } from '../backendApi/MockBackend';
@@ -43,32 +44,30 @@ export class App {
   public async setupApp() {
     await this.#localStore.setup();
 
-    // TODO: Delete this when ready to implement the real backend
-    await this.#localStore.db.get('refreshed').catch(async () => {
-      this.#localStore.createDocument('refreshed', { number: 0 });
-    });
-
     const docsToSetUpAndCallbacks: [string, Function][] = [
       [
         'userCourses',
-        () => this.#localStore.dumpUserCourses(getUserCourses(), 'userCourses')
+        async () =>
+          this.#localStore.dumpUserCourses(
+            await getUserCourses(),
+            'userCourses'
+          )
       ],
       [
         'userAssignments',
-        () =>
+        async () =>
           this.#localStore
-            .dumpUserAssignments(getRequirementAssignments(), 'userAssignments')
+            .dumpUserAssignments(
+              await getRequirementAssignments(),
+              'userAssignments'
+            )
             .catch((e) => console.error(e))
       ],
       [
         'allArrConfigs',
-        () =>
+        async () =>
           this.#localStore.dumpAllArrConfigs(
-            [
-              getCSMajorARRConfig(),
-              getCSMajor2022ARRConfig(),
-              getGenedARRConfig()
-            ],
+            await getAllArrConfigs(),
             'allArrConfigs'
           )
       ],
@@ -83,38 +82,10 @@ export class App {
     ];
 
     await Promise.all(
-      docsToSetUpAndCallbacks.map(async ([doc_key, callback]) => {
-        // TODO: Delete this when ready to implement the real backend
-        await this.#localStore.db
-          .get(doc_key)
-          .then(async (doc) => {
-            if (
-              // @ts-ignore
-              doc[doc_key] === '[]' ||
-              // @ts-ignore
-              (await this.#localStore.db.get('refreshed')).number ===
-                REFRESH_EVERY_N_RELOADS
-            ) {
-              return callback();
-            }
-          })
-          .catch((e) => console.error(e));
+      docsToSetUpAndCallbacks.map(async ([_, callback]) => {
+        await callback().catch((e: Error) => console.error(e));
       })
     );
-
-    // TODO: Delete this when ready to implement the real backend
-    await this.#localStore.db.get('refreshed').then(async (doc) => {
-      // @ts-ignore
-      let number = doc.number;
-      if (number >= REFRESH_EVERY_N_RELOADS) {
-        number = 0;
-      } else {
-        number = number + 1;
-      }
-      // @ts-ignore
-      doc.number = number;
-      return this.#localStore.db.put(doc);
-    });
   }
 
   async render(): Promise<HTMLElement> {

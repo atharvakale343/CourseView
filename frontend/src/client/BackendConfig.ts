@@ -16,12 +16,12 @@ console.log(BACKEND_CONFIG);
 
 const backendRoute = (route: string) => `${BACKEND_CONFIG.SERVER_URL}${route}`;
 
-export const fetchBackendRoute = async (
+export async function fetchBackendRoute(
   route: string,
   options: RequestInit = {}
-): Promise<Response> => {
+): Promise<Response> {
   return fetch(backendRoute(route), {
     ...options,
     credentials: 'include'
   });
-};
+}
