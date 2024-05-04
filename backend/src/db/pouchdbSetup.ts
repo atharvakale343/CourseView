@@ -3,12 +3,13 @@ import PouchFind from "pouchdb-find";
 import { mkdirp } from "mkdirp";
 import dotenv from "dotenv";
 import path from "path";
-import { DATABASE_BASE_DIR } from "../db/tables";
+import { DATABASE_BASE_DIR } from "./tables";
+import { logger } from "../utils/logger";
 
 dotenv.config();
 
 const pouchDbPath = path.resolve(DATABASE_BASE_DIR, "PouchDB");
-console.log("PouchDB path: ", pouchDbPath);
+logger.info(`PouchDB path: ${pouchDbPath}`);
 
 mkdirp.sync(pouchDbPath);
 

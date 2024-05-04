@@ -1,49 +1,20 @@
-import { userDB } from "../config/db";
+import { userDB } from "./pouchdbSetup";
 import { type Account } from "./../../../frontend/src/lib/types/account";
 import { SuccessMessage } from "../utils/MessageTypes";
+import { getStoredKeyByEmail, saveDocumentByEmail } from "./userPouchCRUD";
 
 export async function saveAccount(acc: Account): Promise<SuccessMessage> {
     const obj = {
         _id: acc.email,
         account: acc,
     };
-    return userDB
-        .get(acc.email)
-        .then(doc => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            doc.account = acc;
-            return userDB.put(doc).then(
-                res =>
-                    ({
-                        message: "success",
-                        detail: res,
-                    } satisfies SuccessMessage),
-            );
-        })
-        .catch(err => {
-            if (err.name === "not_found") {
-                return userDB.put(obj).then(
-                    res =>
-                        ({
-                            message: "success",
-                            detail: res,
-                        } satisfies SuccessMessage),
-                );
-            } else {
-                return Promise.reject(err);
-            }
-        });
+    return saveDocumentByEmail(acc.email, "account", acc, userDB).then(
+        res => ({ message: "success", detail: res } as SuccessMessage),
+    );
 }
 
 export async function getAccount(email: string): Promise<Account> {
-    return (
-        userDB
-            .get(email)
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            .then(docu => docu.account)
-    );
+    return getStoredKeyByEmail<Account>(email, "account", userDB);
 }
 
 // export function addCourse(email: string, course: Record<string, unknown>): any {

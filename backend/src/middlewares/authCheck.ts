@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import createError from "http-errors";
+import { logger } from "../utils/logger";
 
 export const checkAuthorization = (
     req: Request,
@@ -7,7 +8,7 @@ export const checkAuthorization = (
     next: NextFunction,
 ): any => {
     if (!req.user) {
-        console.log("Unauthorized");
+        logger.info("Unauthorized");
         next(createError(401));
     }
     next();

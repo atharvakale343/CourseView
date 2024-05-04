@@ -1,11 +1,8 @@
 import express from "express";
-import logger from "morgan";
 import * as path from "path";
-import db from "./db/tables";
-import * as data from "./config/db";
+import * as data from "./db/pouchdbSetup";
 import { DATABASE_BASE_DIR } from "./db/tables";
 import dotenv from "dotenv";
-import * as createError from "http-errors";
 import cors, { CorsOptions } from "cors";
 import session, { SessionOptions } from "express-session";
 import passport from "passport";
@@ -27,6 +24,8 @@ import { authRouter } from "./routes/Auth";
 import { spireRouter } from "./routes/Spire";
 import { userAssignments } from "./routes/UserAssignments";
 import { userSelectedArr } from "./routes/UserSelectedArr";
+import { morganMiddleware } from "./middlewares/morgan.middleware";
+import { logger } from "./utils/logger";
 
 // Create Express server
 export const app = express();
@@ -36,12 +35,6 @@ app.set("port", process.env.SERVER_PORT || 3000);
 
 // SQLite
 const SQLiteStore = connect(session);
-
-data.courseDB.info((err, info) => {
-    if (!err) {
-        console.log(info);
-    }
-});
 
 // Cors
 const whitelist = [
@@ -65,7 +58,7 @@ const corsOptions: CorsOptions = {
 };
 
 // Logger
-app.use(logger("dev"));
+app.use(morganMiddleware);
 
 // Express middleware
 app.use(express.json());
@@ -82,10 +75,10 @@ const sess: SessionOptions = {
     store: new SQLiteStore({ db: "sessions.db", dir: DATABASE_BASE_DIR }),
 };
 
-console.log("ENV: ", app.get("env"));
+logger.info(`ENV:${app.get("env")}`);
 
 if (app.get("env") === "production") {
-    console.log("Setting production settings");
+    logger.info("Setting production settings");
     app.enable("trust proxy");
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

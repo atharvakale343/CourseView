@@ -1,59 +1,17 @@
 import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
 import createHttpError from "http-errors";
-import { courseDB } from "../config/db";
+import { courseDB } from "../db/pouchdbSetup";
 import { UserCourse } from "@client/lib/types/course";
-
-interface UserDocument {
-    _id: string;
-    courses: UserCourse[]; // Assuming courses are represented as strings
-    // Add other properties as needed
-}
+import {
+    getDocumentByEmail,
+    getStoredKeyByEmail,
+    saveDocumentByEmail,
+} from "../db/userPouchCRUD";
 
 // userDB has two fields : id which is the user email and courses which is an array of courses taken by the user
 
 export const userCourses = Router();
-
-// Function to create document in userDB that maps user email to courses taken by user
-
-userCourses.post(
-    "/registerUserCourse",
-    checkAuthorization,
-    (req, res, next) => {
-        const user = req.user;
-        const user_email = user.email;
-
-        // Check if the user is already registered
-        courseDB
-            .get(user_email)
-            .then(doc => {
-                // User is already registered
-                res.status(200).json({ message: "User is already registered" });
-            })
-            .catch(err => {
-                if (err.name === "not_found") {
-                    // User is not registered, register the user
-                    courseDB
-                        .put({
-                            _id: user_email,
-                            courses: [],
-                        })
-                        .then(response => {
-                            res.status(200).json({
-                                message: "User registered successfully",
-                            });
-                        })
-                        .catch(err => {
-                            next(createHttpError(500, "Internal Server Error"));
-                        });
-                } else {
-                    // Handle other errors
-                    next(createHttpError(500, "Internal Server Error"));
-                }
-            });
-    },
-);
-
 /**
 @openapi
   /userCourse:
@@ -83,25 +41,22 @@ userCourses.get("/userCourse", checkAuthorization, (req, res, next) => {
     const user = req.user;
     const user_email = user.email;
 
-    courseDB
-        .get<UserDocument>(user_email)
-        .then(doc => {
-            // User document found, return courses
-            res.status(200).json(doc.courses);
-        })
+    getStoredKeyByEmail<UserCourse[]>(user_email, "courses", courseDB)
+        .then(userCourses => res.status(200).json(userCourses))
         .catch(err => {
             if (err.name === "not_found") {
-                // User document not found, user is not registered
-                res.status(404).json({ message: "User is not registered" });
-            } else if (err.name === "unauthorized") {
-                // Unauthorized error, user is not authorized
-                res.status(401).json({
-                    message: "fail",
-                    error: "Unauthorized",
-                });
+                return saveDocumentByEmail(
+                    user_email,
+                    "courses",
+                    [],
+                    courseDB,
+                ).then(() => res.status(200).json([]));
             } else {
-                next(createHttpError(500, "Internal Server Error"));
+                return Promise.reject(err);
             }
+        })
+        .catch(err => {
+            res.status(500).json({ message: "fail", error: err.message });
         });
 });
 
@@ -146,36 +101,53 @@ userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
     const userCourse = req.body as UserCourse;
     const user_email = user.email;
 
-    courseDB
-        .get<UserDocument>(user_email)
-        .then(doc => {
-            if (
-                doc.courses
-                    .map(uc => uc.course.id)
-                    .includes(userCourse.course.id)
-            ) {
-                // Course already exists
-                throw new Error("Course already exists");
+    function addCourseToDoc(
+        doc: {
+            [key: string]: UserCourse[];
+        } & PouchDB.Core.IdMeta &
+            PouchDB.Core.GetMeta,
+        userCourse: UserCourse,
+    ) {
+        if (
+            doc.courses.map(uc => uc.course.id).includes(userCourse.course.id)
+        ) {
+            throw new Error("Course already exists");
+        }
+        doc.courses.push(userCourse);
+    }
+
+    getDocumentByEmail<UserCourse[]>(user_email, "courses", courseDB)
+        // Error handling
+        .catch(err => {
+            // If the user document is not found, create a new user document
+            if (err.name === "not_found") {
+                // Create a new user document
+                return (
+                    saveDocumentByEmail(user_email, "courses", [], courseDB)
+                        // Get the newly created user document
+                        .then(() =>
+                            getDocumentByEmail<UserCourse[]>(
+                                user_email,
+                                "courses",
+                                courseDB,
+                            ),
+                        )
+                );
             }
-            doc.courses.push(userCourse);
+            // If the error is not a "not_found" error, reject the promise
+            return Promise.reject(err);
+        })
+        // Add the course to the user document
+        .then(doc => {
+            addCourseToDoc(doc, userCourse);
             return courseDB.put(doc);
         })
-        .then(response => {
-            // Course added successfully
-            res.status(200).json({ message: "success" });
-        })
-        .catch(err => {
-            if (err.name === "not_found") {
-                // User document not found, user is not registered
-                res.status(404).json({
-                    message: "fail",
-                    error: "User is not registered",
-                });
-            } else {
-                // Other errors
-                res.status(400).json({ message: "fail", error: err.message });
-            }
-        });
+        // Course added successfully
+        .then(response =>
+            res.status(200).json({ message: "success", detail: response }),
+        )
+        // Error handling
+        .catch(err => next(err));
 });
 
 /**
@@ -220,51 +192,38 @@ userCourses.delete("/userCourse", checkAuthorization, (req, res, next) => {
     const course_id = req.query.courseId as string;
     const user_email = user.email;
 
-    courseDB
-        .get<UserDocument>(user_email)
-        .then(doc => {
-            // iterate through the courses and delete the course if the course_id matches
-            const courses = doc.courses;
-            let courseDeleted = false;
-            console.log(courses);
-            for (let i = 0; i < courses.length; i++) {
-                if (courses[i].course.id === course_id) {
-                    courses.splice(i, 1);
-                    courseDeleted = true;
-                    break;
-                }
-            }
-
-            if (!courseDeleted) {
-                // Course with the given ID not found
-                res.status(400).json({
-                    message: "fail",
-                    error: "Course not found",
-                });
-                return;
-            }
-            return courseDB.put(doc);
-        })
-        .then(response => {
-            // Course deleted successfully
-            res.status(200).json({ message: "success", detail: response });
-        })
+    getDocumentByEmail<UserCourse[]>(user_email, "courses", courseDB)
+        // Check if the user email document exists, and create a new one if it doesn't
         .catch(err => {
             if (err.name === "not_found") {
                 // User document not found, user is not registered
-                res.status(404).json({
-                    message: "fail",
-                    error: "User is not registered",
-                });
-            } else if (err.name === "unauthorized") {
-                // Unauthorized error, user is not authorized
-                res.status(401).json({
-                    message: "fail",
-                    error: "Unauthorized",
-                });
-            } else {
-                // Other errors
-                res.status(500).json({ message: "fail", error: err });
+                return saveDocumentByEmail(
+                    user_email,
+                    "courses",
+                    [],
+                    courseDB,
+                ).then(() =>
+                    getDocumentByEmail<UserCourse[]>(
+                        user_email,
+                        "courses",
+                        courseDB,
+                    ),
+                );
             }
+            return Promise.reject(err);
+        })
+        // Check if the course exists in the user document
+        .then(doc => {
+            if (!doc.courses.map(uc => uc.course.id).includes(course_id)) {
+                throw new createHttpError.BadRequest("Course not found");
+            }
+            doc.courses = doc.courses.filter(uc => uc.course.id !== course_id);
+            return courseDB.put(doc);
+        })
+        .then(result =>
+            res.status(200).json({ message: "success", detail: result }),
+        )
+        .catch(err => {
+            next(err);
         });
 });

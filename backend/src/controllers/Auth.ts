@@ -131,7 +131,6 @@ passport.use(
 // supplying the user ID when serializing, and querying the user record by ID
 // from the database when deserializing.
 passport.serializeUser(function (user: Express.User, cb) {
-    console.log("serializeUser", user);
     process.nextTick(function () {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore

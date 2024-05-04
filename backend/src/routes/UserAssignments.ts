@@ -1,6 +1,14 @@
 import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
 import createHttpError from "http-errors";
+import {
+    getDocumentByEmail,
+    getStoredKeyByEmail,
+    saveDocumentByEmail,
+} from "../db/userPouchCRUD";
+import { DegreeRequirementAssignment } from "@client/lib/types/Degree";
+import { assignmentDB } from "../db/pouchdbSetup";
+import { logger } from "../utils/logger";
 
 export const userAssignments = Router();
 
@@ -31,8 +39,29 @@ export const userAssignments = Router();
  */
 userAssignments.get("/userAssignment", checkAuthorization, (req, res, next) => {
     const user = req.user;
-    // TODO
-    next(createHttpError(501, "Not Implemented"));
+    const user_email = user.email;
+
+    getStoredKeyByEmail<DegreeRequirementAssignment[]>(
+        user_email,
+        "userAssignments",
+        assignmentDB,
+    )
+        .then(userAssignments => res.status(200).json(userAssignments))
+        .catch(err => {
+            if (err.name === "not_found") {
+                return saveDocumentByEmail(
+                    user_email,
+                    "userAssignments",
+                    [],
+                    assignmentDB,
+                ).then(() => res.status(200).json([]));
+            } else {
+                return Promise.reject(err);
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ message: "fail", error: err.message });
+        });
 });
 
 /**
@@ -75,9 +104,66 @@ userAssignments.post(
     "/userAssignment",
     checkAuthorization,
     (req, res, next) => {
-        // TODO
-        next(createHttpError(501, "Not Implemented"));
         const user = req.user;
+        const newAssignment = req.body as DegreeRequirementAssignment;
+        const user_email = user.email;
+
+        function addAssignmentToDoc(
+            doc: {
+                [key: string]: DegreeRequirementAssignment[];
+            } & PouchDB.Core.IdMeta &
+                PouchDB.Core.GetMeta,
+            newAssignment: DegreeRequirementAssignment,
+        ) {
+            if (
+                doc["userAssignments"]
+                    .map(userAssignments => userAssignments.id)
+                    .includes(newAssignment.id)
+            ) {
+                throw new Error("Assignment already exists");
+            }
+            doc["userAssignments"].push(newAssignment);
+        }
+
+        getDocumentByEmail<DegreeRequirementAssignment[]>(
+            user_email,
+            "userAssignments",
+            assignmentDB,
+        )
+            // Error handling
+            .catch(err => {
+                // If the user document is not found, create a new user document
+                if (err.name === "not_found") {
+                    // Create a new user document
+                    return (
+                        saveDocumentByEmail(
+                            user_email,
+                            "userAssignments",
+                            [],
+                            assignmentDB,
+                        )
+                            // Get the newly created user document
+                            .then(() =>
+                                getDocumentByEmail<
+                                    DegreeRequirementAssignment[]
+                                >(user_email, "userAssignments", assignmentDB),
+                            )
+                    );
+                }
+                // If the error is not a "not_found" error, reject the promise
+                return Promise.reject(err);
+            })
+            // Add the course to the user document
+            .then(doc => {
+                addAssignmentToDoc(doc, newAssignment);
+                return assignmentDB.put(doc);
+            })
+            // Course added successfully
+            .then(response =>
+                res.status(200).json({ message: "success", detail: response }),
+            )
+            // Error handling
+            .catch(err => next(err));
     },
 );
 
@@ -122,7 +208,52 @@ userAssignments.delete(
     checkAuthorization,
     (req, res, next) => {
         const user = req.user;
-        // TODO
-        next(createHttpError(501, "Not Implemented"));
+        const assignmentId = req.query.assignmentId as string;
+        const user_email = user.email;
+
+        getDocumentByEmail<DegreeRequirementAssignment[]>(
+            user_email,
+            "userAssignments",
+            assignmentDB,
+        )
+            // Check if the user email document exists, and create a new one if it doesn't
+            .catch(err => {
+                if (err.name === "not_found") {
+                    // User document not found, user is not registered
+                    return saveDocumentByEmail(
+                        user_email,
+                        "userAssignments",
+                        [],
+                        assignmentDB,
+                    ).then(() =>
+                        getDocumentByEmail<DegreeRequirementAssignment[]>(
+                            user_email,
+                            "userAssignments",
+                            assignmentDB,
+                        ),
+                    );
+                }
+                return Promise.reject(err);
+            })
+            // Check if the course exists in the user document
+            .then(doc => {
+                if (
+                    !doc["userAssignments"]
+                        .map(assignment => assignment.id)
+                        .includes(assignmentId)
+                ) {
+                    throw new createHttpError.BadRequest("Course not found");
+                }
+                doc["userAssignments"] = doc["userAssignments"].filter(
+                    assignment => assignment.id !== assignmentId,
+                );
+                return assignmentDB.put(doc);
+            })
+            .then(result =>
+                res.status(200).json({ message: "success", detail: result }),
+            )
+            .catch(err => {
+                next(err);
+            });
     },
 );

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import createError from "http-errors";
+import { logger } from "../utils/logger";
 
 declare type WebError = Error & { status?: number };
 export const errorHandler = (
@@ -14,6 +15,7 @@ export const errorHandler = (
 
     // render the error page
     res.status(err.status || 500);
+    logger.error(err.message);
     res.json({
         message: err.message,
         error: err,

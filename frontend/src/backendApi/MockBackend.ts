@@ -460,6 +460,8 @@ export function getUserCourses(): UserCourse[] {
   return ucs;
 }
 
+console.log(getRequirementAssignments());
+
 /**
  * Retrieves the mock degree requirement assignments based on the user"s courses.
  * @returns An array of DegreeRequirementAssignment objects representing the user"s degree requirement assignments.

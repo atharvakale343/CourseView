@@ -19,3 +19,6 @@ dist/**/*
 # Ignore DB
 var/db/*.db
 var/db/PouchDB/*
+
+# Ignore logs
+logs/*.log

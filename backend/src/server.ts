@@ -1,4 +1,5 @@
 import { app } from "./app";
+import { logger } from "./utils/logger";
 
 const port = app.get("port");
 
@@ -37,7 +38,7 @@ function onListening() {
         typeof addr === "string"
             ? `pipe ${addr}`
             : `${addr.address}:${addr.port}`;
-    console.log(`Listening on ${bind}`);
+    logger.info(`Listening on ${bind}`);
 }
 
 export default server;
