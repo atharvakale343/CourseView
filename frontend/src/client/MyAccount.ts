@@ -232,7 +232,7 @@ export class MyAccount {
         <div class="flex flex-col items-center justify-center gap-y-2">
           <div class="google-sign-in-button h-11 w-[300px]"></div>
           <button
-            class="test-sign-in-button flex h-11 w-[300px] items-center justify-between rounded-sm bg-gray-700 px-3 font-sans text-sm text-gray-50"
+            class="test-sign-in-button flex h-11 w-[300px] items-center justify-between rounded-md bg-gray-700 px-3 font-sans text-sm text-gray-50"
           >
             <i class="fa fa-user w-1/12 text-2xl" aria-hidden="true"></i>
             <h1 class="grow text-center font-medium">
