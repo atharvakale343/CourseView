@@ -12,6 +12,14 @@ authRouter.post(
     },
 );
 
+authRouter.post(
+    "/auth/basic/callback",
+    passport.authenticate("local", { session: true }),
+    function (req, res, next) {
+        res.json({ user: req.user });
+    },
+);
+
 authRouter.get("/loggedIn", controller.loggedIn);
 
 authRouter.post("/logout", controller.logout);

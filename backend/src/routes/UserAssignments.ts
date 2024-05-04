@@ -63,6 +63,68 @@ userAssignments.get("/userAssignment", checkAuthorization, (req, res, next) => {
         });
 });
 
+function modifyUserAssignments(
+    user_email: string,
+    newAssignments: DegreeRequirementAssignment[],
+    replace: boolean,
+) {
+    function addAssignmentToDoc(
+        doc: {
+            [key: string]: DegreeRequirementAssignment[];
+        } & PouchDB.Core.IdMeta &
+            PouchDB.Core.GetMeta,
+        newAssignments: DegreeRequirementAssignment[],
+    ) {
+        const currentAssignmentIds = doc["userAssignments"].map(
+            assign => assign.id,
+        );
+        const filteredAssignments = newAssignments.filter(assign => {
+            return !currentAssignmentIds.includes(assign.id);
+        });
+        if (replace) {
+            doc["userAssignments"] = newAssignments;
+        } else {
+            doc["userAssignments"].push(...filteredAssignments);
+        }
+    }
+
+    return (
+        getDocumentByEmail<DegreeRequirementAssignment[]>(
+            user_email,
+            "userAssignments",
+            assignmentDB,
+        )
+            // Error handling
+            .catch(err => {
+                // If the user document is not found, create a new user document
+                if (err.name === "not_found") {
+                    // Create a new user document
+                    return (
+                        saveDocumentByEmail(
+                            user_email,
+                            "userAssignments",
+                            [],
+                            assignmentDB,
+                        )
+                            // Get the newly created user document
+                            .then(() =>
+                                getDocumentByEmail<
+                                    DegreeRequirementAssignment[]
+                                >(user_email, "userAssignments", assignmentDB),
+                            )
+                    );
+                }
+                // If the error is not a "not_found" error, reject the promise
+                return Promise.reject(err);
+            })
+            // Add the course to the user document
+            .then(doc => {
+                addAssignmentToDoc(doc, newAssignments);
+                return assignmentDB.put(doc);
+            })
+    );
+}
+
 /**
 @openapi
 /userAssignment:
@@ -107,56 +169,7 @@ userAssignments.post(
         const newAssignment = req.body as DegreeRequirementAssignment;
         const user_email = user.email;
 
-        function addAssignmentToDoc(
-            doc: {
-                [key: string]: DegreeRequirementAssignment[];
-            } & PouchDB.Core.IdMeta &
-                PouchDB.Core.GetMeta,
-            newAssignment: DegreeRequirementAssignment,
-        ) {
-            if (
-                doc["userAssignments"]
-                    .map(userAssignments => userAssignments.id)
-                    .includes(newAssignment.id)
-            ) {
-                throw new Error("Assignment already exists");
-            }
-            doc["userAssignments"].push(newAssignment);
-        }
-
-        getDocumentByEmail<DegreeRequirementAssignment[]>(
-            user_email,
-            "userAssignments",
-            assignmentDB,
-        )
-            // Error handling
-            .catch(err => {
-                // If the user document is not found, create a new user document
-                if (err.name === "not_found") {
-                    // Create a new user document
-                    return (
-                        saveDocumentByEmail(
-                            user_email,
-                            "userAssignments",
-                            [],
-                            assignmentDB,
-                        )
-                            // Get the newly created user document
-                            .then(() =>
-                                getDocumentByEmail<
-                                    DegreeRequirementAssignment[]
-                                >(user_email, "userAssignments", assignmentDB),
-                            )
-                    );
-                }
-                // If the error is not a "not_found" error, reject the promise
-                return Promise.reject(err);
-            })
-            // Add the course to the user document
-            .then(doc => {
-                addAssignmentToDoc(doc, newAssignment);
-                return assignmentDB.put(doc);
-            })
+        modifyUserAssignments(user_email, [newAssignment], false)
             // Course added successfully
             .then(response =>
                 res.status(200).json({ message: "success", detail: response }),
@@ -166,6 +179,57 @@ userAssignments.post(
     },
 );
 
+/**
+@openapi
+/userAssignment:
+  put:
+    tags:
+      - user
+    security:
+      - cookieAuth: []
+    summary: Put all user course assignments
+    requestBody:
+      description: the array user course assignments
+      required: true
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "#/components/schemas/DegreeRequirementAssignment"
+    responses:
+      200:
+        description: Added successfully
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SuccessMessage"
+      400:
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FailureMessage"
+      401:
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FailureMessage"
+ */
+userAssignments.put("/userAssignment", checkAuthorization, (req, res, next) => {
+    const user = req.user;
+    const newAssignments = req.body as DegreeRequirementAssignment[];
+    const user_email = user.email;
+
+    modifyUserAssignments(user_email, newAssignments, true)
+        // Course added successfully
+        .then(response =>
+            res.status(200).json({ message: "success", detail: response }),
+        )
+        // Error handling
+        .catch(err => next(err));
+});
 /**
 @openapi
 /userAssignment:

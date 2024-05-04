@@ -14,7 +14,9 @@ export async function saveAccount(acc: Account): Promise<SuccessMessage> {
 }
 
 export async function getAccount(email: string): Promise<Account> {
-    return getStoredKeyByEmail<Account>(email, "account", userDB);
+    return getStoredKeyByEmail<Account>(email, "account", userDB).then(acc => {
+        return acc;
+    });
 }
 
 // export function addCourse(email: string, course: Record<string, unknown>): any {

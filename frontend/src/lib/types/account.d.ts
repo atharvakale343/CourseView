@@ -13,5 +13,5 @@ export type Account = {
     email: string;
     gradSem: string; 
     majors: string[];
-    minors: string[];
+    minors?: string[];
 }

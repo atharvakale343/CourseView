@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern';
 import { Events } from './Events';
+import { StateManager } from './StateManagement';
 
 const viewToViewLabel = {
   'course-history': 'Course History',
@@ -18,10 +19,12 @@ export class Navbar {
   #events: Events;
   #currentView: View;
   #viewToViewIcon: { [K in Icon]: HTMLButtonElement | null } | null = null;
+  #stateManager: StateManager;
 
   constructor() {
     this.#events = Events.events();
     this.#currentView = 'course-history';
+    this.#stateManager = StateManager.getManager();
   }
 
   async render(): Promise<HTMLElement> {
@@ -138,15 +141,24 @@ export class Navbar {
                 </g>
               </svg>
               <p
-                class="icon-title-text text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
+                class="icon-title-text icon-title-text-account text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
               >
-                Your Account
+                ${(await this.#stateManager.checkLoggedIn())
+                  ? 'Your Account'
+                  : 'Log In'}
               </p>
             </div>
           </button>
         </div>
       </div>
     `;
+
+    const accountPTag = elm.querySelector('.icon-title-text-account')!;
+    this.#stateManager.subscribeToUserLoggedInChanges(async () => {
+      accountPTag.textContent = (await this.#stateManager.checkLoggedIn())
+        ? 'Your Account'
+        : 'Log In';
+    });
 
     // Get all the anchor tags within the <div> element
     const links = elm.querySelectorAll('button');

@@ -8,6 +8,7 @@ import {
     getStoredKeyByEmail,
     saveDocumentByEmail,
 } from "../db/userPouchCRUD";
+import { logger } from "../utils/logger";
 
 // userDB has two fields : id which is the user email and courses which is an array of courses taken by the user
 
@@ -100,6 +101,8 @@ userCourses.post("/userCourse", checkAuthorization, (req, res, next) => {
     const user = req.user;
     const userCourse = req.body as UserCourse;
     const user_email = user.email;
+
+    logger.info(`Adding course ${JSON.stringify(userCourse)} to ${user_email}`);
 
     function addCourseToDoc(
         doc: {

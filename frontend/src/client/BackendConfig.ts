@@ -25,3 +25,9 @@ export async function fetchBackendRoute(
     credentials: 'include'
   });
 }
+
+export async function extractJSONFromResponse<T>(res: Response): Promise<T> {
+  return res.ok
+    ? ((await res.json()) as T)
+    : Promise.reject(new Error(res.statusText));
+}

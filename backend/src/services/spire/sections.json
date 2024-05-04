@@ -116,7 +116,7 @@
                     {
                         "requirementType": "fixed",
                         "course": {
-                            "id": "COMPSCI 121",
+                            "id": "COMPSCI|121",
                             "subjectId": "COMPSCI",
                             "number": "121",
                             "title": "Intro to Programming",
@@ -128,7 +128,7 @@
                     {
                         "requirementType": "fixed",
                         "course": {
-                            "id": "COMPSCI 187",
+                            "id": "COMPSCI|187",
                             "subjectId": "COMPSCI",
                             "number": "187",
                             "title": "Data Structures",

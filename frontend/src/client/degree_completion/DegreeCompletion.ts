@@ -108,6 +108,8 @@ export class DegreeCompletion {
         'Assignments should already include auto-assignable assignments'
       );
 
+      console.log('Auto-assignments:', autoAssignments);
+
       for (const assignment of autoAssignments) {
         await this.#stateManager.addUserAssignment(assignment);
       }

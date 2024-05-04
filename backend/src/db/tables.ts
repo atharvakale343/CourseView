@@ -30,4 +30,5 @@ db.serialize(function () {
     );
 });
 
+
 export default db;

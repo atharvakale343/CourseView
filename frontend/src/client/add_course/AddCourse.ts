@@ -197,7 +197,7 @@ export class AddCourse {
       }
 
       // Save new course
-      this.#stateManager.addUserCourse({
+      await this.#stateManager.addUserCourse({
         grade: formData.get('grade') as string,
         notes: formData.get('notes') as string,
         professor: formData.get('professor') as string,
@@ -211,7 +211,6 @@ export class AddCourse {
         course: course
       });
       alert('Added Course Successfully!');
-      form.reset();
     };
 
     // Wait for controls to be defined before attaching form listeners

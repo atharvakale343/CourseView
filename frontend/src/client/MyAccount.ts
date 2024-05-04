@@ -147,9 +147,7 @@ export class MyAccount {
 
       fetchBackendRoute('/saveAccountDetails', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify(postBody)
       })
         .then((response) => response.json())
@@ -225,13 +223,21 @@ export class MyAccount {
     elm.classList.add('my-4', 'mx-4', 'fade-in-element', 'relative');
     elm.innerHTML = /* HTML */ `
       <div
-        class="login-buttons m-auto mb-32 flex h-40 max-w-2xl flex-col items-center gap-y-8 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"
+        class="login-buttons m-auto mb-32 flex h-56 max-w-2xl flex-col items-center gap-y-8 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"
       >
         <h1 class="text-2xl font-bold text-black dark:text-white">
           Sign in to CourseView
         </h1>
-        <div class="flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center gap-y-2">
           <div class="google-sign-in-button h-11 w-[300px]"></div>
+          <button
+            class="test-sign-in-button flex h-11 w-[300px] items-center justify-between rounded-sm bg-gray-700 px-3 font-sans text-sm text-gray-50"
+          >
+            <i class="fa fa-user w-1/12 text-2xl" aria-hidden="true"></i>
+            <h1 class="grow text-center font-medium">
+              Sign in with a Test Account
+            </h1>
+          </button>
         </div>
       </div>
     `;
@@ -263,9 +269,7 @@ export class MyAccount {
 
       return fetchBackendRoute('/auth/one-tap/callback', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: new Headers({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({
           credential: response.credential
         }),
@@ -279,6 +283,8 @@ export class MyAccount {
           );
         });
     };
+
+    // Google One Tap
 
     google.accounts.id.initialize({
       client_id: BACKEND_CONFIG.GOOGLE_CLIENT_ID,
@@ -295,6 +301,33 @@ export class MyAccount {
       shape: 'rectangular',
       width: 300,
       logo_alignment: 'left'
+    });
+
+    // Test Sign In Button
+
+    const testSignInBtn = elm.querySelector(
+      '.test-sign-in-button'
+    )! as HTMLButtonElement;
+
+    testSignInBtn.addEventListener('click', async () => {
+      return fetchBackendRoute('/auth/basic/callback', {
+        method: 'POST',
+        headers: new Headers({
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }),
+        body: new URLSearchParams({
+          username: 'bgreene@umass.edu',
+          password: 'test'
+        }),
+        credentials: 'include'
+      })
+        .then((response) => response.json())
+        .then((res) => console.log('res', res))
+        .then(() => {
+          return getAccount().then((account) =>
+            this.#stateManager.saveAccount(account)
+          );
+        });
     });
 
     return elm;
@@ -337,9 +370,9 @@ export class MyAccount {
           .getUserAccount('userAccount')
           .catch(() => {
             console.error('Error getting user account');
-            return getAccount().then((account) =>
-              this.#stateManager.saveAccount(account)
-            );
+            return getAccount().then((account) => {
+              return this.#stateManager.saveAccount(account);
+            });
           })
           .then(() => this.#localStore.getUserAccount('userAccount'));
         elm.appendChild(await this.renderLoggedIn(userAccount));

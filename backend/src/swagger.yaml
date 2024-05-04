@@ -74,6 +74,32 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/UserAuth"
+  /auth/basic/callback:
+    post:
+      tags:
+        - auth
+      summary: A callback endpoint for Basic Authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                credential:
+                  type: string
+                  example: eyJhbGciPSA...
+      responses:
+        200:
+          description: The session ID is returned in a cookie named `connect.sid`. You need to include this cookie in subsequent requests.
+          headers:
+            Set-Cookie:
+              schema:
+                type: string
+                example: connect.sid=s%3A1owZK_nYFmB3qVNk2Otzc7EQ0XBsg1wD.GKfB3LDDdg3ZVocCxZGQUowQlpa6Fc49AMx82%2FedkBU
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserAuth"
   /getAccountDetails:
     get:
       security:
@@ -342,6 +368,40 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/DegreeRequirementAssignment"
+      responses:
+        200:
+          description: Added successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessMessage"
+        400:
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailureMessage"
+    put:
+      tags:
+        - user
+      security:
+        - cookieAuth: []
+      summary: Put all user course assignments
+      requestBody:
+        description: the array user course assignments
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: "#/components/schemas/DegreeRequirementAssignment"
       responses:
         200:
           description: Added successfully

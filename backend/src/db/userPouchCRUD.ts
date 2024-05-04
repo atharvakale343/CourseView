@@ -30,9 +30,13 @@ export function getStoredKeyByEmail<T>(
     key: string,
     db: PouchDB.Database,
 ): Promise<T> {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    return db.get(email).then(doc => doc[key]);
+    return (
+        db
+            .get(email)
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            .then(doc => doc[key])
+    );
 }
 
 export function getDocumentByEmail<Value>(

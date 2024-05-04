@@ -28,6 +28,9 @@ export async function getAccount(): Promise<Account> {
  */
 export async function getUserCourses(): Promise<UserCourse[]> {
   return fetchBackendRoute('/userCourse').then((response) => {
+    if (response.status === 401) {
+      return [];
+    }
     if (!response.ok) {
       throw new Error(response.statusText);
     }
@@ -41,6 +44,9 @@ export async function getUserCourses(): Promise<UserCourse[]> {
  */
 export async function getRequirementAssignments() {
   return fetchBackendRoute('/userAssignment').then((response) => {
+    if (response.status === 401) {
+      return [];
+    }
     if (!response.ok) {
       throw new Error(response.statusText);
     }

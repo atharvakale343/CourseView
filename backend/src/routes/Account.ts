@@ -110,7 +110,8 @@ accountRouter.post(
         }
         const validSemesters = new Spire()
             .getPastSemesterStrings()
-            .map(sem => sem.value).concat([""]);
+            .map(sem => sem.value)
+            .concat([""]);
         if (validSemesters.indexOf(body.gradSem) === -1) {
             res.status(400).json({
                 message: "fail",

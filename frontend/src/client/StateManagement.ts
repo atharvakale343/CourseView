@@ -1,7 +1,8 @@
 import { DegreeRequirementAssignment } from '../lib/types/Degree';
+import { Account } from '../lib/types/account';
 import { Course, UserCourse } from '../lib/types/course';
 import { compareUserCourses } from '../lib/utils';
-import { fetchBackendRoute } from './BackendConfig';
+import { extractJSONFromResponse, fetchBackendRoute } from './BackendConfig';
 import { Events } from './Events';
 import { LocalStore, UserAssignmentsDocumentKey } from './LocalStore';
 
@@ -36,8 +37,19 @@ export class StateManager {
    * @returns A promise that resolves when the assignment is successfully added.
    */
   public async addUserAssignment(assignment: DegreeRequirementAssignment) {
-    return this.#localStore
-      .addUserAssignment(assignment, 'userAssignments')
+    await this.#localStore.addUserAssignment(assignment, 'userAssignments');
+    return fetchBackendRoute('/userAssignment', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(assignment)
+    })
+      .then(extractJSONFromResponse)
+      .catch((e) => {
+        alert(`Failed to add assignment: ${e.message}`);
+        console.error(e);
+        this.deleteUserAssignmentById(assignment.id, 'userAssignments');
+        return Promise.reject(e);
+      })
       .then(() =>
         this.#events.publish('userAssignmentsChanged', {
           type: 'change',
@@ -55,6 +67,22 @@ export class StateManager {
   public async hasUserAlreadyTakenCourse(course: Course) {
     const userCourses = await this.#localStore.getUserCourses('userCourses');
     return userCourses.some((userCourse) => userCourse.course.id === course.id);
+  }
+
+  public async deleteUserAssignmentById(
+    assignmentId: string,
+    store: UserAssignmentsDocumentKey
+  ) {
+    await this.#localStore.deleteUserAssignmentById(assignmentId, store);
+    return fetchBackendRoute(`/userAssignment?assignmentId=${assignmentId}`, {
+      method: 'DELETE'
+    })
+      .then(extractJSONFromResponse)
+      .catch((e) => {
+        alert(`Failed to delete assignment: ${e.message}`);
+        console.error(e);
+        return Promise.reject(e);
+      });
   }
 
   /**
@@ -79,10 +107,7 @@ export class StateManager {
       console.warn('assignmentsToDelete', assignmentsToDelete);
     }
     for (const deleteAssign of assignmentsToDelete) {
-      await this.#localStore.deleteUserAssignmentById(
-        deleteAssign.id,
-        'userAssignments'
-      );
+      await this.deleteUserAssignmentById(deleteAssign.id, 'userAssignments');
     }
     return this.#events.publish('userAssignmentsChanged', {
       type: 'change',
@@ -96,8 +121,23 @@ export class StateManager {
    * @returns A promise that resolves when the user course is successfully saved.
    */
   public async addUserCourse(user_course: UserCourse) {
-    return this.#localStore
-      .addUserCourse(user_course, 'userCourses')
+    console.log('Adding user course', user_course);
+    await this.#localStore.addUserCourse(user_course, 'userCourses');
+    return fetchBackendRoute('/userCourse', {
+      method: 'POST',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(user_course)
+    })
+      .then(extractJSONFromResponse)
+      .catch((e) => {
+        alert(`Failed to add course: ${e.message}`);
+        console.error(e);
+        this.#localStore.deleteUserCourseByCourseId(
+          user_course.course.id,
+          'userCourses'
+        );
+        return Promise.reject(e);
+      })
       .then(() => this.#events.publish('userCoursesChanged', null));
   }
 
@@ -109,10 +149,41 @@ export class StateManager {
    * @returns A promise that resolves when the user course is deleted and the assignment (if needed) is deleted.
    */
   public async deleteUserCourse(user_course: UserCourse) {
-    return this.#localStore
-      .deleteUserCourseByCourseId(user_course.course.id, 'userCourses')
-      .then(() => this.#events.publish('userCoursesChanged', null))
-      .then(() => this.deleteAssignmentIfNeeded(user_course));
+    await this.#localStore.deleteUserCourseByCourseId(
+      user_course.course.id,
+      'userCourses'
+    );
+
+    return fetchBackendRoute(`/userCourse?courseId=${user_course.course.id}`, {
+      method: 'DELETE'
+    })
+      .then(extractJSONFromResponse)
+      .catch((e) => {
+        alert(`Failed to delete course: ${e.message}`);
+        console.error(e);
+        this.#localStore.addUserCourse(user_course, 'userCourses');
+        return Promise.reject(e);
+      })
+      .then(() => this.deleteAssignmentIfNeeded(user_course))
+      .catch((e) => {
+        alert(`Failed to delete course: ${e.message}`);
+        console.error(e);
+        this.#localStore.addUserCourse(user_course, 'userCourses');
+        return Promise.reject(e);
+      })
+      .then(() => this.#events.publish('userCoursesChanged', null));
+  }
+
+  private putUserSelectedArrConfigIds(config_ids: string[]) {
+    return fetchBackendRoute('/userSelectedArrConfig', {
+      method: 'PUT',
+      body: JSON.stringify(config_ids)
+    }).then((response) => {
+      if (response.status === 401) {
+        return Promise.resolve();
+      }
+      return extractJSONFromResponse(response);
+    });
   }
 
   /**
@@ -122,13 +193,26 @@ export class StateManager {
    * @returns A promise that resolves when the configuration ID is successfully added.
    */
   public async addUserSelectedArrConfig(config_id: string) {
-    return this.#localStore
+    let oldConfigIds: string[] = [];
+    await this.#localStore
       .getUserSelectedArrConfigIds('userSelectedArrConfigIds')
       .then((config_ids) => {
+        oldConfigIds = config_ids;
         return this.#localStore.dumpUserSelectedArrConfigIds(
           [...config_ids, config_id],
           'userSelectedArrConfigIds'
         );
+      });
+
+    return this.putUserSelectedArrConfigIds([...oldConfigIds, config_id])
+      .catch((e) => {
+        alert(`Failed to add configuration: ${e.message}`);
+        console.error(e);
+        this.#localStore.dumpUserSelectedArrConfigIds(
+          oldConfigIds,
+          'userSelectedArrConfigIds'
+        );
+        return Promise.reject(e);
       })
       .then(() =>
         this.#events.publish('userSelectedArrConfigIdsChanged', null)
@@ -141,13 +225,28 @@ export class StateManager {
    * @returns A promise that resolves when the configuration is successfully removed.
    */
   public async removeUserSelectedArrConfig(config_id: string) {
-    return this.#localStore
+    let oldConfigIds: string[] = [];
+    let newConfigIds: string[] = [];
+    await this.#localStore
       .getUserSelectedArrConfigIds('userSelectedArrConfigIds')
       .then((config_ids) => {
+        oldConfigIds = config_ids;
+        newConfigIds = config_ids.filter((id) => id !== config_id);
         return this.#localStore.dumpUserSelectedArrConfigIds(
-          config_ids.filter((id) => id !== config_id),
+          newConfigIds,
           'userSelectedArrConfigIds'
         );
+      });
+
+    return this.putUserSelectedArrConfigIds(newConfigIds)
+      .catch((e) => {
+        alert(`Failed to remove configuration: ${e.message}`);
+        console.error(e);
+        this.#localStore.dumpUserSelectedArrConfigIds(
+          oldConfigIds,
+          'userSelectedArrConfigIds'
+        );
+        return Promise.reject(e);
       })
       .then(() =>
         this.#events.publish('userSelectedArrConfigIdsChanged', null)
@@ -214,30 +313,51 @@ export class StateManager {
    * @returns A promise that resolves when the user assignments are successfully replicated to the local store.
    */
   async replicateUserAssignmentsToLocalStore() {
-    return this.#localStore
-      .dumpUserAssignments(
-        await this.#localStore.getUserAssignments('userAssignmentsModified'),
-        'userAssignments'
+    return fetchBackendRoute('/userAssignment', {
+      method: 'PUT',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(
+        await this.#localStore.getUserAssignments('userAssignmentsModified')
       )
-      .catch((e) => console.error(e));
+    })
+      .then(extractJSONFromResponse)
+      .catch((e) => {
+        alert(`Failed to replicate user assignments: ${e.message}`);
+        console.error(e);
+        this.#events.publish('userAssignmentsChanged', {
+          type: 'change',
+          changeRequired: true
+        } satisfies ModificationEvent);
+        return Promise.reject(e);
+      })
+      .then(() =>
+        this.#localStore.getUserAssignments('userAssignmentsModified')
+      )
+      .then((userAssignments) =>
+        this.#localStore.dumpUserAssignments(userAssignments, 'userAssignments')
+      );
   }
 
   async saveAccount(account: Account) {
-    return this.#localStore.dumpUserAccount(account, 'userAccount').then(() => this.#events.publish('userLoggedInChanged', null));
+    return this.#localStore
+      .dumpUserAccount(account, 'userAccount')
+      .then(() => this.#events.publish('userLoggedInChanged', null));
   }
 
   async logoutAccount() {
     return this.#localStore
       .removeUserAccount('userAccount')
-      .then(() => fetchBackendRoute('/logout', { method: 'POST' }))
+      .then(() =>
+        fetchBackendRoute('/logout', { method: 'POST' }).then(
+          extractJSONFromResponse
+        )
+      )
       .then(() => this.#events.publish('userLoggedInChanged', null));
   }
 
   async checkLoggedIn() {
     return fetchBackendRoute('/loggedIn')
-      .then((res: Response) =>
-        res.ok ? res.json() : Promise.reject(new Error('Server error'))
-      )
+      .then(extractJSONFromResponse)
       .then((data: any) => data.message === 'success');
   }
 }
