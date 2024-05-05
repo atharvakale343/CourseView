@@ -21,6 +21,7 @@ export const userDB = new PouchDB(path.resolve(pouchDbPath, "userDB"));
 export const assignmentDB = new PouchDB(
     path.resolve(pouchDbPath, "assignmentDB"),
 );
+export const preferenceDB = new PouchDB(path.resolve(pouchDbPath, "preferenceDB"));
 
 // Hydrate the test account with some data
 hydrateTestAccount();

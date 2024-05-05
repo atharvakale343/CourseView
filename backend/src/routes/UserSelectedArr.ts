@@ -1,6 +1,7 @@
 import { NextFunction, Router } from "express";
 import { Request, Response } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
+import { preferenceDB } from "../db/pouchdbSetup";
 import createHttpError from "http-errors";
 
 export const userSelectedArr = Router();
@@ -22,15 +23,16 @@ export const userSelectedArr = Router();
             schema:
             $ref: "#/components/schemas/UserSelectedArrConfigs"
 */
-userSelectedArr.get(
-    "/userSelectedArrConfig",
-    checkAuthorization,
-    (req: Request, res: Response, next: NextFunction) => {
+userSelectedArr.get("/userSelectedArrConfig", checkAuthorization, async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const user = req.user;
-        // TODO
-        next(createHttpError(501, "Not Implemented"));
-    },
-);
+        const data: any = await preferenceDB.get(user.email); 
+        res.status(200).json(data.preferences);
+    }
+    catch (err: unknown) {
+        next(err)
+    }
+});
 
 /**
 @openapi
@@ -68,12 +70,13 @@ userSelectedArr.get(
             schema:
                 $ref: "#/components/schemas/FailureMessage"
  */
-userSelectedArr.put(
-    "/userSelectedArrConfig",
-    checkAuthorization,
-    (req: Request, res: Response, next: NextFunction) => {
+userSelectedArr.put("/userSelectedArrConfig", checkAuthorization, async (req: Request, res: Response, next: NextFunction) => {
+    try {
         const user = req.user;
-        // TODO
-        next(createHttpError(501, "Not Implemented"));
-    },
-);
+        const data = await preferenceDB.put({ _id: user.email, preferences: req.body}); 
+        res.status(200).json(data);
+    }
+    catch (err: unknown) {
+        next(err)
+    }
+});
