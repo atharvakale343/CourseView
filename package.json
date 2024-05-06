@@ -16,7 +16,7 @@
     "validate-html": "echo 'Please `cd frontend` and then `npm run validate-html`'",
     "prettier": "echo 'Please `cd frontend` and then `prettier`'",
     "postinstall": "(cd frontend && npm install); (cd backend && npm install);",
-    "start": "(cd frontend && VITE_GOOGLE_CLIENT_ID=917526433563-3ln6kc77u3efffe9cg4vglmql09gsuud.apps.googleusercontent.com npm run build); (cd backend && npm run build); (cd backend && npm run start)"
+    "start": "(cd frontend && VITE_GOOGLE_CLIENT_ID=917526433563-3ln6kc77u3efffe9cg4vglmql09gsuud.apps.googleusercontent.com npm run build -- --mode development); (cd backend && npm run build); (cd backend && npm run start)"
   },
   "collaborators": [
     "Atharva Kale aukale@umass.edu atharvakale343",
