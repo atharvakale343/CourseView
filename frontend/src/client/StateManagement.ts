@@ -312,7 +312,7 @@ export class StateManager {
 
     return this.putUserSelectedArrConfigIds([...oldConfigIds, config_id])
       .catch(async (e) => {
-        await new Alert(`Failed to add configuration: ${e.message}`).show();
+        await new Alert(`Failed to add configuration: ${e.message}`, 'error').show();
         console.error(e);
         this.#localStore.dumpUserSelectedArrConfigIds(
           oldConfigIds,
@@ -346,7 +346,7 @@ export class StateManager {
 
     return this.putUserSelectedArrConfigIds(newConfigIds)
       .catch(async (e) => {
-        await new Alert(`Failed to remove configuration: ${e.message}`).show();
+        await new Alert(`Failed to remove configuration: ${e.message}`, 'error').show();
         console.error(e);
         this.#localStore.dumpUserSelectedArrConfigIds(
           oldConfigIds,
