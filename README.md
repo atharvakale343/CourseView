@@ -17,6 +17,15 @@ This repository is organized into two main directories.
 └── frontend
 ```
 
+To run the project:
+
+```bash
+npm install
+npm run start
+```
+
+Now, you can visit `http://localhost:3000` to view the app.
+
 # Cloning the Repo
 
 ```bash
@@ -25,7 +34,9 @@ git clone git@github.com:atharvakale343/326-final-project-spring-24.git
 git config pull.rebase true
 ```
 
-# Frontend
+# Development
+
+## Frontend
 
 In your terminal, navigate to the `frontend` directory and run the following commands:
 
@@ -37,7 +48,7 @@ npm run dev
 
 Read more about the frontend in the [frontend README](frontend/README.md).
 
-# Backend
+## Backend
 
 ```bash
 cd backend
