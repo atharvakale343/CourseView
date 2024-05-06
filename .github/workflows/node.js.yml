@@ -29,16 +29,17 @@ jobs:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
       - name: Install
-        run: npm install
-      - name: Build
         working-directory: ./backend
-        run: npm run build
+        run: npm install
       - name: lint
         working-directory: ./backend
         run: npm run lint
       - name: validate
         working-directory: ./backend
         run: npm run validate-prettiness
+      - name: Build
+        working-directory: ./backend
+        run: npm run build
       - name: Install .env file
         working-directory: ./backend
         run: |
