@@ -23,10 +23,6 @@ export class Toolbar {
       'items-center'
     );
 
-    const checkedSections = await this.#localStore.getUserSelectedArrConfigIds(
-      'userSelectedArrConfigIds'
-    );
-
     elm.innerHTML = /* HTML */ `
       <sl-dropdown size="large" stay-open-on-select="" class="settings mr-2">
         <sl-button slot="trigger" caret>

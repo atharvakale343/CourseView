@@ -91,7 +91,7 @@ export class DegreeCompletion {
 
     this.#stateManager.subscribeToUserSelectedArrConfigChanges(async () => {
       await reloadSections();
-      userAssignmentsChangedHandler({
+      await userAssignmentsChangedHandler({
         changeRequired: true,
         type: 'delete'
       } satisfies ModificationEvent);
