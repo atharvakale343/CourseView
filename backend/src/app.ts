@@ -39,9 +39,9 @@ const SQLiteStore = connect(session);
 // Cors
 const whitelist = [
     "http://localhost:3000",
+    "http://localhost:3000",
     "http://localhost:2000",
-    "https://localhost:2000",
-    "https://localhost:3000",
+    "http://localhost:2000",
     "https://courseview-git-dev-atharva-kales-projects.vercel.app",
     "https://courseview-cs326-team-4.vercel.app",
     "https://app.courseview.us",
@@ -49,7 +49,7 @@ const whitelist = [
 const corsOptions: CorsOptions = {
     credentials: true,
     origin(requestOrigin, callback) {
-        if (whitelist.indexOf(requestOrigin as string) !== -1) {
+        if (!requestOrigin || whitelist.indexOf(requestOrigin as string) !== -1) {
             callback(null, true);
         } else {
             callback(new Error("Not allowed by CORS"));
