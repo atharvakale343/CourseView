@@ -99,13 +99,13 @@ const file = fs.readFileSync("./src/swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(file);
 app.use("/api-docs", swaggerUi.serve);
 app.get("/api-docs", swaggerUi.setup(swaggerDocument));
+app.use(express.static(path.join(__dirname, "../../frontend/dist")));
+app.use("/", index);
 
 // Setup cors now after swagger routes
 app.use(cors(corsOptions));
 
 // Routes
-app.use(express.static(path.join(__dirname, "../public")));
-app.use("/", index);
 app.use(accountRouter);
 app.use(authRouter);
 app.use(spireRouter);
