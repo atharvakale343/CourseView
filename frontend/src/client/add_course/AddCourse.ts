@@ -2,6 +2,7 @@ import { StateManager } from '../StateManagement';
 import { Course } from '../../lib/types/course';
 import { fetchBackendRoute } from '../BackendConfig';
 import { Semester, Subject } from '../../lib/types/Degree';
+import { Alert } from '../Alert';
 
 export class AddCourse {
   #stateManager: StateManager;
@@ -191,7 +192,7 @@ export class AddCourse {
 
       // Check if course has already been added
       if (await this.#stateManager.hasUserAlreadyTakenCourse(course)) {
-        alert('You have already added this course!');
+        await new Alert('You have already added this course!', 'warn').show();
         form.reset();
         return;
       }
@@ -210,7 +211,8 @@ export class AddCourse {
         transferred: false,
         course: course
       });
-      alert('Added Course Successfully!');
+      await new Alert('Added Course Successfully!', 'info').show();
+      form.reset();
     };
 
     // Wait for controls to be defined before attaching form listeners

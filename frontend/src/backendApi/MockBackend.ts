@@ -1,12 +1,10 @@
 import { fetchBackendRoute } from '../client/BackendConfig';
-import { getAllCoursesDropdown } from '../client/add_course/CoursesConfig';
 import {
   DegreeRequirementAssignment,
-  Requirement,
   Section
 } from '../lib/types/Degree';
 import { Account } from '../lib/types/account';
-import { Course, UserCourse } from '../lib/types/course';
+import { UserCourse } from '../lib/types/course';
 
 /**
  * Retrieves an account object based on the provided ID.
@@ -60,5 +58,14 @@ export async function getAllArrConfigs() {
       throw new Error(response.statusText);
     }
     return response.json() as Promise<Section[]>;
+  });
+}
+
+export async function getUserSelectedArrConfigIds() {
+  return fetchBackendRoute('/userSelectedArrConfig').then((response) => {
+    if (!response.ok) {
+      throw new Error(response.statusText);
+    }
+    return response.json() as Promise<string[]>;
   });
 }

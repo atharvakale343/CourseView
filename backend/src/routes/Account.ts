@@ -1,8 +1,6 @@
 import { Router } from "express";
 import { checkAuthorization } from "../middlewares/authCheck";
-import createHttpError from "http-errors";
 import { getAccount, saveAccount } from "../db/dbCRUD";
-import morgan from "morgan";
 import { Account } from "@client/lib/types/account";
 import { Spire } from "../services/spire/Spire";
 

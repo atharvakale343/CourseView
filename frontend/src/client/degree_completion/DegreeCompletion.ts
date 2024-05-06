@@ -88,6 +88,7 @@ export class DegreeCompletion {
     };
 
     await reloadSections();
+
     this.#stateManager.subscribeToUserSelectedArrConfigChanges(async () => {
       await reloadSections();
       userAssignmentsChangedHandler({
@@ -95,29 +96,6 @@ export class DegreeCompletion {
         type: 'delete'
       } satisfies ModificationEvent);
     });
-
-    const autoAssignHandler = async () => {
-      const autoAssignments = autoAssignCourses(
-        await this.#localStore.getUserCourses('userCourses'),
-        getAllRequirementsFromSection(sections),
-        await this.#localStore.getUserAssignments('userAssignments')
-      );
-
-      console.assert(
-        autoAssignments.length === 0,
-        'Assignments should already include auto-assignable assignments'
-      );
-
-      console.log('Auto-assignments:', autoAssignments);
-
-      for (const assignment of autoAssignments) {
-        await this.#stateManager.addUserAssignment(assignment);
-      }
-    };
-
-    await autoAssignHandler();
-
-    this.#stateManager.subscribeToUserCourseChanges(autoAssignHandler);
 
     const defaultMsgElement = elm.querySelector(
       '.default-msg'
@@ -158,6 +136,29 @@ export class DegreeCompletion {
       type: 'delete',
       changeRequired: true
     } satisfies ModificationEvent);
+
+    const autoAssignHandler = async () => {
+      const autoAssignments = autoAssignCourses(
+        await this.#localStore.getUserCourses('userCourses'),
+        getAllRequirementsFromSection(sections),
+        await this.#localStore.getUserAssignments('userAssignments')
+      );
+
+      console.assert(
+        autoAssignments.length === 0,
+        'Assignments should already include auto-assignable assignments'
+      );
+
+      console.log('Auto-assignments:', autoAssignments);
+
+      for (const assignment of autoAssignments) {
+        await this.#stateManager.addUserAssignment(assignment);
+      }
+    };
+
+    await autoAssignHandler();
+
+    this.#stateManager.subscribeToUserCourseChanges(autoAssignHandler);
 
     const toolbarElement = elm.querySelector('.toolbar')! as HTMLDivElement;
     toolbarElement.appendChild(await new Toolbar().render());

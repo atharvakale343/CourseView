@@ -108,6 +108,17 @@ export class LocalStore {
     });
   }
 
+  public async removeUserCourses(source: UserCoursesDocumentKey) {
+    return this.db
+      .get<{ [key in UserCoursesDocumentKey]: string }>(source)
+      .then(
+        (userCourses) => (
+          (userCourses.userCourses = JSON.stringify([])), userCourses
+        )
+      )
+      .then((userCourses) => this.db.put(userCourses));
+  }
+
   /**
    * Retrieves the user's courses from the database.
    *
@@ -159,6 +170,24 @@ export class LocalStore {
         userAssignments: JSON.stringify(userAssignments)
       })
     );
+  }
+
+  public async removeUserAssignments(source: UserAssignmentsDocumentKey) {
+    return this.db
+      .get<{
+        [key in UserAssignmentsDocumentKey]: string;
+      }>(source)
+      .then((userAssignments) => {
+        if (source === 'userAssignments') {
+          userAssignments.userAssignments = JSON.stringify([]);
+        } else if (source === 'userAssignmentsModified') {
+          userAssignments.userAssignmentsModified = JSON.stringify([]);
+        } else {
+          throw new Error('Invalid source');
+        }
+        return userAssignments;
+      })
+      .then((userAssignments) => this.db.put(userAssignments));
   }
 
   /**
@@ -295,6 +324,15 @@ export class LocalStore {
       // @ts-ignore
       return JSON.parse(doc[destination]);
     }) as Promise<string[]>;
+  }
+
+  public async removeUserSelectedArrConfigIds(
+    source: UserSelectedArrConfigIdsDocumentKey
+  ) {
+    return this.db
+      .get<{ [key in UserSelectedArrConfigIdsDocumentKey]: string }>(source)
+      .then((doc) => ((doc.userSelectedArrConfigIds = JSON.stringify([])), doc))
+      .then((doc) => this.db.put(doc));
   }
 
   public async getUserAccount(

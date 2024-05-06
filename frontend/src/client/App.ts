@@ -6,20 +6,10 @@ import { DegreeCompletion } from './degree_completion/DegreeCompletion';
 import { Events } from './Events';
 import { MyAccount } from './MyAccount';
 import { LocalStore } from './LocalStore';
-import {
-  getAllArrConfigs,
-  getRequirementAssignments,
-  getUserCourses
-} from '../backendApi/MockBackend';
-import {
-  getCSMajor2022ARRConfig,
-  getCSMajorARRConfig,
-  getGenedARRConfig
-} from '../backendApi/ArrConfig';
+
 import { StateManager } from './StateManagement';
 
 type ViewElementMap = { [K in View]: Promise<HTMLElement> };
-const REFRESH_EVERY_N_RELOADS = 4;
 
 export interface Component {
   render(): Promise<HTMLElement>;

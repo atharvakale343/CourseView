@@ -2,7 +2,6 @@ import { match } from 'ts-pattern';
 import {
   AnonymousRequirement,
   Card,
-  DegreeRequirementAssignment,
   FixedRequirement,
   PrefixRequirement,
   Requirement

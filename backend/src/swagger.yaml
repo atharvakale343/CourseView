@@ -515,7 +515,7 @@ components:
         example:
           - "gened-arr-config"
           - "cs-major-arr-config-2016"
-          - "cs-major-arr-config-2022"
+          - "cs-major-arr-config-2023"
     DegreeRequirementAssignment:
       type: object
       properties:

@@ -1,6 +1,6 @@
 import { UserCourse } from "@client/lib/types/course";
 import { saveDocumentByEmail } from "../db/userPouchCRUD";
-import { userDB, assignmentDB, courseDB } from "../db/pouchdbSetup";
+import { assignmentDB, courseDB } from "../db/pouchdbSetup";
 import { DegreeRequirementAssignment } from "@client/lib/types/Degree";
 import { saveAccount } from "../db/dbCRUD";
 

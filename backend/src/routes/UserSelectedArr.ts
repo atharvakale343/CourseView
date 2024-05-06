@@ -6,6 +6,22 @@ import createHttpError from "http-errors";
 
 export const userSelectedArr = Router();
 
+function getUserPreferences(email: string) {
+    return preferenceDB.get<{ preferences: string[] }>(email).catch(err => {
+        if (err.status === 404) {
+            const doc = {
+                _id: email,
+                preferences: [] as string[],
+            };
+            return preferenceDB
+                .put(doc)
+                .then(() => preferenceDB.get<{ preferences: string[] }>(email));
+        } else {
+            throw err;
+        }
+    });
+}
+
 /**
 @openapi
 /userSelectedArrConfig:
@@ -23,16 +39,19 @@ export const userSelectedArr = Router();
             schema:
             $ref: "#/components/schemas/UserSelectedArrConfigs"
 */
-userSelectedArr.get("/userSelectedArrConfig", checkAuthorization, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = req.user;
-        const data: any = await preferenceDB.get(user.email); 
-        res.status(200).json(data.preferences);
-    }
-    catch (err: unknown) {
-        next(err)
-    }
-});
+userSelectedArr.get(
+    "/userSelectedArrConfig",
+    checkAuthorization,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = req.user;
+            const data = await getUserPreferences(user.email);
+            res.status(200).json(data.preferences);
+        } catch (err: unknown) {
+            next(err);
+        }
+    },
+);
 
 /**
 @openapi
@@ -70,13 +89,23 @@ userSelectedArr.get("/userSelectedArrConfig", checkAuthorization, async (req: Re
             schema:
                 $ref: "#/components/schemas/FailureMessage"
  */
-userSelectedArr.put("/userSelectedArrConfig", checkAuthorization, async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const user = req.user;
-        const data = await preferenceDB.put({ _id: user.email, preferences: req.body}); 
-        res.status(200).json(data);
-    }
-    catch (err: unknown) {
-        next(err)
-    }
-});
+userSelectedArr.put(
+    "/userSelectedArrConfig",
+    checkAuthorization,
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const user = req.user;
+            // Get json body
+            if (!Array.isArray(req.body)) {
+                throw new createHttpError.BadRequest("Invalid request body");
+            }
+            await getUserPreferences(user.email).then(doc => {
+                doc.preferences = req.body as string[];
+                preferenceDB.put(doc);
+            });
+            res.status(200).json({ message: "Added successfully" });
+        } catch (err: unknown) {
+            next(err);
+        }
+    },
+);

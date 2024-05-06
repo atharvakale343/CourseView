@@ -39,27 +39,7 @@ export class Toolbar {
             </span>
           </div>
         </sl-button>
-        <sl-menu>
-          ${(await this.#localStore.getAllArrConfigs('allArrConfigs'))
-            .map((section, index) => {
-              return /* HTML */ `
-                <sl-menu-item
-                  type="checkbox"
-                  value="${section.id}"
-                  class="${checkedSections.includes(section.id)
-                    ? 'checked'
-                    : null} ${index === 0
-                    ? 'border-t'
-                    : ''} border-b border-gray-400"
-                  ${checkedSections.includes(section.id) ? 'checked' : null}
-                >
-                  <span class="font-medium">${section.title}</span>
-                  <span class="text-xs">${section.description}</span>
-                </sl-menu-item>
-              `;
-            })
-            .join('')}
-        </sl-menu>
+        <sl-menu> </sl-menu>
       </sl-dropdown>
 
       <div class="flex w-full flex-row gap-x-2 sm:w-96">
@@ -137,22 +117,53 @@ export class Toolbar {
     });
 
     const slMenuElement = elm.querySelector('sl-menu')!;
-    slMenuElement.addEventListener(
-      'sl-select',
-      async (e: CustomEvent) => {
-        const item = e.detail.item as SlMenuItem;
-        item.classList.toggle('checked');
-        const id = item.value as string;
 
-        if (item.checked) {
-          await this.#stateManager.addUserSelectedArrConfig(id);
-          await resetHandler().catch((_) => Promise.resolve());
-        } else {
-          await this.#stateManager.removeUserSelectedArrConfig(id);
-          await resetHandler().catch((_) => Promise.resolve());
-        }
-      }
+    const userSelectedArrChangesHandler = async () => {
+      const checkedSections =
+        await this.#localStore.getUserSelectedArrConfigIds(
+          'userSelectedArrConfigIds'
+        );
+      slMenuElement.innerHTML = /* HTML */ `
+        ${(await this.#localStore.getAllArrConfigs('allArrConfigs'))
+          .map((section, index) => {
+            return /* HTML */ `
+              <sl-menu-item
+                type="checkbox"
+                value="${section.id}"
+                class="${checkedSections.includes(section.id)
+                  ? 'checked'
+                  : null} ${index === 0
+                  ? 'border-t'
+                  : ''} border-b border-gray-400"
+                ${checkedSections.includes(section.id) ? 'checked' : null}
+              >
+                <span class="font-medium">${section.title}</span>
+                <span class="text-xs">${section.description}</span>
+              </sl-menu-item>
+            `;
+          })
+          .join('')}
+      `;
+    };
+
+    await userSelectedArrChangesHandler();
+    this.#stateManager.subscribeToUserSelectedArrConfigChanges(
+      userSelectedArrChangesHandler
     );
+
+    slMenuElement.addEventListener('sl-select', async (e: CustomEvent) => {
+      const item = e.detail.item as SlMenuItem;
+      item.classList.toggle('checked');
+      const id = item.value as string;
+
+      if (item.checked) {
+        await this.#stateManager.addUserSelectedArrConfig(id);
+        await resetHandler().catch((_) => Promise.resolve());
+      } else {
+        await this.#stateManager.removeUserSelectedArrConfig(id);
+        await resetHandler().catch((_) => Promise.resolve());
+      }
+    });
 
     return elm;
   }
