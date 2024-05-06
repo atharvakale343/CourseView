@@ -28,6 +28,11 @@ export class MyAccount {
     const elm = document.createElement('div');
     elm.classList.add('my-4', 'mx-4', 'fade-in-element', 'grow');
     elm.id = 'my-account';
+
+    const photoSrc =
+      userAccount.photo !== 'not-found'
+        ? userAccount.photo.replace('s96-c', 's384-c')
+        : '/profile.jpg';
     elm.innerHTML = /* HTML */ `
       <div class="progress-ring flex h-svh items-center justify-center">
         <div class="mb-60">
@@ -56,7 +61,7 @@ export class MyAccount {
         <div class="flex items-center justify-center">
           <img
             class="mb-3 size-32 rounded-full shadow-lg md:size-48"
-            src="/profile.jpg"
+            src="${photoSrc}"
             alt="Bonnie image"
           />
         </div>
@@ -143,7 +148,8 @@ export class MyAccount {
           typeof formData.major === 'string'
             ? [formData.major]
             : formData.major,
-        gradSem: formData.gradSem
+        gradSem: formData.gradSem,
+        photo: userAccount.photo
       };
 
       fetchBackendRoute('/saveAccountDetails', {
@@ -378,6 +384,7 @@ export class MyAccount {
             });
           })
           .then(() => this.#localStore.getUserAccount('userAccount'));
+        console.log('userAccount', userAccount);
         elm.appendChild(await this.renderLoggedIn(userAccount));
       } else {
         elm.appendChild(await this.renderLoggedOut());

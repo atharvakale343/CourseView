@@ -1799,6 +1799,7 @@ async function addAccountDetail() {
         email: TEST_ACCOUNT_EMAIL,
         gradSem: "fall-2024",
         majors: ["computer-science-bs"],
+        photo: "not-found",
     });
 }
 

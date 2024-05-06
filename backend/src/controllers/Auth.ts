@@ -38,12 +38,17 @@ type UsersRow = {
     id: string;
     name: string;
     email: string;
+    photo: string;
 };
 
 function verify(profile: passport.Profile, done: passport.DoneCallback) {
     if (!profile) {
         return done(undefined, undefined);
     }
+    const photo =
+        profile.photos && profile.photos.length > 0
+            ? profile.photos[0].value
+            : "not-found";
     db.get(
         "SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?",
         [profile.provider, profile.id],
@@ -56,8 +61,8 @@ function verify(profile: passport.Profile, done: passport.DoneCallback) {
                     return done(new Error("No email found"));
                 }
                 db.run(
-                    "INSERT INTO users (name, email) VALUES (?, ?)",
-                    [profile.displayName, profile.emails[0].value],
+                    "INSERT INTO users (name, email, photo) VALUES (?, ?, ?)",
+                    [profile.displayName, profile.emails[0].value, photo],
                     function (err) {
                         if (err) {
                             return done(err);
@@ -81,6 +86,7 @@ function verify(profile: passport.Profile, done: passport.DoneCallback) {
                                     id: id.toString(),
                                     name: profile.displayName,
                                     email: profile.emails[0].value,
+                                    photo: photo,
                                 };
 
                                 return done(null, user);
@@ -103,6 +109,7 @@ function verify(profile: passport.Profile, done: passport.DoneCallback) {
 
                         const user: UsersRow = {
                             id: row.id.toString(),
+                            photo: row.photo,
                             email: row.email,
                             name: row.name,
                         };
@@ -144,7 +151,7 @@ passport.serializeUser(function (user: Express.User, cb) {
 passport.deserializeUser(function (obj, cb) {
     process.nextTick(function () {
         db.get(
-            "SELECT rowid AS id, email, name FROM users WHERE rowid = ?",
+            "SELECT rowid AS id, email, name, photo FROM users WHERE rowid = ?",
             [obj],
             function (err, row: UsersRow) {
                 if (err) {
@@ -159,6 +166,7 @@ passport.deserializeUser(function (obj, cb) {
                     id: row.id.toString(),
                     email: row.email,
                     name: row.name,
+                    photo: row.photo,
                 };
 
                 return cb(undefined, user);

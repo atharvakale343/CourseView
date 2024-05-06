@@ -42,6 +42,7 @@ accountRouter.get(
                         gradSem: "",
                         majors: [],
                         minors: [],
+                        photo: user.photo,
                     }).then(() => {
                         return getAccount(user.email);
                     });
