@@ -39,6 +39,7 @@ function onListening() {
             ? `pipe ${addr}`
             : `${addr.address}:${addr.port}`;
     logger.info(`Listening on ${bind}`);
+    logger.info("Open http://localhost:3000 in a browser to see the app")
 }
 
 export default server;
