@@ -13,6 +13,7 @@
         "watch-node": "nodemon dist/server.js",
         "build-ts": "tsc",
         "watch-ts": "tsc -w",
+        "esbuild-watch-ts": "npx esbuild src/**/*.ts src/**/**/*.ts src/*.ts --bundle --outdir=dist --watch --platform=node --sourcemap",
         "lint": "eslint src/*.ts",
         "lint-fix": "yarn lint --fix",
         "debug": "npm run build && npm run watch-debug",
