@@ -50,5 +50,4 @@ jobs:
           echo DATABASE_DIR=${{ vars.DATABASE_DIR }} >> .env
           cat .env
       - name: Deploy
-        working-directory: ./backend
-        run: pm2 restart backendserver
+        run: (cd frontend && npm run build); (cd backend && pm2 restart backendserver)
