@@ -221,7 +221,7 @@ export class MyAccount {
 
   async renderLoggedOut() {
     const elm = document.createElement('div');
-    elm.classList.add('my-4', 'mx-4', 'fade-in-element', 'relative');
+    elm.classList.add('my-4', 'mx-4', 'fade-in-element-delay', 'relative');
     elm.innerHTML = /* HTML */ `
       <div
         class="login-buttons m-auto mb-32 flex h-56 max-w-2xl flex-col items-center gap-y-8 rounded-lg bg-slate-50 p-8 shadow-md md:gap-y-8"

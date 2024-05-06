@@ -51,6 +51,12 @@
   animation: fadeIn 0.125s ease-in forwards;
 }
 
+/* Apply the fade-in effect with delay to the element */
+.fade-in-element-delay {
+  opacity: 0; /* Set initial opacity to 0 */
+  animation: fadeIn 0.125s ease-in 0.3s forwards;
+}
+
 sl-menu-item::part(base) {
   @apply font-mono text-black;
 }
