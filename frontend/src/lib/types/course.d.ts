@@ -18,7 +18,7 @@
     "hasRestrictions": false,
   }
 */
-type Course = {
+export type Course = {
   id: string;
   subjectId: string;
   number: string;

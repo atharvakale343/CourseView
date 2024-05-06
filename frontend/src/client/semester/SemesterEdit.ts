@@ -1,3 +1,4 @@
+import { UserCourse } from '../../lib/types/course';
 import { guidGenerator } from '../../lib/utils';
 import { Events } from '../Events';
 import { StateManager } from '../StateManagement';

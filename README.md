@@ -5,7 +5,7 @@
 
 A Course History and Planning Tool for students of UMass Amherst. This project is a part of the CS326 Web Programming course at UMass Amherst.
 
-[Live Preview](https://courseview-cs326-team-4.vercel.app/)
+[Live Preview](https://app.courseview.us)
 
 # Getting Started
 
@@ -39,4 +39,10 @@ Read more about the frontend in the [frontend README](frontend/README.md).
 
 # Backend
 
-Coming soon.
+```bash
+cd backend
+npm install
+npm run watch
+```
+
+Read more about the backend in the [backend README](backend/README.md).

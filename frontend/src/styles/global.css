@@ -84,7 +84,6 @@ sl-select::part(display-input) {
   }
 }
 
-
 .credits-progress {
   animation: progressBarAnimation 1s ease 0.25s normal backwards; /* Adjust duration and timing function as needed */
 }
@@ -96,4 +95,8 @@ sl-select::part(display-input) {
 
 .credits-progress {
   transition: width 0.5s ease-in-out;
+}
+
+.g_id_signin iframe {
+  display: none !important;
 }

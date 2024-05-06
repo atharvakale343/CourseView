@@ -58,3 +58,14 @@ export type Card =
       type: 'assignment';
       assignment: DegreeRequirementAssignment;
     };
+
+export type Subject = {
+  id: string;
+  short: string;
+  long: string;
+  title: string;
+};
+export type Semester = {
+  display: string;
+  value: string;
+};

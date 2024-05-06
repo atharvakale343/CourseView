@@ -2,7 +2,6 @@ import { match } from 'ts-pattern';
 import {
   AnonymousRequirement,
   Card,
-  DegreeRequirementAssignment,
   FixedRequirement,
   PrefixRequirement,
   Requirement
@@ -17,6 +16,7 @@ import { CoursePicker } from '../CoursePicker';
 import { LocalStore } from '../../LocalStore';
 import { View } from '../../Navbar';
 import { StateManager } from '../../StateManagement';
+import { UserCourse } from '../../../lib/types/course';
 
 export class UnassignedRequirement {
   #requirement: Requirement;

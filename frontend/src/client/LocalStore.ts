@@ -1,5 +1,7 @@
 const PouchDB = require('pouchdb-browser');
 import { DegreeRequirementAssignment, Section } from '../lib/types/Degree';
+import { Account } from '../lib/types/account';
+import { UserCourse } from '../lib/types/course';
 
 export type UserCoursesDocumentKey = 'userCourses';
 export type UserAssignmentsDocumentKey =
@@ -7,6 +9,7 @@ export type UserAssignmentsDocumentKey =
   | 'userAssignmentsModified';
 export type UserSelectedArrConfigIdsDocumentKey = 'userSelectedArrConfigIds';
 export type AllArrConfigsDocumentKey = 'allArrConfigs';
+export type UserAccountDocumentKey = 'userAccount';
 /**
  * Represents a local store for managing user courses and assignments.
  */
@@ -105,6 +108,17 @@ export class LocalStore {
     });
   }
 
+  public async removeUserCourses(source: UserCoursesDocumentKey) {
+    return this.db
+      .get<{ [key in UserCoursesDocumentKey]: string }>(source)
+      .then(
+        (userCourses) => (
+          (userCourses.userCourses = JSON.stringify([])), userCourses
+        )
+      )
+      .then((userCourses) => this.db.put(userCourses));
+  }
+
   /**
    * Retrieves the user's courses from the database.
    *
@@ -158,6 +172,24 @@ export class LocalStore {
     );
   }
 
+  public async removeUserAssignments(source: UserAssignmentsDocumentKey) {
+    return this.db
+      .get<{
+        [key in UserAssignmentsDocumentKey]: string;
+      }>(source)
+      .then((userAssignments) => {
+        if (source === 'userAssignments') {
+          userAssignments.userAssignments = JSON.stringify([]);
+        } else if (source === 'userAssignmentsModified') {
+          userAssignments.userAssignmentsModified = JSON.stringify([]);
+        } else {
+          throw new Error('Invalid source');
+        }
+        return userAssignments;
+      })
+      .then((userAssignments) => this.db.put(userAssignments));
+  }
+
   /**
    * Clones the user assignments from the source document to the destination document.
    *
@@ -170,7 +202,7 @@ export class LocalStore {
     destination: UserAssignmentsDocumentKey
   ) {
     return this.getUserAssignments(source).then((userAssignments) => {
-      return this.dumpUserAssignments(userAssignments, destination)
+      return this.dumpUserAssignments(userAssignments, destination);
     });
   }
 
@@ -204,7 +236,7 @@ export class LocalStore {
       const updatedAssignments = userAssignments.filter(
         (assignment) => assignment.id !== id
       );
-      return this.dumpUserAssignments(updatedAssignments, source)
+      return this.dumpUserAssignments(updatedAssignments, source);
     });
   }
 
@@ -229,7 +261,7 @@ export class LocalStore {
 
   /**
    * Dumps all array configurations to the specified destination in the database.
-   * 
+   *
    * @param sections - An array of Section objects to be dumped.
    * @param destination - The key of the document where the array configurations will be dumped.
    * @returns A promise that resolves when the array configurations are successfully dumped.
@@ -249,7 +281,7 @@ export class LocalStore {
 
   /**
    * Retrieves all array configurations from the specified document key in the database.
-   * 
+   *
    * @param source - The document key to retrieve the array configurations from.
    * @returns A promise that resolves to an array of Section objects.
    */
@@ -292,5 +324,46 @@ export class LocalStore {
       // @ts-ignore
       return JSON.parse(doc[destination]);
     }) as Promise<string[]>;
+  }
+
+  public async removeUserSelectedArrConfigIds(
+    source: UserSelectedArrConfigIdsDocumentKey
+  ) {
+    return this.db
+      .get<{ [key in UserSelectedArrConfigIdsDocumentKey]: string }>(source)
+      .then((doc) => ((doc.userSelectedArrConfigIds = JSON.stringify([])), doc))
+      .then((doc) => this.db.put(doc));
+  }
+
+  public async getUserAccount(
+    source: UserAccountDocumentKey
+  ): Promise<Account> {
+    return this.db.get(source).then((doc) => {
+      // @ts-ignore
+      return JSON.parse(doc.userAccount);
+    }) as Promise<Account>;
+  }
+
+  public async dumpUserAccount(
+    account: Account,
+    destination: UserAccountDocumentKey
+  ) {
+    return this.db
+      .get(destination)
+      .then((doc) => {
+        // @ts-ignore
+        doc.userAccount = JSON.stringify(account);
+        return this.db.put(doc);
+      })
+      .catch((e) => {
+        return this.db.put({
+          _id: destination,
+          userAccount: JSON.stringify(account)
+        });
+      });
+  }
+
+  public async removeUserAccount(source: UserAccountDocumentKey) {
+    return this.db.get(source).then((doc) => this.db.remove(doc));
   }
 }

@@ -1,4 +1,5 @@
 import { Card, DegreeRequirementAssignment } from '../../../lib/types/Degree';
+import { UserCourse } from '../../../lib/types/course';
 import { Events } from '../../Events';
 import { DeleteConfirmation } from '../DeleteConfirmation';
 

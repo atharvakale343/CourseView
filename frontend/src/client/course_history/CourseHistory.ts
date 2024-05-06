@@ -1,3 +1,4 @@
+import { UserCourse } from '../../lib/types/course';
 import { Events } from '../Events';
 import { LocalStore } from '../LocalStore';
 import { StateManager } from '../StateManagement';
@@ -109,7 +110,8 @@ export class CourseHistory {
       'flex',
       'flex-col',
       'space-y-4',
-      'fade-in-element'
+      'fade-in-element',
+      'h-full'
     );
     elm.id = 'course-history';
 
@@ -136,8 +138,20 @@ export class CourseHistory {
         </button>
       </div>
 
+      <div class="default-msg flex grow items-center justify-center">
+        <h1
+          class="rounded-md border border-slate-300 bg-slate-50 md:text-lg p-4 text-center font-semibold text-black"
+        >
+          Add a course to view your progress.
+        </h1>
+      </div>
+
       <div class="container-course-history"></div>
     `;
+
+    const defaultMsgElement = elm.querySelector(
+      '.default-msg'
+    )! as HTMLDivElement;
 
     const addCourseBtn = elm.querySelector(
       '#add-course-btn'
@@ -157,6 +171,11 @@ export class CourseHistory {
     const refreshViewHandler = async () => {
       containerCourseHistory.innerHTML = '';
       const userCourses = await this.#localStore.getUserCourses('userCourses');
+
+      userCourses.length === 0
+        ? defaultMsgElement.classList.remove('hidden')
+        : defaultMsgElement.classList.add('hidden');
+
       containerCourseHistory.appendChild(await this.refreshView(userCourses));
       const totalCredits = this.getTotalCredits(userCourses);
       creditsProgressElement.querySelector('h1')!.textContent =
@@ -174,5 +193,3 @@ export class CourseHistory {
     return elm;
   }
 }
-
-

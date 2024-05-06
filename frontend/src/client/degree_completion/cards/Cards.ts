@@ -1,8 +1,6 @@
 import { match } from 'ts-pattern';
 import {
   Card,
-  DegreeRequirementAssignment,
-  Requirement
 } from '../../../lib/types/Degree';
 import { guidGenerator } from '../../../lib/utils';
 import { Events } from '../../Events';

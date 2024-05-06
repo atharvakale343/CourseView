@@ -1,5 +1,6 @@
 import { match } from 'ts-pattern';
 import { Events } from './Events';
+import { StateManager } from './StateManagement';
 
 const viewToViewLabel = {
   'course-history': 'Course History',
@@ -17,11 +18,13 @@ type Icon = Exclude<View, 'add-course'>;
 export class Navbar {
   #events: Events;
   #currentView: View;
-  #viewToViewIcon: { [K in Icon]: HTMLAnchorElement | null } | null = null;
+  #viewToViewIcon: { [K in Icon]: HTMLButtonElement | null } | null = null;
+  #stateManager: StateManager;
 
   constructor() {
     this.#events = Events.events();
     this.#currentView = 'course-history';
+    this.#stateManager = StateManager.getManager();
   }
 
   async render(): Promise<HTMLElement> {
@@ -39,7 +42,7 @@ export class Navbar {
           ${viewToViewLabel[this.#currentView]}
         </h1>
         <div class="ml-1 flex flex-row gap-x-1">
-          <a
+          <button
             target="_blank"
             rel="noopener noreferrer"
             id="course-history-icon"
@@ -69,8 +72,8 @@ export class Navbar {
                 Course History
               </p>
             </div>
-          </a>
-          <a
+          </button>
+          <button
             target="_blank"
             rel="noopener noreferrer"
             id="degree-completion-icon"
@@ -110,8 +113,8 @@ export class Navbar {
                 Degree Completion
               </p>
             </div>
-          </a>
-          <a
+          </button>
+          <button
             target="_blank"
             rel="noopener noreferrer"
             id="my-account-icon"
@@ -138,18 +141,27 @@ export class Navbar {
                 </g>
               </svg>
               <p
-                class="icon-title-text text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
+                class="icon-title-text icon-title-text-account text-center text-xs font-medium transition group-hover:text-rose-600 sm:text-sm"
               >
-                Your Account
+                ${(await this.#stateManager.checkLoggedIn())
+                  ? 'Your Account'
+                  : 'Log In'}
               </p>
             </div>
-          </a>
+          </button>
         </div>
       </div>
     `;
 
+    const accountPTag = elm.querySelector('.icon-title-text-account')!;
+    this.#stateManager.subscribeToUserLoggedInChanges(async () => {
+      accountPTag.textContent = (await this.#stateManager.checkLoggedIn())
+        ? 'Your Account'
+        : 'Log In';
+    });
+
     // Get all the anchor tags within the <div> element
-    const links = elm.querySelectorAll('a');
+    const links = elm.querySelectorAll('button');
 
     // Add event listeners to each anchor tag
     links.forEach((link) => {
@@ -158,7 +170,7 @@ export class Navbar {
         e.preventDefault();
 
         // Get the view name from the href attribute
-        const view = (e.currentTarget as HTMLAnchorElement)
+        const view = (e.currentTarget as HTMLButtonElement)
           ?.getAttribute('href')
           ?.replace('#', '');
 
@@ -172,15 +184,15 @@ export class Navbar {
     // Get all the icon elements and store them
     const courseHistoryIcon = elm.querySelector(
       '#course-history-icon'
-    )! as HTMLAnchorElement;
+    )! as HTMLButtonElement;
 
     const degreeCompletionIcon = elm.querySelector(
       '#degree-completion-icon'
-    )! as HTMLAnchorElement;
+    )! as HTMLButtonElement;
 
     const myAccountIcon = elm.querySelector(
       '#my-account-icon'
-    )! as HTMLAnchorElement;
+    )! as HTMLButtonElement;
 
     this.#viewToViewIcon = {
       'course-history': courseHistoryIcon,

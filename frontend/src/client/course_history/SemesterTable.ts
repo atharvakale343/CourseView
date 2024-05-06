@@ -1,3 +1,4 @@
+import { UserCourse } from '../../lib/types/course';
 import { SemesterEdit } from '../semester/SemesterEdit';
 
 /**

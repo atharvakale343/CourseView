@@ -1,8 +1,10 @@
 import { app } from "./app";
+import { logger } from "./utils/logger";
 
 const port = app.get("port");
 
 const server = app.listen(port, onListening);
+
 server.on("error", onError);
 
 function onError(error: NodeJS.ErrnoException) {
@@ -33,8 +35,10 @@ function onListening() {
         throw new Error("Server address is null");
     }
     const bind =
-        typeof addr === "string" ? `pipe ${addr}` : `port ${addr.port}`;
-    console.log(`Listening on ${bind}`);
+        typeof addr === "string"
+            ? `pipe ${addr}`
+            : `${addr.address}:${addr.port}`;
+    logger.info(`Listening on ${bind}`);
 }
 
 export default server;
