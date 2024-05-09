@@ -140,7 +140,7 @@ export class DegreeCompletion {
     const autoAssignHandler = async () => {
       const autoAssignments = autoAssignCourses(
         await this.#localStore.getUserCourses('userCourses'),
-        getAllRequirementsFromSection(sections),
+        getAllRequirementsFromSection(await this.#localStore.getAllArrConfigs('allArrConfigs')),
         await this.#localStore.getUserAssignments('userAssignments')
       );
 
