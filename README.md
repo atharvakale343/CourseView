@@ -9,9 +9,9 @@ A Course History and Planning Tool for students of UMass Amherst. This project i
 
 ## App Views
 
-|         Login         |         Course History         |        Add a Course        |         Degree Completion         |
-| :-------------------: | :----------------------------: | :------------------------: | :-------------------------------: |
-| ![](./docs/login.png) | ![](./docs/course-history.png) | ![](./docs/add-course.png) | ![](./docs/degree-completion.png) |
+|                  Login                   |                  Course History                   |                 Add a Course                  |                  Degree Completion                   |
+| :--------------------------------------: | :-----------------------------------------------: | :-------------------------------------------: | :--------------------------------------------------: |
+| <img src="./docs/login.png" width="256"> | <img src="./docs/course-history.png" width="256"> | <img src="./docs/add-course.png" width="256"> | <img src="./docs/degree-completion.png" width="256"> |
 
 # Getting Started
 
