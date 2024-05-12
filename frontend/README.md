@@ -2,12 +2,10 @@
 
 ```bash
 npm install
-npm run milestone-02
+npm run dev
 ```
 
-# Milestone 2
-
-The following files are files of concern for Milestone 2:
+# Project Structure
 
 ```
 .
@@ -19,6 +17,14 @@ The following files are files of concern for Milestone 2:
 ```
 
 The `index.ts` file is the entry point of the application. It is responsible for creating the `App` instance and calling the `render` method.
+
+# Event-Action
+
+This vanilla JS application is built using the Event-Action (Pub-Sub) pattern. Events are managed by the [Events.ts](src/client/Events.ts) class. The `Events` class is a singleton class that manages the events and their listeners.
+
+The following events are used in the application:
+
+![Event-Action](./src/docs/event-action.png)
 
 # TailwindCSS
 
