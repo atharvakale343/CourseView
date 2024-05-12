@@ -7,6 +7,12 @@ A Course History and Planning Tool for students of UMass Amherst. This project i
 
 [Live Preview](https://app.courseview.us)
 
+## App Views
+
+|         Login         |         Course History         |        Add a Course        |         Degree Completion         |
+| :-------------------: | :----------------------------: | :------------------------: | :-------------------------------: |
+| ![](./docs/login.png) | ![](./docs/course-history.png) | ![](./docs/add-course.png) | ![](./docs/degree-completion.png) |
+
 # Getting Started
 
 This repository is organized into two main directories.
