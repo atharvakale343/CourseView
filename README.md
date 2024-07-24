@@ -1,4 +1,3 @@
-![example workflow](https://github.com/atharvakale343/CourseView/actions/workflows/node.js.yml/badge.svg)
 ![Vercel Deploy](https://therealsujitk-vercel-badge.vercel.app/?app=courseview-umass)
 
 # CourseView
